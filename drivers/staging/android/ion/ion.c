@@ -1175,8 +1175,8 @@ static int ion_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
     MMProfileLogEx(ION_MMP_Events[PROFILE_MAP_USER], MMProfileFlagStart, buffer->size, vma->vm_start);
 
 	if (!buffer->heap->ops->map_user) {
-		pr_err("%s: this heap does not define a method for mapping "
-		       "to userspace\n", __func__);
+		pr_err("%s: this heap does not define a method for mapping to userspace\n",
+			__func__);
 		return -EINVAL;
 	}
 
@@ -1645,8 +1645,7 @@ static int ion_debug_heap_show(struct seq_file *s, void *unused)
 	}
 	up_read(&dev->lock);
 	seq_printf(s, "----------------------------------------------------\n");
-	seq_printf(s, "orphaned allocations (info is from last known client):"
-		   "\n");
+	seq_printf(s, "orphaned allocations (info is from last known client):\n");
 	mutex_lock(&dev->buffer_lock);
 	for (n = rb_first(&dev->buffers); n; n = rb_next(n)) {
 		struct ion_buffer *buffer = rb_entry(n, struct ion_buffer,
