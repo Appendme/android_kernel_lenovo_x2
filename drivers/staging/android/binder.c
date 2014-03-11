@@ -1457,7 +1457,7 @@ static void binder_set_nice(long nice)
 #else
 	set_user_nice(current, min_nice);
 #endif
-	if (min_nice < 20)
+	if (min_nice <= MAX_NICE)
 		return;
 	binder_user_error("%d RLIMIT_NICE not set\n", current->pid);
 }
