@@ -288,7 +288,7 @@ PVRSRV_ERROR OSMMUPxMap(PVRSRV_DEVICE_NODE *psDevNode, Px_HANDLE *psMemHandle,
 		/* vmalloc and friends expect a guard page so we need to take that into account */
 		tmp_area.addr = (void *)uiCPUVAddr;
 		tmp_area.size =  2 * PAGE_SIZE;
-		ret = map_vm_area(&tmp_area, prot, &ppsPage);
+		ret = map_vm_area(&tmp_area, prot, ppsPage);
 		if (ret) {
 			gen_pool_free(pvrsrv_pool_writecombine, uiCPUVAddr, PAGE_SIZE);
 			PVR_DPF((PVR_DBG_ERROR,
