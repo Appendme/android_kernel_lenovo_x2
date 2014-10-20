@@ -155,7 +155,6 @@ static struct platform_driver timed_gpio_driver = {
 	.remove		= timed_gpio_remove,
 	.driver		= {
 		.name		= TIMED_GPIO_NAME,
-		.owner		= THIS_MODULE,
 	},
 };
 
