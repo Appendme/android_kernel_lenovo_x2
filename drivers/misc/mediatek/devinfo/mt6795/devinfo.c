@@ -165,11 +165,11 @@ static int __init devinfo_init(void)
     int ret = 0;
     devinfo_dev = MKDEV(MAJOR_DEV_NUM, 0);
 
-    xlog_printk(ANDROID_LOG_INFO, DEVINFO_TAG ," init\n");    
+    pr_debug("[%s]init\n", MODULE_NAME);
 
     ret = register_chrdev_region(devinfo_dev, 1, DEV_NAME );
     if (ret) {
-        pr_info("[%s] register device failed, ret:%d\n", MODULE_NAME, ret);
+        pr_warn("[%s] register device failed, ret:%d\n", MODULE_NAME, ret);
         return ret;
     }
     /*create class*/
@@ -213,7 +213,7 @@ static int __init dt_get_devinfo(unsigned long node, const char *uname, int dept
             g_devinfo_data[i] = tags->devinfo_data[i];
         }
         /* print chip id for debugging purpose */
-        pr_info("tag_devinfo_data size:%d \n", g_devinfo_data_size);
+        pr_debug("tag_devinfo_data size:%d \n", g_devinfo_data_size);
 	
     }
     
