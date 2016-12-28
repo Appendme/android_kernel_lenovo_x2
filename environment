@@ -1,0 +1,6 @@
+#!/bin/sh
+
+ARCH=arm
+SUBARCH=arm
+CROSS_COMPILE=/home/append/cm13.0/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8/bin/arm-eabi-
+export ARCH SUBARCH CROSS_COMPILE
