@@ -437,9 +437,6 @@ static void avc_audit_pre_callback(struct audit_buffer *ab, void *a)
  * @ab: the audit buffer
  * @a: audit_data
  */
-#ifdef CONFIG_MTK_AEE_FEATURE
-extern void mtk_audit_hook(char *data); 
-#endif
 static void avc_audit_post_callback(struct audit_buffer *ab, void *a)
 {
 	struct common_audit_data *ad = a;
@@ -450,19 +447,20 @@ static void avc_audit_post_callback(struct audit_buffer *ab, void *a)
 	if (ad->selinux_audit_data->denied) {
 		audit_log_format(ab, " permissive=%u",
 				 ad->selinux_audit_data->result ? 0 : 1);
-		#ifdef CONFIG_MTK_AEE_FEATURE				 
-		{		 
-			int rc;
-			char *scontext;
-			u32 scontext_len;
-			rc = security_sid_to_context(ad->selinux_audit_data->ssid, &scontext, &scontext_len);
-			if (!rc){
-				printk(KERN_WARNING "audit avc scontext:%s\n",scontext);
-				//mtk_audit_hook(scontext);
+#ifdef CONFIG_MTK_AEE_FEATURE
+		{
+			struct nlmsghdr *nlh;
+			char *selinux_data;
+			if (ab) {
+				nlh = nlmsg_hdr(audit_get_skb(ab));
+				selinux_data = nlmsg_data(nlh);
+				if (nlh->nlmsg_type != AUDIT_EOE) {
+					if (nlh->nlmsg_type == 1400)
+						mtk_audit_hook(selinux_data);
+				}
 			}
-			kfree(scontext);
 		}
-		#endif
+#endif
 	}
 }
 
