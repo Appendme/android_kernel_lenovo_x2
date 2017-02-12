@@ -613,29 +613,6 @@ static void process_dbg_opt(const char *opt)
         set_session_mode(&config, 1);
         return;
     }
-	else if (0 == strncmp(opt, "regw:", 5))
-    {
-        char *p = (char *)opt + 5;
-        unsigned long addr = simple_strtoul(p, &p, 16);
-        unsigned long val  = simple_strtoul(p + 1, &p, 16);
-
-        if (addr) {
-            OUTREG32(addr, val);
-        } else {
-            return;
-        }
-    }
-    else if (0 == strncmp(opt, "regr:", 5))
-    {
-        char *p = (char *)opt + 5;
-        void* addr = (void*) simple_strtoul(p, &p, 16);
-
-        if (addr) {
-            printk("Read register 0x%p: 0x%08x\n", addr, INREG32(addr));
-        } else {
-           return;
-        }
-    }
     else if (0 == strncmp(opt, "cmmva_dprec", 11))
     {
 		dprec_handle_option(0x7);
