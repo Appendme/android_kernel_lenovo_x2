@@ -1846,3 +1846,7 @@ config MTK_EXTMEM
 	   bool "mtk external memory"
 	   depends on MTK_INTERNAL
 	   default n
+
+config MTK_COMBO_AOSP_TETHERING_SUPPORT
+	bool "Multiplex wlan0 for both AP and STA"
+	default n
