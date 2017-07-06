@@ -807,7 +807,7 @@ static int sd_multi_rw_compare_slave(int host_num, int read, uint address)
 	mmc_wait_for_req(host_ctl->mmc, &msdc_mrq);
 
 	if (read == 0x1){
-		for(forIndex=0;forIndex<MSDC_MULTI_BUF_LEN;forIndex++){                    
+		for (forIndex = 0; forIndex < MSDC_MULTI_BUF_LEN; forIndex++) {
 			//printk("index[%d]\tW_buffer[0x%x]\tR_buffer[0x%x]\t\n", forIndex, msdc_multi_wbuf_sd[forIndex], msdc_multi_rbuf_sd[forIndex]);
 			if(msdc_multi_wbuf_sd[forIndex]!=msdc_multi_rbuf_sd[forIndex]){
 				pr_err("index[%d]\tW_buffer[0x%x]\tR_buffer[0x%x]\tfailed\n",
@@ -3431,6 +3431,11 @@ static ssize_t msdc_debug_proc_write_DVT(struct file *file, const char __user* b
 
 	struct msdc_host *host;
 
+	if (count == 0)
+		return -1;
+	if (count > 255)
+		count = 255;
+
 	ret = copy_from_user(cmd_buf, buf, count);
 	if (ret < 0)
 		return -1;
@@ -3448,9 +3453,11 @@ static ssize_t msdc_debug_proc_write_DVT(struct file *file, const char __user* b
 
 	host = mtk_msdc_host[i_msdc_id];
 
-	pr_notice("[****SD_Debug****] Start Online Tuning DVT test\n");
-	mt_msdc_online_tuning_test(host, 0, 0, 0);
-	pr_notice("[****SD_Debug****] Finish Online Tuning DVT test\n");
+	if (host) {
+		pr_notice("[****SD_Debug****] Start Online Tuning DVT test\n");
+		mt_msdc_online_tuning_test(host, 0, 0, 0);
+		pr_notice("[****SD_Debug****] Finish Online Tuning DVT test\n");
+	}
 
 	return count;
 }
@@ -3636,6 +3643,11 @@ extern void pmic_config_interface(unsigned int, unsigned int, unsigned int, unsi
 static ssize_t msdc_voltage_proc_write(struct file *file, const char __user* buf, size_t count, loff_t *data)
 {
 	int ret;
+
+	if (count == 0)
+		return -1;
+	if (count > 255)
+		count = 255;
 	
 	ret = copy_from_user(cmd_buf, buf, count);
 	if (ret < 0)return -1;
