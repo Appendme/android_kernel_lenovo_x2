@@ -27,6 +27,9 @@
 #include <linux/regulator/consumer.h>
 #include <linux/dma-mapping.h>
 #include <linux/kthread.h>
+#include <linux/proc_fs.h>
+#include <linux/seq_file.h>
+#include <linux/uaccess.h>
 #include <cust_eint.h>
 #include <mach/mt_pm_ldo.h>
 #include <mach/mt_typedefs.h>
@@ -806,6 +809,70 @@ static ssize_t synaptics_rmi4_suspend_store(struct device *dev,
 		return -EINVAL;
 
 	return count;
+}
+
+static ssize_t keypad_enable_proc_show(struct seq_file *m, void *v)
+{
+	struct synaptics_rmi4_data *ts = m->private;
+
+	seq_printf(m, "%d\n", atomic_read(&ts->keypad_enable));
+
+	return 0;
+}
+
+static ssize_t keypad_enable_proc_write(struct file *file, const char __user *buffer,
+		size_t count, loff_t *offset)
+{
+	struct synaptics_rmi4_data *ts = (struct synaptics_rmi4_data *)PDE_DATA(file_inode(file));
+	char buf[2];
+	unsigned int val = 0;
+
+	if (count > 2)
+		return count;
+
+	if (copy_from_user(buf, buffer, count)) {
+		printk(KERN_ERR "%s: read proc input error.\n", __func__);
+		return count;
+	}
+
+	val = (buf[0] == '0' ? 0 : 1);
+	atomic_set(&ts->keypad_enable, val);
+	if (val) {
+		set_bit(KEY_BACK, ts->input_dev->keybit);
+		set_bit(KEY_MENU, ts->input_dev->keybit);
+		set_bit(KEY_HOMEPAGE, ts->input_dev->keybit);
+	} else {
+		clear_bit(KEY_BACK, ts->input_dev->keybit);
+		clear_bit(KEY_MENU, ts->input_dev->keybit);
+		clear_bit(KEY_HOMEPAGE, ts->input_dev->keybit);
+	}
+	input_sync(ts->input_dev);
+
+	return count;
+}
+
+static int keypad_enable_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, keypad_enable_proc_show, PDE_DATA(inode));
+}
+
+static const struct file_operations keypad_enable_fops = {
+	.open = keypad_enable_proc_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+	.write = keypad_enable_proc_write
+};
+
+static int synaptics_rmi4_init_touchpanel_proc(struct synaptics_rmi4_data *data)
+{
+	struct proc_dir_entry *proc_entry = NULL;
+
+	struct proc_dir_entry *procdir = proc_mkdir( "touchpanel", NULL );
+
+	proc_entry = proc_create_data("keypad_enable", 0664, procdir, &keypad_enable_fops, data);
+
+	return 0;
 }
 
  /**
@@ -1769,6 +1836,12 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 			wx = finger_data->wx;
 			wy = finger_data->wy;
 #endif
+
+			if (y > rmi4_data->sensor_max_y) {
+				if (!atomic_read(&rmi4_data->keypad_enable)) {
+					continue;
+				}
+			}
 
 		/*lenovo xuwen1 modify 20140620 for area touch,begin*/
 #if defined(LENOVO_AREA_TOUCH)
@@ -3373,6 +3446,8 @@ static int synaptics_rmi4_set_input_dev(struct synaptics_rmi4_data *rmi4_data)
 	set_bit(EV_ABS, rmi4_data->input_dev->evbit);
 	set_bit(BTN_TOUCH, rmi4_data->input_dev->keybit);
 	set_bit(BTN_TOOL_FINGER, rmi4_data->input_dev->keybit);
+
+	atomic_set(&rmi4_data->keypad_enable, 1);
 	
 #ifdef INPUT_PROP_DIRECT
 	set_bit(INPUT_PROP_DIRECT, rmi4_data->input_dev->propbit);
@@ -3919,6 +3994,8 @@ static int synaptics_rmi4_probe(struct i2c_client *client,
 		retval = PTR_ERR(thread);
 		pr_err(" %s: failed to create kernel thread: %d\n",__func__, retval);
 	}
+
+	synaptics_rmi4_init_touchpanel_proc(rmi4_data);
 
 	retval = synaptics_rmi4_irq_enable(rmi4_data, true);
 	if (retval < 0) {

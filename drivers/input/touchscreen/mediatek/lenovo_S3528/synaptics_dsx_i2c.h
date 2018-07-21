@@ -256,6 +256,7 @@ struct synaptics_rmi4_data {
 			unsigned char *data, unsigned short length);
 	int (*irq_enable)(struct synaptics_rmi4_data *rmi4_data, bool enable);
 	int (*reset_device)(struct synaptics_rmi4_data *rmi4_data);
+	atomic_t keypad_enable;
 };
 
 struct synaptics_rmi4_exp_fn {
