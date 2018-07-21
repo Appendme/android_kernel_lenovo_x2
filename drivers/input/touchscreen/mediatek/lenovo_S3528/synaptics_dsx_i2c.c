@@ -100,7 +100,7 @@ struct synaptics_rmi4_3203_gesture_reg {
 
 /*lenovo-sw xuwen1 add 20140625 for glove mode begin*/
 #ifdef LENOVO_CTP_GLOVE_CONTROL
-static struct  tpd_glove_t glove_func;
+static struct tpd_glove_t glove_func;
 
 static int set_glove_mode_func (bool flag);
 static int get_glove_mode_func(void);
@@ -236,12 +236,12 @@ extern void mt_eint_unmask(unsigned int line);
 extern void mt_eint_mask(unsigned int line);
 extern void mt_eint_set_hw_debounce(unsigned int eint_num, unsigned int ms);
 extern unsigned int mt_eint_set_sens(unsigned int eint_num, unsigned int sens);
-extern void mt_eint_registration(unsigned int eint_num, unsigned int flag,  void (EINT_FUNC_PTR) (void), unsigned int is_auto_umask);
+extern void mt_eint_registration(unsigned int eint_num, unsigned int flag, void (EINT_FUNC_PTR) (void), unsigned int is_auto_umask);
 static void tpd_eint_handler(void);
 static int touch_event_handler(void *data);
 
-static int  synaptics_rmi4_probe(struct i2c_client *client,const struct i2c_device_id *dev_id);
-static int  synaptics_rmi4_remove(struct i2c_client *client);
+static int synaptics_rmi4_probe(struct i2c_client *client,const struct i2c_device_id *dev_id);
+static int synaptics_rmi4_remove(struct i2c_client *client);
 
 static int synaptics_rmi4_i2c_read(struct synaptics_rmi4_data *rmi4_data,
 		unsigned short addr, unsigned char *data,
@@ -456,11 +456,11 @@ struct synaptics_rmi4_f12_ctrl_27 {
 			unsigned char report_rate;
 			unsigned char false_activation;
 			unsigned char max_active_duration;
-                        unsigned char timer_1;
-                        unsigned char max_active_duration_timeout;
-                        unsigned char allowed_swipes;
-                        unsigned char swipe_tolerance;
-                        unsigned char swipe_lift_control;
+			unsigned char timer_1;
+			unsigned char max_active_duration_timeout;
+			unsigned char allowed_swipes;
+			unsigned char swipe_tolerance;
+			unsigned char swipe_lift_control;
 		};
 		unsigned char data[9];
 	};
@@ -475,7 +475,7 @@ struct low_power_wakeup_gesture {
 	struct synaptics_rmi4_f12_ctrl_20 control_20;
 	struct synaptics_rmi4_f12_data_4 data_04;
 //lenovo-sw xuwen1 add 201409215 for lwpw mode
-        struct synaptics_rmi4_f12_ctrl_27 control_27;
+	struct synaptics_rmi4_f12_ctrl_27 control_27;
 };
 
 struct low_power_wakeup_gesture lpwg_handler;
@@ -489,15 +489,14 @@ struct synaptics_rmi4_f12_ctrl_23 {
 		unsigned char data[2];
 	};
 	//lenovo-sw xuwen1 add 20140625 for glove mode
-	unsigned short addr; 
+	unsigned short addr;
 };
 
 /*lenovo-sw xuwen1 add 20140625 for glove mode begin*/
 
 struct glove_mode_ctrl {
-          bool glove_mode;
-          struct synaptics_rmi4_f12_ctrl_23 control_23;
-	  
+	bool glove_mode;
+	struct synaptics_rmi4_f12_ctrl_23 control_23;
 };
 
 struct glove_mode_ctrl glove_handler;
@@ -1197,7 +1196,7 @@ static void synaptics_rmi4_gesture_suspend(struct synaptics_rmi4_data *rmi4_data
 				dev_err(&(rmi4_data->input_dev->dev),
 						"%s: Failed to enter doze mode\n",
 						__func__);
-				     lpwg_handler.control_20.report_flags = (lpwg_handler.control_20.report_flags)&0xFD;
+				lpwg_handler.control_20.report_flags = (lpwg_handler.control_20.report_flags)&0xFD;
 			}
 			/*lenovo-sw xuwen1 add 20140915 for FW enter doze from area begin*/
 			lpwg_handler.control_27.max_active_duration = 0x64;
@@ -1209,7 +1208,7 @@ static void synaptics_rmi4_gesture_suspend(struct synaptics_rmi4_data *rmi4_data
 				sizeof(lpwg_handler.control_27.data));
 			if (retval < 0) {
 				dev_err(&(rmi4_data->input_dev->dev),
-					"%s: Failed to set time control of lwpw  mode\n",
+					"%s: Failed to set time control of lwpw mode\n",
 					__func__);
 				/*add for back to original status begin*/
 				lpwg_handler.control_27.max_active_duration = 0x0c;
@@ -1256,12 +1255,12 @@ static void synaptics_rmi4_gesture_suspend(struct synaptics_rmi4_data *rmi4_data
 
 		tpd_halt = 1;
 
-		#ifdef TPD_CLOSE_POWER_IN_SLEEP
+#ifdef TPD_CLOSE_POWER_IN_SLEEP
 			// power down sequence
 			tpd_power_ctrl(0);
 			mt_set_gpio_out(GPIO_CTP_RST_PIN, GPIO_OUT_ZERO);
 			msleep(DELAY_S7300_RESET);
-		#endif
+#endif
 	}
 }
 
@@ -1374,9 +1373,9 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 	data_reg_blk_size = fhandler->size_of_data_register_block;
 
 	__dbg_core("fn11_mask(%d)\n",rmi4_data->fn11_mask);
-	#ifdef LENOVO_GESTURE_WAKEUP
+#ifdef LENOVO_GESTURE_WAKEUP
 		synaptics_rmi4_gesture_report(rmi4_data);
-	#endif
+#endif
 
 	retval = synaptics_rmi4_i2c_read(rmi4_data,
 			data_addr,
@@ -1393,7 +1392,7 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 		finger_status = (finger_status_reg[reg_index] >> finger_shift)
 				& MASK_2BIT;
 
-	#ifdef LENOVO_CTP_GLOVE_CONTROL
+#ifdef LENOVO_CTP_GLOVE_CONTROL
 		if (glove_func.status == 1) {
 			 __dbg("finger_status is 0x%2x\n",finger_status);
 			switch (gf_current) {
@@ -1430,7 +1429,7 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 			}
 
 		}
-	#endif
+#endif
 
 		/*
 		 * Each 2-bit finger status field represents the following:
@@ -1464,7 +1463,7 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 			wx = (data[3] & MASK_4BIT);
 			wy = (data[3] >> 4) & MASK_4BIT;
 
-		#ifdef CONFIG_LENOVO_POWEROFF_CHARGING_UI
+#ifdef CONFIG_LENOVO_POWEROFF_CHARGING_UI
 			if (((x > LENOVO_CHARGING_DRAW_LEFT) && (x<LENOVO_CHARGING_DRAW_RIGHT))
 					&&((y>LENOVO_CHARGING_DRAW_TOP)
 					&&(y<LENOVO_CHARGING_DRAW_BOTTOM))
@@ -1478,12 +1477,12 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 				input_report_key(kpd_input_dev, KEY_HOME, 0);
 				input_sync(kpd_input_dev);
 			}
-		#endif
+#endif
 
-		#if defined(LENOVO_AREA_TOUCH)
+#if defined(LENOVO_AREA_TOUCH)
 			xysqr = wx * wy;
 			__dbg_core(" %s XYsqr=%d\n",__func__, xysqr);
-		#endif
+#endif
 
 			input_report_key(rmi4_data->input_dev,
 					BTN_TOUCH, 1);
@@ -1503,19 +1502,19 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 			input_report_abs(rmi4_data->input_dev,
 					ABS_MT_TOUCH_MINOR, min(wx, wy));
 #endif
-		#if defined(LENOVO_AREA_TOUCH)
+#if defined(LENOVO_AREA_TOUCH)
 			input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_X_W, xysqr);
 			input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_Y_W, xysqr);
-		#endif
+#endif
 #ifndef TYPE_B_PROTOCOL
 			input_mt_sync(rmi4_data->input_dev);
 #endif
 
 #ifdef TPD_HAVE_BUTTON
 			if (NORMAL_BOOT != boot_mode)
-			{   
+			{
 				tpd_button(x, y, 1);
-			}	
+			}
 #endif
 			__dbg_core(
 					"f11_abs report Finger %d: st(0x%02x), x(%d), y(%d)\n",
@@ -1547,10 +1546,10 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 				ABS_MT_POSITION_X, x);
 		input_report_abs(rmi4_data->input_dev,
 				ABS_MT_POSITION_Y, y);
-	#if defined(LENOVO_AREA_TOUCH)
+#if defined(LENOVO_AREA_TOUCH)
 		input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_X_W, xysqr);
 		input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_Y_W, xysqr);
-	#endif
+#endif
 		ns_tmp = sched_clock(); //ns
 		ms_gap = NS_TO_MS(ns_tmp, ns_gap); //ms
 		ns_gap = ns_tmp; //ns
@@ -1563,9 +1562,9 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 #endif
 #ifdef TPD_HAVE_BUTTON
 		if (NORMAL_BOOT != boot_mode)
-		{   
+		{
 			tpd_button(x, y, 0);
-		}   
+		}
 #endif
 		__dbg_core("f11_abs up");
 	}
@@ -1648,11 +1647,11 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 	
 	__dbg_core("fn11_mask(%d)\n",rmi4_data->fn11_mask);
 	/*lenovo-sw xuwen1 add for gesture begin*/
-	#ifdef LENOVO_GESTURE_WAKEUP
+#ifdef LENOVO_GESTURE_WAKEUP
 	if ( rmi4_data->fn11_mask) {
 		synaptics_rmi4_gesture_report(rmi4_data);
 	}
-	#endif
+#endif
 	/*lenovo-sw xuwen1 add for gesture end*/
 	/* Determine the total number of fingers to process */
 	if (extra_data->data15_size) {
@@ -1707,11 +1706,11 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 	for (finger = 0; finger < fingers_to_process; finger++) {
 		finger_data = data + finger;
 		/*lenovo-sw xuwen1  changed 20140825 for glove begin*/
-	#ifndef LENOVO_CTP_GLOVE_CONTROL
+#ifndef LENOVO_CTP_GLOVE_CONTROL
 		finger_status = finger_data->object_type_and_status & MASK_1BIT;//lenovo-sw xuwen1 
 		__dbg("finger_status is 0x%2x,finger_data->object_type_and_status is 0x%2x\n",finger_status,finger_data->object_type_and_status);
- 	#else
-		if (glove_func.status == 0)  {
+#else
+		if (glove_func.status == 0) {
 			finger_status = finger_data->object_type_and_status & MASK_1BIT;//lenovo-sw xuwen1 
 			__dbg("finger_status is 0x%2x,finger_data->object_type_and_status is 0x%2x\n",finger_status,finger_data->object_type_and_status);
 		} else if (glove_func.status == 1) {
@@ -1752,7 +1751,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 			}
 
 		}
-	#endif
+#endif
 #ifdef TYPE_B_PROTOCOL
 		input_mt_slot(rmi4_data->input_dev, finger);
 		input_mt_report_slot_state(rmi4_data->input_dev,
@@ -1772,59 +1771,59 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 #endif
 
 		/*lenovo xuwen1 modify 20140620 for area touch,begin*/
-		#if defined(LENOVO_AREA_TOUCH)
+#if defined(LENOVO_AREA_TOUCH)
 			Xw =finger_data->wx;
 			Yw = finger_data->wy;
 			XYsqr = Xw*Yw;
 			__dbg_core(" %s XYsqr=%d\n",__func__,XYsqr);
-		#endif
+#endif
 		/*lenovo xuwen1 modify 20140620 for area touch,end*/
-    
+
 		/*lenovo-xw xuwen1 add 20140506 for start work begin*/
-		#ifdef CONFIG_LENOVO_POWEROFF_CHARGING_UI	  
-		   	if (((x > LENOVO_CHARGING_DRAW_LEFT) && (x<LENOVO_CHARGING_DRAW_RIGHT)) 
+#ifdef CONFIG_LENOVO_POWEROFF_CHARGING_UI
+			if (((x > LENOVO_CHARGING_DRAW_LEFT) && (x<LENOVO_CHARGING_DRAW_RIGHT))
 					&&((y>LENOVO_CHARGING_DRAW_TOP)
 					&&(y<LENOVO_CHARGING_DRAW_BOTTOM))
 					&&(ipo_flag ==0x1)
 					&&(g_tp_poweron !=0x1)) {
 
 				g_tp_poweron = 0x1;
-				tp_button_flag = 0x1;   
+				tp_button_flag = 0x1;
 				input_report_key(kpd_input_dev, KEY_HOME, 1);
 				input_sync(kpd_input_dev);
 				input_report_key(kpd_input_dev, KEY_HOME, 0);
-				input_sync(kpd_input_dev);	                         
+				input_sync(kpd_input_dev);
 			}
-		#endif
+#endif
 		/*lenovo-xw xuwen1 add 20140506 for start work begin*/
 
 			input_report_key(rmi4_data->input_dev,
 					BTN_TOUCH, 1);
 			input_report_key(rmi4_data->input_dev,
 					BTN_TOOL_FINGER, 1);
-		#ifndef TYPE_B_PROTOCOL
+#ifndef TYPE_B_PROTOCOL
 			input_report_abs(rmi4_data->input_dev,
 					ABS_MT_TRACKING_ID, finger);
-		#endif
+#endif
 			input_report_abs(rmi4_data->input_dev,
 					ABS_MT_POSITION_X, x);
 			input_report_abs(rmi4_data->input_dev,
 					ABS_MT_POSITION_Y, y);
-		#ifdef REPORT_2D_W
+#ifdef REPORT_2D_W
 			input_report_abs(rmi4_data->input_dev,
 					ABS_MT_TOUCH_MAJOR, max(wx, wy));
 			input_report_abs(rmi4_data->input_dev,
 					ABS_MT_TOUCH_MINOR, min(wx, wy));
-		#endif
+#endif
 		/*lenovo xuwen1 modify 20140620 for area touch,begin*/
-		#if defined(LENOVO_AREA_TOUCH)
+#if defined(LENOVO_AREA_TOUCH)
 			input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_X_W, XYsqr);
 			input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_Y_W, XYsqr);
-		#endif
+#endif
 		/*lenovo xuwen1 modify 20140620 for area touch,end*/
-		#ifndef TYPE_B_PROTOCOL
+#ifndef TYPE_B_PROTOCOL
 			input_mt_sync(rmi4_data->input_dev);
-		#endif
+#endif
 
 			dev_dbg(&rmi4_data->i2c_client->dev,
 					"%s: Finger %d:\n"
@@ -1836,7 +1835,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 					__func__, finger,
 					finger_status,
 					x, y, wx, wy);
-		#ifdef	SPECIAL_REPORT_LOG
+#ifdef	SPECIAL_REPORT_LOG
 			x_s = x; y_s = y; wx_s = wx; wy_s = wy;
 			ns_tmp = sched_clock(); //ns
 			ms_gap = NS_TO_MS(ns_tmp, ns_gap); //ms
@@ -1844,7 +1843,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 			finger_c = 'd';
 			__dbg_core("[PF] rx=%d,ry=%d,cx=%d,cy=%d,p=%d,%c(+%d ms)\n",
 					x, y, wx, wy, finger, finger_c, ms_gap);
-		#endif
+#endif
 			__dbg_core(" f12_abs down(%d,%d,%d,%d)\n",x, y, finger, finger_status);
 			TPD_EM_PRINT(wx, wy, x, y, finger, 1);	//for mediatek engineer mode tpd log
 			touch_count++;
@@ -1856,16 +1855,16 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 				BTN_TOUCH, 0);
 		input_report_key(rmi4_data->input_dev,
 				BTN_TOOL_FINGER, 0);
-	#ifdef	SPECIAL_REPORT_LOG
+#ifdef	SPECIAL_REPORT_LOG
 		input_report_abs(rmi4_data->input_dev,
 				ABS_MT_POSITION_X, x);
 		input_report_abs(rmi4_data->input_dev,
 				ABS_MT_POSITION_Y, y);
 		/*lenovo xuwen1 modify 20140620 for area touch,begin*/
-		#if defined(LENOVO_AREA_TOUCH)
+#if defined(LENOVO_AREA_TOUCH)
 		input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_X_W, XYsqr);
 		input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_Y_W, XYsqr);
-		#endif
+#endif
 		/*lenovo xuwen1 modify 20140620 for area touch,end*/
 		ns_tmp = sched_clock(); //ns
 		ms_gap = NS_TO_MS(ns_tmp, ns_gap); //ms
@@ -1873,10 +1872,10 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 		finger_c = 'u';
 		__dbg("[PF] rx=%d,ry=%d,cx=%d,cy=%d,p=%d,%c(+%d ms)\n",
 					x_s, y_s, wx_s, wy_s, finger, finger_c, ms_gap);
-	#endif
-	#ifndef TYPE_B_PROTOCOL
+#endif
+#ifndef TYPE_B_PROTOCOL
 		input_mt_sync(rmi4_data->input_dev);
-	#endif
+#endif
 		__dbg_core(" f12_abs up\n");
 		TPD_EM_PRINT(0, 0, 0, 0, 0, 0);	//for mediatek engineer mode tpd log
 	}
@@ -1914,7 +1913,7 @@ int synaptics_rmi4_f51_report(struct synaptics_rmi4_data *rmi4_data)
 			return;
 		__dbg("%s, lpwg_int_flag_in_double = %d.\n", __func__,lpwg_int_flag);
 		__dbg("%s, double_gesture_type = 0x%2x.\n",__func__,val);
-		if ((val == 0x02) && (lpwg_int_flag == 1) && (gesture_home_once == 1) ) {
+		if ((val == 0x02) && (lpwg_int_flag == 1) && (gesture_home_once == 1)) {
 			__dbg("enter in double gesture mode \n");
 			gesture_func.letter = 0x50;
 			input_report_key(rmi4_data->input_dev, KEY_SLIDE, 1);
@@ -1966,9 +1965,9 @@ static void synaptics_rmi4_f1a_report(struct synaptics_rmi4_data *rmi4_data,
 		do_once = 0;
 	}
 	//lenovo_sw liuyw2 3/20/15 add 0d gesture
-	#ifdef LENOVO_GESTURE_WAKEUP
+#ifdef LENOVO_GESTURE_WAKEUP
 	synaptics_rmi4_0d_gesture_report(rmi4_data, fhandler);
-	#endif
+#endif
 
 	retval = synaptics_rmi4_i2c_read(rmi4_data,
 			data_addr,
@@ -2245,8 +2244,8 @@ static void synaptics_rmi4_sensor_report(struct synaptics_rmi4_data *rmi4_data)
  */
 
 static void tpd_eint_handler(void)
-{      
-        __dbg("enter in tpd_eint_handler\n");
+{
+	__dbg("enter in tpd_eint_handler\n");
 	TPD_DEBUG_PRINT_INT;
 	tpd_flag = 1;
 	wake_up_interruptible(&waiter);
@@ -2431,7 +2430,7 @@ static int synaptics_rmi4_f11_init(struct synaptics_rmi4_data *rmi4_data,
 			__func__, fhandler->fn_number,
 			rmi4_data->sensor_max_x,
 			rmi4_data->sensor_max_y);
-        __dbg("[DRV1] max x = %d max y = %d\n ",rmi4_data->sensor_max_x,rmi4_data->sensor_max_y);
+	__dbg("[DRV1] max x = %d max y = %d\n ",rmi4_data->sensor_max_x,rmi4_data->sensor_max_y);
 
 	rmi4_data->max_touch_width = MAX_F11_TOUCH_WIDTH;
 
@@ -2517,9 +2516,9 @@ static int synaptics_rmi4_f12_init(struct synaptics_rmi4_data *rmi4_data,
 			query_5.ctrl5_is_present +
 			query_5.ctrl6_is_present +
 			query_5.ctrl7_is_present;
-     /*lenovo-sw xuwen1 add for slide gesture begin*/
-      lpwg_handler.control_20.offset = ctrl_8_offset+
-	   	      query_5.ctrl8_is_present +
+	/*lenovo-sw xuwen1 add for slide gesture begin*/
+	lpwg_handler.control_20.offset = ctrl_8_offset+
+			query_5.ctrl8_is_present +
 			query_5.ctrl9_is_present +
 			query_5.ctrl10_is_present +
 			query_5.ctrl11_is_present +
@@ -2531,26 +2530,26 @@ static int synaptics_rmi4_f12_init(struct synaptics_rmi4_data *rmi4_data,
 			query_5.ctrl17_is_present +
 			query_5.ctrl18_is_present +
 			query_5.ctrl19_is_present;
-	 lpwg_handler.control_20.addr= fhandler->full_addr.ctrl_base + lpwg_handler.control_20.offset;
-	 lpwg_handler.data_04.addr = fhandler->full_addr.data_base+0x02;
-	 __dbg("lpwg_handler.control_20.addr:0x%04x, lpwg_handler.data_04.addr:0x%04x, fhandler.ctrl_base:0x%04x,fhandler.data_base:0x%04x\n",lpwg_handler.control_20.addr,lpwg_handler.data_04.addr,fhandler->full_addr.ctrl_base,fhandler->full_addr.data_base);
-         retval = synaptics_rmi4_i2c_read(rmi4_data,
-			 lpwg_handler.control_20.addr,
+	lpwg_handler.control_20.addr= fhandler->full_addr.ctrl_base + lpwg_handler.control_20.offset;
+	lpwg_handler.data_04.addr = fhandler->full_addr.data_base+0x02;
+	__dbg("lpwg_handler.control_20.addr:0x%04x, lpwg_handler.data_04.addr:0x%04x, fhandler.ctrl_base:0x%04x,fhandler.data_base:0x%04x\n",lpwg_handler.control_20.addr,lpwg_handler.data_04.addr,fhandler->full_addr.ctrl_base,fhandler->full_addr.data_base);
+	retval = synaptics_rmi4_i2c_read(rmi4_data,
+			lpwg_handler.control_20.addr,
 			lpwg_handler.control_20.data,
 			sizeof(lpwg_handler.control_20.data));
 	if (retval < 0)
-		{
+	{
 		__dbg(" read lpwg_handler failed\n");
 		return retval;
-		}
+	}
 	__dbg(" lpwg_handler.control_20.report_flags is %d.\n", lpwg_handler.control_20.report_flags);
-       if(lpwg_handler.control_20.report_flags){
-	   	lpwg_handler.supported = false;
+	if(lpwg_handler.control_20.report_flags)
+	{
+		lpwg_handler.supported = false;
 		lpwg_handler.lpwg_mode = false;
-		
-        }
-	   
-	 /*lenovo-sw xuwen1 add for slide gesture end*/   
+	}
+
+	/*lenovo-sw xuwen1 add for slide gesture end*/
 	ctrl_23_offset = ctrl_8_offset +
 			query_5.ctrl8_is_present +
 			query_5.ctrl9_is_present +
@@ -2567,49 +2566,49 @@ static int synaptics_rmi4_f12_init(struct synaptics_rmi4_data *rmi4_data,
 			query_5.ctrl20_is_present +
 			query_5.ctrl21_is_present +
 			query_5.ctrl22_is_present;
-/*lenovo-sw xuwen1 add 20140625 for glove mode begin*/
-        glove_handler.control_23.addr= fhandler->full_addr.ctrl_base + ctrl_23_offset;
-       __dbg("glove_handler.control_23.addr:0x%04x,fhandler.ctrl_base:0x%04x,ctrl_23_offset:0x%04x\n",glove_handler.control_23.addr,fhandler->full_addr.ctrl_base,ctrl_23_offset);
+	/*lenovo-sw xuwen1 add 20140625 for glove mode begin*/
+	glove_handler.control_23.addr= fhandler->full_addr.ctrl_base + ctrl_23_offset;
+	__dbg("glove_handler.control_23.addr:0x%04x,fhandler.ctrl_base:0x%04x,ctrl_23_offset:0x%04x\n",glove_handler.control_23.addr,fhandler->full_addr.ctrl_base,ctrl_23_offset);
 
-	 retval = synaptics_rmi4_i2c_read(rmi4_data,
+	retval = synaptics_rmi4_i2c_read(rmi4_data,
 			glove_handler.control_23.addr,
 			glove_handler.control_23.data,
 			sizeof(glove_handler.control_23.data));
-	 if (retval < 0)
-	 	{
-	 	__dbg(" read glove_handler ctrl_23 failed\n");
-		return retval;
-	 	}
-	 __dbg(" glove_handler.control_23.obj_type_enable is %d.\n", glove_handler.control_23.obj_type_enable);
-
-     retval = synaptics_rmi4_i2c_read(rmi4_data,0x0201,&ctrl_0d_00,sizeof(ctrl_0d_00));
-	 if (retval < 0)
-	 	{
-	 	__dbg(" read glove_handler 0D_ctrl_0 failed\n");
-		return retval;
-	 	}
-	 __dbg(" glove_handler.virtual_control_0.glove_0D_value is %d.\n", ctrl_0d_00);
-/*lenovo-sw xuwen1 add 20140625 for glove mode end*/
-/*lenovo-sw xuwen1 add 20140915 for FW enter doze from area begin*/	   
-lpwg_handler.control_27.offset = ctrl_23_offset +
-			query_5.ctrl23_is_present +
-			query_5.ctrl24_is_present +
-			query_5.ctrl25_is_present +
-			query_5.ctrl26_is_present;
-lpwg_handler.control_27.addr= fhandler->full_addr.ctrl_base + lpwg_handler.control_27.offset;
-__dbg("lpwg_handler.control_27.addr:0x%04x\n",lpwg_handler.control_27.addr);
-         retval = synaptics_rmi4_i2c_read(rmi4_data,
-			 lpwg_handler.control_27.addr,
-			lpwg_handler.control_27.data,
-			sizeof(lpwg_handler.control_27.data));
 	if (retval < 0)
-		{
-		__dbg(" read timer_control_lpwg_handler failed\n");
+	{
+		__dbg(" read glove_handler ctrl_23 failed\n");
 		return retval;
-		}
-	// __dbg(" max_active_duration d%,timer_1 %d,max_active_duration_timeout %d.\n", lpwg_handler.control_27.max_active_duration,
-  //lpwg_handler.control_27.timer_1,lpwg_handler.control_27.max_active_duration_timeout);
-/*lenovo-sw xuwen1 add 20140915 for FW enter doze from area end*/	 	
+	}
+	__dbg(" glove_handler.control_23.obj_type_enable is %d.\n", glove_handler.control_23.obj_type_enable);
+
+	retval = synaptics_rmi4_i2c_read(rmi4_data,0x0201,&ctrl_0d_00,sizeof(ctrl_0d_00));
+	if (retval < 0)
+	{
+		__dbg(" read glove_handler 0D_ctrl_0 failed\n");
+		return retval;
+	}
+	__dbg(" glove_handler.virtual_control_0.glove_0D_value is %d.\n", ctrl_0d_00);
+	/*lenovo-sw xuwen1 add 20140625 for glove mode end*/
+	/*lenovo-sw xuwen1 add 20140915 for FW enter doze from area begin*/
+	lpwg_handler.control_27.offset = ctrl_23_offset +
+				query_5.ctrl23_is_present +
+				query_5.ctrl24_is_present +
+				query_5.ctrl25_is_present +
+				query_5.ctrl26_is_present;
+	lpwg_handler.control_27.addr= fhandler->full_addr.ctrl_base + lpwg_handler.control_27.offset;
+	__dbg("lpwg_handler.control_27.addr:0x%04x\n",lpwg_handler.control_27.addr);
+			retval = synaptics_rmi4_i2c_read(rmi4_data,
+				lpwg_handler.control_27.addr,
+				lpwg_handler.control_27.data,
+				sizeof(lpwg_handler.control_27.data));
+		if (retval < 0)
+			{
+			__dbg(" read timer_control_lpwg_handler failed\n");
+			return retval;
+			}
+		// __dbg(" max_active_duration d%,timer_1 %d,max_active_duration_timeout %d.\n", lpwg_handler.control_27.max_active_duration,
+	//lpwg_handler.control_27.timer_1,lpwg_handler.control_27.max_active_duration_timeout);
+	/*lenovo-sw xuwen1 add 20140915 for FW enter doze from area end*/
 	ctrl_28_offset = ctrl_23_offset +
 			query_5.ctrl23_is_present +
 			query_5.ctrl24_is_present +
@@ -2704,7 +2703,7 @@ __dbg("lpwg_handler.control_27.addr:0x%04x\n",lpwg_handler.control_27.addr);
 			__func__, fhandler->fn_number,
 			rmi4_data->sensor_max_x,
 			rmi4_data->sensor_max_y);
-      __dbg("[DRV2] max x = %d max y = %d\n ",rmi4_data->sensor_max_x,rmi4_data->sensor_max_y);
+	__dbg("[DRV2] max x = %d max y = %d\n ",rmi4_data->sensor_max_x,rmi4_data->sensor_max_y);
 	rmi4_data->num_of_rx = ctrl_8.num_of_rx;
 	rmi4_data->num_of_tx = ctrl_8.num_of_tx;
 	rmi4_data->max_touch_width = max(rmi4_data->num_of_rx,
@@ -2726,7 +2725,8 @@ static int synaptics_rmi4_f1a_alloc_mem(struct synaptics_rmi4_data *rmi4_data,
 	struct synaptics_rmi4_f1a_handle *f1a;
 
 	f1a = kzalloc(sizeof(*f1a), GFP_KERNEL);
-	if (!f1a) {
+	if (!f1a)
+	{
 		dev_err(&rmi4_data->i2c_client->dev,
 				"%s: Failed to alloc mem for function handle\n",
 				__func__);
@@ -2750,7 +2750,8 @@ static int synaptics_rmi4_f1a_alloc_mem(struct synaptics_rmi4_data *rmi4_data,
 	f1a->max_count = f1a->button_query.max_button_count + 1;
 
 	f1a->button_control.txrx_map = kzalloc(f1a->max_count * 2, GFP_KERNEL);
-	if (!f1a->button_control.txrx_map) {
+	if (!f1a->button_control.txrx_map)
+	{
 		dev_err(&rmi4_data->i2c_client->dev,
 				"%s: Failed to alloc mem for tx rx mapping\n",
 				__func__);
@@ -3154,9 +3155,9 @@ rescan_pdt:
 					return retval;
 				/*lenovo-sw xuwen1 add for gesture begin*/
 				rmi4_data->fn11_mask = 0;
-                          offset = intr_count%8;
-                       for(ii=offset;ii<(rmi_fd.intr_src_count+offset);ii++)
-                               rmi4_data->fn11_mask |= 1 <<ii;
+				offset = intr_count % 8;
+				for(ii = offset; ii < (rmi_fd.intr_src_count + offset); ii++)
+					rmi4_data->fn11_mask |= 1 << ii;
 				/*lenovo-sw xuwen1 add for gesture end*/
 				break;
 			case SYNAPTICS_RMI4_F1A:
@@ -3343,8 +3344,7 @@ static void synaptics_rmi4_set_params(struct synaptics_rmi4_data *rmi4_data)
 static int synaptics_rmi4_set_input_dev(struct synaptics_rmi4_data *rmi4_data)
 {
 	int retval;
-	int temp;
-       int i;
+
 	rmi4_data->input_dev = input_allocate_device();
 	if (rmi4_data->input_dev == NULL) {
 		dev_err(&rmi4_data->i2c_client->dev,
@@ -3654,28 +3654,28 @@ EXPORT_SYMBOL(synaptics_rmi4_new_function);
 
 static void tpd_power_ctrl(int en)
 {
-        if (en) {
-	#ifdef TPD_PWRBY_PMIC
+	if (en) {
+#ifdef TPD_PWRBY_PMIC
 		hwPowerOn(TPD_POWER_SOURCE, VOL_2800, "TP");
-        	msleep(DELAY_S7300_BOOT_READY);
-	#elif defined(TPD_PWRBY_GPIO)
+		msleep(DELAY_S7300_BOOT_READY);
+#elif defined(TPD_PWRBY_GPIO)
 		mt_set_gpio_mode(TPD_POWER_GPIO, GPIO_CTP_EN_PIN_M_GPIO);
 		mt_set_gpio_dir(TPD_POWER_GPIO, GPIO_DIR_OUT);
 		mt_set_gpio_out(TPD_POWER_GPIO, GPIO_OUT_ONE);
 		msleep(DELAY_S7300_BOOT_READY);
-	#else
+#else
 		//no need ctrl
-	#endif
+#endif
 	} else {
-	#ifdef TPD_PWRBY_PMIC
-        	hwPowerDown(TPD_POWER_SOURCE, "TP");
-        	msleep(10);
-	#elif defined(TPD_PWRBY_GPIO)
+#ifdef TPD_PWRBY_PMIC
+		hwPowerDown(TPD_POWER_SOURCE, "TP");
+		msleep(10);
+#elif defined(TPD_PWRBY_GPIO)
 		mt_set_gpio_dir(TPD_POWER_GPIO, GPIO_DIR_IN);
 		msleep(20);
-	#else
+#else
 		//no need ctrl
-	#endif
+#endif
 	}
 }
 
@@ -3697,10 +3697,10 @@ static void tpd_esd_do_reset(struct synaptics_rmi4_data *rmi4_data)
 		return;
 	}
 #endif
-	#if 1
+#if 1
 	tpd_power_ctrl(0);
 	tpd_power_ctrl(1);
-	#endif
+#endif
 	mt_set_gpio_out(GPIO_CTP_RST_PIN, GPIO_OUT_ZERO);
 	msleep(10);
 	mt_set_gpio_out(GPIO_CTP_RST_PIN, GPIO_OUT_ONE);
@@ -3738,7 +3738,7 @@ static int tpd_esd_check(struct synaptics_rmi4_data *rmi4_data)
 
 	if (retval < 0) {
 		__dbg_core("rmi4_esd [TIMER] i2c error trigger\n");
-	    do_reset = 1;
+		do_reset = 1;
 	}
 
 	if (tpd_esd_check_status(status)) {
@@ -3758,7 +3758,7 @@ static void tpd_esd_check_func(struct work_struct *work)
 
 	if (syna_fwu_upgrade_progress != FWU_PROGRESS_IN_PROGRESS) {
 		if (tpd_esd_check(rmi4_data))
-		    tpd_esd_do_reset(rmi4_data);
+			tpd_esd_do_reset(rmi4_data);
 	}
 	queue_delayed_work(tpd_esd_check_wq,
 			&tpd_esd_check_dwork,
@@ -3821,7 +3821,7 @@ void rmi4_tpd_reinit(struct synaptics_rmi4_data *rmi4_data)
  */
 
  
-static int  synaptics_rmi4_probe(struct i2c_client *client,
+static int synaptics_rmi4_probe(struct i2c_client *client,
 		const struct i2c_device_id *dev_id)
 {
 	int retval;
@@ -3848,14 +3848,14 @@ static int  synaptics_rmi4_probe(struct i2c_client *client,
 	mt_set_gpio_pull_select(GPIO_CTP_EINT_PIN, GPIO_PULL_UP);
 
 	mt_set_gpio_mode(GPIO_CTP_RST_PIN, GPIO_CTP_RST_PIN_M_GPIO);
-   	mt_set_gpio_dir(GPIO_CTP_RST_PIN, GPIO_DIR_OUT);
-  	mt_set_gpio_out(GPIO_CTP_RST_PIN, GPIO_OUT_ONE);
+	mt_set_gpio_dir(GPIO_CTP_RST_PIN, GPIO_DIR_OUT);
+	mt_set_gpio_out(GPIO_CTP_RST_PIN, GPIO_OUT_ONE);
 
 	// power up sequence
-  	tpd_power_ctrl(1);
+	tpd_power_ctrl(1);
 	mt_set_gpio_out(GPIO_CTP_RST_PIN, GPIO_OUT_ZERO);
 	msleep(DELAY_S7300_RESET);
-  	mt_set_gpio_out(GPIO_CTP_RST_PIN, GPIO_OUT_ONE);
+	mt_set_gpio_out(GPIO_CTP_RST_PIN, GPIO_OUT_ONE);
 	msleep(DELAY_S7300_RESET_READY);
 
 #if	TOUCH_FILTER
@@ -3901,7 +3901,7 @@ static int  synaptics_rmi4_probe(struct i2c_client *client,
 /*lenovo-sw, xuwen1, 20140423, add for light up screen end*/
 
 /*lenovo xuwen1 modify 20140620 for area touch,begin*/
- #if defined(LENOVO_AREA_TOUCH)
+#if defined(LENOVO_AREA_TOUCH)
 //	set_bit(ABS_MT_POSITION_X_W,rmi4_data->input_dev->absbit);
 //	set_bit(ABS_MT_POSITION_Y_W, rmi4_data->input_dev->absbit);
 #endif
@@ -4022,13 +4022,13 @@ static int set_glove_mode_func(bool en)
 	struct synaptics_rmi4_data *rmi4_data = dev_get_drvdata(g_dev);
 
 	if (!tpd_load_status) {
-	    __dbg("[glove_mode]Do not use correct touchpanel.\n");
-	    return -1;
+		__dbg("[glove_mode]Do not use correct touchpanel.\n");
+		return -1;
 	}
 
 	if (tpd_halt) {
-	    __dbg("[glove_mode]touchpanel status is suspend.\n");
-	    return -1;
+		__dbg("[glove_mode]touchpanel status is suspend.\n");
+		return -1;
 	}
 
 	if (en) {
@@ -4042,7 +4042,7 @@ static int set_glove_mode_func(bool en)
 						&reg_val,sizeof(reg_val));
 		}
 		glove_func.status = 1; //close button&USB
-		__dbg_core("enable glove func  mode.\n");
+		__dbg_core("enable glove func mode.\n");
 
 	} else {
 		if (tpd_rmi4_s3203_det) {
@@ -4059,7 +4059,7 @@ static int set_glove_mode_func(bool en)
 
 	}
 	if (retval < 0) {
-		__dbg("set  glove func error !\n");
+		__dbg("set glove func error !\n");
 	}
 	return retval;
 }
@@ -4212,7 +4212,7 @@ static void synaptics_rmi4_sensor_sleep(struct synaptics_rmi4_data *rmi4_data)
 		} else {
 			rmi4_data->sensor_sleep = true;
 		}
-     		__dbg("2/the status of sensor_sleep is %d\n",rmi4_data->sensor_sleep);
+		__dbg("2/the status of sensor_sleep is %d\n",rmi4_data->sensor_sleep);
 	}
 #else
 	device_ctrl = (device_ctrl & ~MASK_3BIT);
@@ -4386,7 +4386,7 @@ static int synaptics_rmi4_suspend(struct device *dev)
 {
 	struct synaptics_rmi4_exp_fhandler *exp_fhandler;
 	struct synaptics_rmi4_data *rmi4_data = dev_get_drvdata(g_dev);
-	int retval;      
+
 	if (rmi4_data->staying_awake)
 		return 0;
 
@@ -4448,11 +4448,11 @@ static int synaptics_rmi4_resume(struct device *dev)
 
 #ifdef TPD_CLOSE_POWER_IN_SLEEP
 	// power up sequence
-	#ifdef LENOVO_GESTURE_WAKEUP
+#ifdef LENOVO_GESTURE_WAKEUP
 	if (!gesture_func.wakeup_enable) {
 		tpd_power_ctrl(1);
 	}
-	#endif
+#endif
 #endif
 	mt_set_gpio_out(GPIO_CTP_RST_PIN, GPIO_OUT_ZERO);
 	msleep(DELAY_S7300_RESET);
@@ -4547,7 +4547,7 @@ static int tpd_local_init(void)
 		TPD_DMESG("tangjie Error unable to add i2c driver.\n");
 		goto exit_local_init;
 	}
-#ifdef TPD_HAVE_BUTTON     
+#ifdef TPD_HAVE_BUTTON
 	tpd_button_setting(TPD_KEY_COUNT, tpd_keys_local, tpd_keys_dim_local);// initialize tpd button data
 #endif 
 	boot_mode = get_boot_mode();
@@ -4610,7 +4610,7 @@ static int __init synaptics_rmi4_init(void)
  */
 static void __exit synaptics_rmi4_exit(void)
 {
-	 tpd_driver_remove(&synaptics_rmi4_driver); //i2c_del_driver(&synaptics_rmi4_driver);
+	tpd_driver_remove(&synaptics_rmi4_driver); //i2c_del_driver(&synaptics_rmi4_driver);
 	return;
 }
 
