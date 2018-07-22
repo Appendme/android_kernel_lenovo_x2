@@ -1414,7 +1414,6 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 	int y;
 	int wx;
 	int wy;
-	int temp;
 	
 #ifdef	SPECIAL_REPORT_LOG
 	static unsigned int x_s=0, y_s=0, wx_s=0, wy_s=0;
@@ -3563,7 +3562,6 @@ exit:
 static int synaptics_rmi4_reset_device(struct synaptics_rmi4_data *rmi4_data)
 {
 	int retval;
-	int temp;
 	unsigned char command = 0x01;
 	struct synaptics_rmi4_exp_fhandler *exp_fhandler;
 
@@ -3894,7 +3892,6 @@ static int synaptics_rmi4_probe(struct i2c_client *client,
 	int retval;
 	unsigned char attr_count;
 	struct synaptics_rmi4_data *rmi4_data;
-	int i;
 
 	/*if other tp ic already, then return, dont do reset&pwr on*/ 
 	if (tpd_ic_ready_get())
@@ -4231,7 +4228,7 @@ static void synaptics_rmi4_sensor_sleep(struct synaptics_rmi4_data *rmi4_data)
 {
 	int retval;
 	unsigned char device_ctrl;
-	unsigned char no_sleep_setting = rmi4_data->no_sleep_setting;
+
 	__dbg("enter in %s\n",__func__);
 	retval = synaptics_rmi4_i2c_read(rmi4_data,
 			rmi4_data->f01_ctrl_base_addr,
@@ -4453,7 +4450,9 @@ static void synaptics_rmi4_late_resume(struct early_suspend *h)
  */
 static int synaptics_rmi4_suspend(struct device *dev)
 {
+#ifndef LENOVO_GESTURE_WAKEUP
 	struct synaptics_rmi4_exp_fhandler *exp_fhandler;
+#endif
 	struct synaptics_rmi4_data *rmi4_data = dev_get_drvdata(g_dev);
 
 	if (rmi4_data->staying_awake)
