@@ -1071,7 +1071,6 @@ exit:
 #endif
 
 #ifdef LENOVO_GESTURE_WAKEUP
-
 static int synaptics_rmi4_gesture_report(struct synaptics_rmi4_data *rmi4_data)
 {
 	int retval;
@@ -1254,7 +1253,7 @@ static void synaptics_rmi4_gesture_suspend(struct synaptics_rmi4_data *rmi4_data
 		} else {
 			lpwg_handler.control_20.report_flags = (lpwg_handler.control_20.report_flags | 0x02);
 			retval = synaptics_rmi4_i2c_write(rmi4_data,
-				 lpwg_handler.control_20.addr,
+				lpwg_handler.control_20.addr,
 				lpwg_handler.control_20.data,
 				sizeof(lpwg_handler.control_20.data));
 			__dbg(":suspend_1/data is %d \n",lpwg_handler.control_20.report_flags);
@@ -1269,8 +1268,8 @@ static void synaptics_rmi4_gesture_suspend(struct synaptics_rmi4_data *rmi4_data
 			lpwg_handler.control_27.timer_1 = 0x02;
 			lpwg_handler.control_27.max_active_duration_timeout = 0x07;
 			retval = synaptics_rmi4_i2c_write(rmi4_data,
-				 lpwg_handler.control_27.addr,
-				 lpwg_handler.control_27.data,
+				lpwg_handler.control_27.addr,
+				lpwg_handler.control_27.data,
 				sizeof(lpwg_handler.control_27.data));
 			if (retval < 0) {
 				dev_err(&(rmi4_data->input_dev->dev),
@@ -1968,9 +1967,9 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 exit_f12_report:
 	return touch_count;
 }
+
 /*lenovo-sw xuwen1 add for double click home gesture begin*/
 int synaptics_rmi4_f51_report(struct synaptics_rmi4_data *rmi4_data)
-
 {
 
 	int retval = 0;
@@ -2002,8 +2001,6 @@ int synaptics_rmi4_f51_report(struct synaptics_rmi4_data *rmi4_data)
 /*lenovo-sw xuwen1 add for double click home gesture end*/
 
 //lenovo_sw liuyw2 3/20/15 add 0d gesture
-
-
 static void synaptics_rmi4_f1a_report(struct synaptics_rmi4_data *rmi4_data,
 		struct synaptics_rmi4_fn *fhandler)
 {
@@ -2120,7 +2117,7 @@ static void synaptics_rmi4_f1a_report(struct synaptics_rmi4_data *rmi4_data,
 			input_report_key(rmi4_data->input_dev,
 					f1a->button_map[button],
 					status);
-			__dbg_core(" %s key(%d) st(%d)\n", __func__, f1a->button_map[button], status);
+			__dbg_core("%s key(%d) st(%d)\n", __func__, f1a->button_map[button], status);
 		} else {
 			if (before_2d_status[button] == 1) {
 				before_2d_status[button] = 0;
@@ -2128,7 +2125,7 @@ static void synaptics_rmi4_f1a_report(struct synaptics_rmi4_data *rmi4_data,
 				input_report_key(rmi4_data->input_dev,
 						f1a->button_map[button],
 						status);
-				__dbg_core(" %s key(%d) st(%d)\n", __func__, f1a->button_map[button], status);
+				__dbg_core("%s key(%d) st(%d)\n", __func__, f1a->button_map[button], status);
 			} else {
 				if (status == 1)
 					while_2d_status[button] = 1;
@@ -2141,7 +2138,7 @@ static void synaptics_rmi4_f1a_report(struct synaptics_rmi4_data *rmi4_data,
 		input_report_key(rmi4_data->input_dev,
 				f1a->button_map[button],
 				status);
-		__dbg_core(" %s key(%d) st(%d)\n", __func__, f1a->button_map[button], status);
+		__dbg_core("%s key(%d) st(%d)\n", __func__, f1a->button_map[button], status);
 #endif
 #endif	/* TPD_BUTTON_REPORT_XY */
 	}
@@ -2600,8 +2597,8 @@ static int synaptics_rmi4_f12_init(struct synaptics_rmi4_data *rmi4_data,
 			query_5.ctrl17_is_present +
 			query_5.ctrl18_is_present +
 			query_5.ctrl19_is_present;
-	lpwg_handler.control_20.addr= fhandler->full_addr.ctrl_base + lpwg_handler.control_20.offset;
-	lpwg_handler.data_04.addr = fhandler->full_addr.data_base+0x02;
+	lpwg_handler.control_20.addr = fhandler->full_addr.ctrl_base + lpwg_handler.control_20.offset;
+	lpwg_handler.data_04.addr = fhandler->full_addr.data_base + 0x02;
 	__dbg("lpwg_handler.control_20.addr:0x%04x, lpwg_handler.data_04.addr:0x%04x, fhandler.ctrl_base:0x%04x,fhandler.data_base:0x%04x\n",lpwg_handler.control_20.addr,lpwg_handler.data_04.addr,fhandler->full_addr.ctrl_base,fhandler->full_addr.data_base);
 	retval = synaptics_rmi4_i2c_read(rmi4_data,
 			lpwg_handler.control_20.addr,
@@ -4647,7 +4644,7 @@ static struct tpd_driver_t synaptics_rmi4_driver = {
 	.tpd_have_button = 1,
 #else
 	.tpd_have_button = 0,
-#endif		
+#endif
 };
 
 static struct i2c_board_info __initdata i2c_tpd={ I2C_BOARD_INFO("synaptics-tpd", (TPD_I2C_ADDR))};
