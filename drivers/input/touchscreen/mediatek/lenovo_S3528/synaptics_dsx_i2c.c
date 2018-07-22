@@ -1111,7 +1111,7 @@ static int synaptics_rmi4_gesture_report(struct synaptics_rmi4_data *rmi4_data)
 					lpwg_handler.data_04.data,
 					sizeof(lpwg_handler.data_04.data));
 			if (retval < 0)
-				return;
+				return -1;
 
 			__dbg_core(" gesture_type(0x%x 0x%x 0x%x 0x%x 0x%x.)\n",
 					lpwg_handler.data_04.gesture_type,
@@ -1369,7 +1369,7 @@ static void synaptics_rmi4_gesture_resume(struct synaptics_rmi4_data *rmi4_data)
 						"%s: Failed to enter sleep mode\n",
 						__func__);
 				lpwg_handler.control_20.report_flags = 0x00;
-				return 0;
+				return;
 			}
 			__dbg("resume_2/ lpwg_handler.control_20.report_flags is %d.\n", lpwg_handler.control_20.report_flags);
 		}
@@ -1979,7 +1979,7 @@ int synaptics_rmi4_f51_report(struct synaptics_rmi4_data *rmi4_data)
 		__dbg("enter in double gesture mode\n");
 		retval = synaptics_rmi4_i2c_read(rmi4_data,0x0400,&val,sizeof(val));
 		if (retval < 0)
-			return;
+			return 0;
 		__dbg("%s, lpwg_int_flag_in_double = %d.\n", __func__,lpwg_int_flag);
 		__dbg("%s, double_gesture_type = 0x%2x.\n",__func__,val);
 		if ((val == 0x02) && (lpwg_int_flag == 1) && (gesture_home_once == 1)) {
@@ -3511,7 +3511,7 @@ static int synaptics_rmi4_reinit_device(struct synaptics_rmi4_data *rmi4_data)
 	struct synaptics_rmi4_device_info *rmi;
 
 	if (syna_fwu_upgrade_progress == FWU_PROGRESS_IN_PROGRESS)
-		return;
+		return 0;
 
 	rmi = &(rmi4_data->rmi4_mod_info);
 
@@ -3568,7 +3568,7 @@ static int synaptics_rmi4_reset_device(struct synaptics_rmi4_data *rmi4_data)
 	struct synaptics_rmi4_exp_fhandler *exp_fhandler;
 
 	if (syna_fwu_upgrade_progress == FWU_PROGRESS_IN_PROGRESS)
-		return;
+		return -1;
 
 	mutex_lock(&(rmi4_data->rmi4_reset_mutex));
 
