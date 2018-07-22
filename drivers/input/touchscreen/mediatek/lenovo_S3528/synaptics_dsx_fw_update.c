@@ -1857,50 +1857,6 @@ static void synaptics_rmi4_fwu_attn(struct synaptics_rmi4_data *rmi4_data,
 	return;
 }
 
-unsigned int tpd_update_extra_param_vendor1()
-{
-	 return 0;
-}
-
-unsigned int tpd_update_extra_param_vendor2()
-{
-///////////// NO USE, MAYBE CAN REMOVED //////////////
-/*
-    int retval;
-	unsigned char buf[88];
-
-    retval = fwu->fn_ptr->read(fwu->rmi4_data,0x012E,buf,sizeof(buf));//0x0219(/0x24)
-    if (retval < 0) {
-		__dbg("Failed to read 0x012E (code %d).\n", retval);
-		return retval;
-	}
-	//freq scan
-	buf[0] |=  0x80;
-	buf[11] |= 0x80;
-	buf[22] &= 0x7F;
-	buf[33] &= 0x7F;
-	buf[44] &= 0x7F;
- 
-    retval = fwu->fn_ptr->write(fwu->rmi4_data,0x012E,buf,sizeof(buf));//0x0219(/0x24)
-    if (retval < 0) {
-		__dbg("Failed to write 0x012E (code %d).\n", retval);
-		return retval;
-	}
-*/
-	 return 0;
-////////////////////////////////////////////////////
-}
-
-unsigned int tpd_update_extra_param()
-{
-	if (FAMILY_QUERY_ID == 0x01)
-		tpd_update_extra_param_vendor1();
-	else if (FAMILY_QUERY_ID == 0x04)
-		tpd_update_extra_param_vendor2();
-
-	return 0;
-}
-
 static int synaptics_rmi4_fwu_init(struct synaptics_rmi4_data *rmi4_data)
 {
 	int retval;
@@ -2076,7 +2032,7 @@ static int synaptics_rmi4_fwu_init(struct synaptics_rmi4_data *rmi4_data)
 	}
 	#endif
 #endif
-	tpd_update_extra_param();
+
 	//FW_ID_A_UPDAT = tpd_read_fw_version();
 	get_tpd_info();
 	//__dbg("FW_ID_after_update is 0x%08x.\n",FW_ID_A_UPDAT);

@@ -312,7 +312,6 @@ static int synaptics_rmi4_irq_enable(struct synaptics_rmi4_data *rmi4_data,
 static int synaptics_rmi4_irq_enable(struct synaptics_rmi4_data *rmi4_data,
 		bool enable);
 
-extern unsigned int tpd_update_extra_param();
 struct synaptics_rmi4_f01_device_status {
 	union {
 		struct {
@@ -1918,7 +1917,6 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 					x, y, wx, wy, finger, finger_c, ms_gap);
 #endif
 			__dbg_core(" f12_abs down(%d,%d,%d,%d)\n",x, y, finger, finger_status);
-			TPD_EM_PRINT(wx, wy, x, y, finger, 1);	//for mediatek engineer mode tpd log
 			touch_count++;
 		}
 	}
@@ -1950,7 +1948,6 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 		input_mt_sync(rmi4_data->input_dev);
 #endif
 		__dbg_core(" f12_abs up\n");
-		TPD_EM_PRINT(0, 0, 0, 0, 0, 0);	//for mediatek engineer mode tpd log
 	}
 
 	input_sync(rmi4_data->input_dev);
@@ -3560,7 +3557,6 @@ static int synaptics_rmi4_reinit_device(struct synaptics_rmi4_data *rmi4_data)
 	synaptics_rmi4_set_configured(rmi4_data);
 
 	retval = 0;
-	tpd_update_extra_param();
 
 exit:
 	mutex_unlock(&(rmi4_data->rmi4_reset_mutex));
@@ -3621,7 +3617,6 @@ static int synaptics_rmi4_reset_device(struct synaptics_rmi4_data *rmi4_data)
 	rmi4_data->touch_stopped = false;
 
 	mutex_unlock(&(rmi4_data->rmi4_reset_mutex));
-	tpd_update_extra_param();
 	return 0;
 }
 
