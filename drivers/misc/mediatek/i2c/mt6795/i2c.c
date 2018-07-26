@@ -47,6 +47,7 @@ static struct i2c_dma_info g_dma_data[DMA_LOG_LEN];
 
 #define DEBUG_9210_READ
 
+typedef int (*pmaster_xfer) (struct i2c_adapter *adap, struct i2c_msg *msgs, int num);
 
 //define ONLY_KERNEL
 /******************************internal API********************************************************/
@@ -1363,7 +1364,7 @@ static U32 mt_i2c_functionality(struct i2c_adapter *adap)
 
 static struct i2c_algorithm mt_i2c_algorithm = {
 #ifdef USE_I2C_MTK_EXT
-	.master_xfer   = mtk_i2c_transfer,
+	.master_xfer   = (pmaster_xfer)mtk_i2c_transfer,
 #else
 	.master_xfer   = standard_i2c_transfer,
 #endif
