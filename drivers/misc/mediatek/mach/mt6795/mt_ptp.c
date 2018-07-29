@@ -3936,7 +3936,7 @@ static void ptp_set_ptp_volt(struct ptp_det *det)
 
 #endif
 		}
-
+	default:
 		break;
 	}
 
@@ -4135,7 +4135,6 @@ static inline void handle_init01_isr(struct ptp_det *det)
 static inline void handle_init02_isr(struct ptp_det *det)
 {
 	unsigned int temp;
-	int i;
 	struct ptp_ctrl *ctrl = id_to_ptp_ctrl(det->ctrl_id);
 	struct ptp_det *little_det = id_to_ptp_det(PTP_DET_LITTLE);
 
@@ -4169,6 +4168,7 @@ static inline void handle_init02_isr(struct ptp_det *det)
 	memcpy(det->volt_tbl_init2, det->volt_tbl, sizeof(det->volt_tbl_init2));
 	
 #if 0
+	int i;
 	for (i = 0; i < NR_FREQ; i++)
 		ptp_isr_info("ptp_detectors[%s].volt_tbl[%d] = 0x%08X\n", det->name, i, det->volt_tbl[i]);
 
