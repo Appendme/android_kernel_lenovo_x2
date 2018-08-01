@@ -62,8 +62,6 @@
 #define __dbg_core(X...)
 #endif
 
-extern struct tpd_device *tpd;
-
 static unsigned char bypass_suspend = 0;
 extern unsigned char syna_fwu_upgrade_progress;
 
@@ -190,15 +188,6 @@ static struct task_struct *thread = NULL;
 static DECLARE_WAIT_QUEUE_HEAD(waiter);
 static int tpd_halt = 0; 
 static int tpd_flag = 0;
-#ifdef TPD_HAVE_BUTTON
-static int tpd_keys_local[TPD_KEY_COUNT] = TPD_KEYS;
-static int tpd_keys_dim_local[TPD_KEY_COUNT][4] = TPD_KEYS_DIM;
-#endif
-static u8 boot_mode;
-
-#ifdef	TPD_HAVE_BUTTON
-#define TPD_BUTTON_REPORT_XY		//report the virtual key x and y,mediatek
-#endif
 
 #if TOUCH_FILTER	//Touch filter algorithm,mediatek
 extern struct tpd_filter_t tpd_filter;
@@ -1561,13 +1550,6 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 #ifndef TYPE_B_PROTOCOL
 			input_mt_sync(rmi4_data->input_dev);
 #endif
-
-#ifdef TPD_HAVE_BUTTON
-			if (NORMAL_BOOT != boot_mode)
-			{
-				tpd_button(x, y, 1);
-			}
-#endif
 			__dbg_core(
 					"f11_abs report Finger %d: st(0x%02x), x(%d), y(%d)\n",
 					finger,
@@ -1611,12 +1593,6 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 #endif
 #ifndef TYPE_B_PROTOCOL
 		input_mt_sync(rmi4_data->input_dev);
-#endif
-#ifdef TPD_HAVE_BUTTON
-		if (NORMAL_BOOT != boot_mode)
-		{
-			tpd_button(x, y, 0);
-		}
 #endif
 		__dbg_core("f11_abs up");
 	}
@@ -2476,9 +2452,7 @@ static int synaptics_rmi4_f11_init(struct synaptics_rmi4_data *rmi4_data,
 			((control[7] & MASK_4BIT) << 8);
 	rmi4_data->sensor_max_y = ((control[8] & MASK_8BIT) << 0) |
 			((control[9] & MASK_4BIT) << 8);
-/*#ifdef TPD_HAVE_BUTTON
-	rmi4_data->sensor_max_y = rmi4_data->sensor_max_y * TPD_DISPLAY_HEIGH_RATIO / TPD_TOUCH_HEIGH_RATIO;
-#endif*/
+
 	dev_dbg(&rmi4_data->i2c_client->dev,
 			"%s: Function %02x max x = %d max y = %d\n",
 			__func__, fhandler->fn_number,
@@ -3395,6 +3369,19 @@ static void synaptics_rmi4_set_params(struct synaptics_rmi4_data *rmi4_data)
 	return;
 }
 
+static int synaptics_rmi4_dma_alloc(struct synaptics_rmi4_data *rmi4_data)
+{
+	rmi4_data->input_dev->dev.coherent_dma_mask = DMA_BIT_MASK(32);
+	gpDMABuf_va = (u8 *)dma_alloc_coherent(&rmi4_data->input_dev->dev, 4096, &gpDMABuf_pa, GFP_KERNEL);
+
+	if (!gpDMABuf_va)
+		return -ENOMEM;
+
+	memset(gpDMABuf_va, 0, 4096);
+
+	return 0;
+}
+
 static int synaptics_rmi4_set_input_dev(struct synaptics_rmi4_data *rmi4_data)
 {
 	int retval;
@@ -3407,6 +3394,16 @@ static int synaptics_rmi4_set_input_dev(struct synaptics_rmi4_data *rmi4_data)
 		retval = -ENOMEM;
 		goto err_input_device;
 	}
+
+	retval = synaptics_rmi4_dma_alloc(rmi4_data);
+	if (retval < 0) {
+		dev_err(&rmi4_data->i2c_client->dev,
+				"%s: Failed to allocate DMA i2c buffer\n",
+				__func__);
+		retval = -ENOMEM;
+		goto err_input_device;
+	}
+
 	retval = synaptics_rmi4_query_device(rmi4_data);
 	if (retval < 0) {
 		dev_err(&rmi4_data->i2c_client->dev,
@@ -3458,7 +3455,7 @@ err_register_input:
 err_query_device:
 	synaptics_rmi4_empty_fn_list(rmi4_data);
 	input_free_device(rmi4_data->input_dev);
-
+	dma_free_coherent(&rmi4_data->input_dev->dev, 4096, gpDMABuf_va, gpDMABuf_pa);
 err_input_device:
 	return retval;
 }
@@ -4559,82 +4556,36 @@ static int synaptics_rmi4_resume(struct device *dev)
 	return 0;
 }
 
+#ifndef CONFIG_FB
 static const struct dev_pm_ops synaptics_rmi4_dev_pm_ops = {
 	.suspend = synaptics_rmi4_suspend,
 	.resume  = synaptics_rmi4_resume,
 };
+#endif
 #endif
 
 static const struct i2c_device_id synaptics_rmi4_id_table[] = {
 	{ DRIVER_NAME, 0 },
 	{ },
 };
-unsigned short force[] = {0,TPD_I2C_ADDR,I2C_CLIENT_END,I2C_CLIENT_END};
+
+unsigned short force[] = { 0, TPD_I2C_ADDR, I2C_CLIENT_END, I2C_CLIENT_END };
 static const unsigned short * const forces[] = { force, NULL };
-//static int tpd_detect(struct i2c_client *client, struct i2c_board_info *info);
 
 MODULE_DEVICE_TABLE(i2c, synaptics_rmi4_id_table);
 
 static struct i2c_driver tpd_i2c_driver = {
 	.driver = {
-		.name = DRIVER_NAME
+		.name = DRIVER_NAME,
+		.owner = THIS_MODULE,
 	},
 	.probe = synaptics_rmi4_probe,
 	.remove = synaptics_rmi4_remove,
-	//.detect = tpd_detect,
 	.id_table = synaptics_rmi4_id_table,
 	.address_list = (const unsigned short*) forces,
 };
 
-static int tpd_local_init(void)
-{
-	TPD_DMESG("synaptics I2C Touchscreen Driver (Built %s @ %s)\n", __DATE__, __TIME__);
-
-	tpd->dev->dev.coherent_dma_mask = DMA_BIT_MASK(32);
-	gpDMABuf_va = (u8 *)dma_alloc_coherent(&tpd->dev->dev,
-							4096, &gpDMABuf_pa, GFP_KERNEL);
-	if (!gpDMABuf_va) {
-		__dbg_core("Allocate DMA I2C Buffer failed!");
-		return -1;
-	}
-	memset(gpDMABuf_va, 0, 4096);
-
-	if (i2c_add_driver(&tpd_i2c_driver)!=0) {
-		TPD_DMESG("tangjie Error unable to add i2c driver.\n");
-		goto exit_local_init;
-	}
-#ifdef TPD_HAVE_BUTTON
-	tpd_button_setting(TPD_KEY_COUNT, tpd_keys_local, tpd_keys_dim_local);// initialize tpd button data
-#endif 
-	boot_mode = get_boot_mode();
-	if (boot_mode == 3) {
-		boot_mode = NORMAL_BOOT;
-	}
-	tpd_type_cap = 1;
-
-
-	return 0;
-
-exit_local_init:
-	if(gpDMABuf_va)
-		dma_free_coherent(&tpd->dev->dev,
-			4096, gpDMABuf_va, gpDMABuf_pa);
-	return -1;
-}
-
-static struct tpd_driver_t synaptics_rmi4_driver = {
-	.tpd_device_name = DRIVER_NAME,
-	.tpd_local_init = tpd_local_init,
-	.suspend = synaptics_rmi4_suspend,
-	.resume = synaptics_rmi4_resume,
-#ifndef TPD_HAVE_BUTTON //lenovo-sw xuwen1 add for read version
-	.tpd_have_button = 1,
-#else
-	.tpd_have_button = 0,
-#endif
-};
-
-static struct i2c_board_info __initdata i2c_tpd={ I2C_BOARD_INFO(DRIVER_NAME, (TPD_I2C_ADDR)) };
+static struct i2c_board_info __initdata i2c_tpd = { I2C_BOARD_INFO(DRIVER_NAME, (TPD_I2C_ADDR)) };
 
  /**
  * synaptics_rmi4_init()
@@ -4648,8 +4599,8 @@ static struct i2c_board_info __initdata i2c_tpd={ I2C_BOARD_INFO(DRIVER_NAME, (T
 static int __init synaptics_rmi4_init(void)
 {
 	i2c_register_board_info(TPD_I2C_BUS, &i2c_tpd, 1);
-	if(tpd_driver_add(&synaptics_rmi4_driver) < 0){
-		pr_err("Fail to add tpd driver\n");
+	if (i2c_add_driver(&tpd_i2c_driver)!=0) {
+		pr_err("Fail to add touchscreen driver\n");
 		return -1;
 	}
 
@@ -4666,7 +4617,7 @@ static int __init synaptics_rmi4_init(void)
  */
 static void __exit synaptics_rmi4_exit(void)
 {
-	tpd_driver_remove(&synaptics_rmi4_driver); //i2c_del_driver(&synaptics_rmi4_driver);
+	i2c_del_driver(&tpd_i2c_driver);
 	return;
 }
 
