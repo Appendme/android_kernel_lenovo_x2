@@ -66,21 +66,9 @@ extern struct tpd_device *tpd;
 
 static unsigned char bypass_suspend = 0;
 extern unsigned char syna_fwu_upgrade_progress;
-/*lenovo-xw xuwen1 add 20140506 for start work begin*/
-/*lenovo-sw xuwen1 add for exeit begin*/
-/*
-#if !defined(__devinit)
-#define __devinit
-#endif
-#if !defined(__devexit)
-#define __devexit
-#endif
-#if !defined(__devexit_p)
-#define __devexit_p(x) (&(x))
-#endif*/
-/*lenovo-sw xuwen1 add for exeit end*/
-#define DRIVER_NAME "mtk-tpd"	//"synaptics_dsx_i2c", modify for sync the input device, or the factory mode is fail
-#define INPUT_PHYS_NAME "mtk-tpd/input0"	//"synaptics_dsx_i2c/input0"
+
+#define DRIVER_NAME "synaptics_dsx_i2c"
+#define INPUT_PHYS_NAME "synaptics_dsx_i2c/input0"
 
 #ifdef LENOVO_GESTURE_WAKEUP
 
@@ -3978,7 +3966,7 @@ static int synaptics_rmi4_probe(struct i2c_client *client,
 	register_early_suspend(&rmi4_data->early_suspend);
 #endif
 
-	thread = kthread_run(touch_event_handler, rmi4_data, "synaptics-tpd");
+	thread = kthread_run(touch_event_handler, rmi4_data, DRIVER_NAME);
 	if ( IS_ERR(thread) ) {
 		retval = PTR_ERR(thread);
 		pr_err(" %s: failed to create kernel thread: %d\n",__func__, retval);
@@ -4578,8 +4566,8 @@ static const struct dev_pm_ops synaptics_rmi4_dev_pm_ops = {
 #endif
 
 static const struct i2c_device_id synaptics_rmi4_id_table[] = {
-	{"synaptics-tpd", 0},
-	{},
+	{ DRIVER_NAME, 0 },
+	{ },
 };
 unsigned short force[] = {0,TPD_I2C_ADDR,I2C_CLIENT_END,I2C_CLIENT_END};
 static const unsigned short * const forces[] = { force, NULL };
@@ -4589,7 +4577,7 @@ MODULE_DEVICE_TABLE(i2c, synaptics_rmi4_id_table);
 
 static struct i2c_driver tpd_i2c_driver = {
 	.driver = {
-		.name = "synaptics-tpd",
+		.name = DRIVER_NAME
 	},
 	.probe = synaptics_rmi4_probe,
 	.remove = synaptics_rmi4_remove,
@@ -4635,7 +4623,7 @@ exit_local_init:
 }
 
 static struct tpd_driver_t synaptics_rmi4_driver = {
-	.tpd_device_name = "synaptics_tpd",
+	.tpd_device_name = DRIVER_NAME,
 	.tpd_local_init = tpd_local_init,
 	.suspend = synaptics_rmi4_suspend,
 	.resume = synaptics_rmi4_resume,
@@ -4646,7 +4634,7 @@ static struct tpd_driver_t synaptics_rmi4_driver = {
 #endif
 };
 
-static struct i2c_board_info __initdata i2c_tpd={ I2C_BOARD_INFO("synaptics-tpd", (TPD_I2C_ADDR))};
+static struct i2c_board_info __initdata i2c_tpd={ I2C_BOARD_INFO(DRIVER_NAME, (TPD_I2C_ADDR)) };
 
  /**
  * synaptics_rmi4_init()
