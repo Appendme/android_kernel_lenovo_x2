@@ -1399,9 +1399,7 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 	static unsigned long long ns_gap = 0;
 	unsigned int ms_gap;
 #endif
-#if defined(LENOVO_AREA_TOUCH)//lenovo xuwen1 modify 20140620 begin area touch
-	int xysqr = 0;
-#endif
+
 	/*
 	 * The number of finger status registers is determined by the
 	 * maximum number of fingers supported - 2 bits per finger. So
@@ -1520,10 +1518,6 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 			}
 #endif
 
-#if defined(LENOVO_AREA_TOUCH)
-			xysqr = wx * wy;
-			__dbg_core(" %s XYsqr=%d\n",__func__, xysqr);
-#endif
 
 			input_report_key(rmi4_data->input_dev,
 					BTN_TOUCH, 1);
@@ -1543,10 +1537,7 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 			input_report_abs(rmi4_data->input_dev,
 					ABS_MT_TOUCH_MINOR, min(wx, wy));
 #endif
-#if defined(LENOVO_AREA_TOUCH)
-			input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_X_W, xysqr);
-			input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_Y_W, xysqr);
-#endif
+
 #ifndef TYPE_B_PROTOCOL
 			input_mt_sync(rmi4_data->input_dev);
 #endif
@@ -1580,10 +1571,7 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 				ABS_MT_POSITION_X, x);
 		input_report_abs(rmi4_data->input_dev,
 				ABS_MT_POSITION_Y, y);
-#if defined(LENOVO_AREA_TOUCH)
-		input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_X_W, xysqr);
-		input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_Y_W, xysqr);
-#endif
+
 		ns_tmp = sched_clock(); //ns
 		ms_gap = NS_TO_MS(ns_tmp, ns_gap); //ms
 		ns_gap = ns_tmp; //ns
@@ -1630,9 +1618,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 	int wx;
 	int wy;
 	int temp;
-#if defined(LENOVO_AREA_TOUCH)//lenovo xuwen1 modify 20140620 begin area touch
-	int Xw = 0,Yw = 0,XYsqr = 0;	
-#endif
+
 	struct synaptics_rmi4_f12_extra_data *extra_data;
 	struct synaptics_rmi4_f12_finger_data *data;
 	struct synaptics_rmi4_f12_finger_data *finger_data;
@@ -1804,15 +1790,6 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 				}
 			}
 
-		/*lenovo xuwen1 modify 20140620 for area touch,begin*/
-#if defined(LENOVO_AREA_TOUCH)
-			Xw =finger_data->wx;
-			Yw = finger_data->wy;
-			XYsqr = Xw*Yw;
-			__dbg_core(" %s XYsqr=%d\n",__func__,XYsqr);
-#endif
-		/*lenovo xuwen1 modify 20140620 for area touch,end*/
-
 		/*lenovo-xw xuwen1 add 20140506 for start work begin*/
 #ifdef CONFIG_LENOVO_POWEROFF_CHARGING_UI
 			if (((x > LENOVO_CHARGING_DRAW_LEFT) && (x<LENOVO_CHARGING_DRAW_RIGHT))
@@ -1849,12 +1826,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 			input_report_abs(rmi4_data->input_dev,
 					ABS_MT_TOUCH_MINOR, min(wx, wy));
 #endif
-		/*lenovo xuwen1 modify 20140620 for area touch,begin*/
-#if defined(LENOVO_AREA_TOUCH)
-			input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_X_W, XYsqr);
-			input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_Y_W, XYsqr);
-#endif
-		/*lenovo xuwen1 modify 20140620 for area touch,end*/
+
 #ifndef TYPE_B_PROTOCOL
 			input_mt_sync(rmi4_data->input_dev);
 #endif
@@ -1893,12 +1865,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 				ABS_MT_POSITION_X, x);
 		input_report_abs(rmi4_data->input_dev,
 				ABS_MT_POSITION_Y, y);
-		/*lenovo xuwen1 modify 20140620 for area touch,begin*/
-#if defined(LENOVO_AREA_TOUCH)
-		input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_X_W, XYsqr);
-		input_report_abs(rmi4_data->input_dev,ABS_MT_POSITION_Y_W, XYsqr);
-#endif
-		/*lenovo xuwen1 modify 20140620 for area touch,end*/
+
 		ns_tmp = sched_clock(); //ns
 		ms_gap = NS_TO_MS(ns_tmp, ns_gap); //ms
 		ns_gap = ns_tmp; //ns
@@ -3948,13 +3915,6 @@ static int synaptics_rmi4_probe(struct i2c_client *client,
 	input_set_capability(rmi4_data->input_dev, EV_KEY, KEY_SLIDE);
 #endif
 /*lenovo-sw, xuwen1, 20140423, add for light up screen end*/
-
-/*lenovo xuwen1 modify 20140620 for area touch,begin*/
-#if defined(LENOVO_AREA_TOUCH)
-//	set_bit(ABS_MT_POSITION_X_W,rmi4_data->input_dev->absbit);
-//	set_bit(ABS_MT_POSITION_Y_W, rmi4_data->input_dev->absbit);
-#endif
-/*lenovo xuwen1 modify 20140620 for area touch,end*/
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
 	rmi4_data->early_suspend.level = EARLY_SUSPEND_LEVEL_BLANK_SCREEN + 1;
