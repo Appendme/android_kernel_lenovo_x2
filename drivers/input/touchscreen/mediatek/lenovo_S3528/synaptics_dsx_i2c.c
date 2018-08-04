@@ -1202,7 +1202,6 @@ static int synaptics_rmi4_0d_gesture_report(struct synaptics_rmi4_data *rmi4_dat
 static void synaptics_rmi4_gesture_suspend(struct synaptics_rmi4_data *rmi4_data)
 {
 	int retval = 0;
-	struct synaptics_rmi4_exp_fhandler *exp_fhandler;
 
 	if (gesture_func.wakeup_enable) {
 		__dbg_core("%s, enter suspend lpwg with gesture enable. fullctrl %x fulldata %x\n", __func__, s3203_gesture_reg.ctrl, s3203_gesture_reg.data_2d);
@@ -1286,14 +1285,6 @@ static void synaptics_rmi4_gesture_suspend(struct synaptics_rmi4_data *rmi4_data
 			synaptics_rmi4_free_fingers(rmi4_data);
 			__dbg_core("%s, enter suspend lpwg with gesture disable.\n", __func__);
 		}
-
-		mutex_lock(&exp_data.mutex);
-		if (!list_empty(&exp_data.list)) {
-			list_for_each_entry(exp_fhandler, &exp_data.list, link)
-				if (exp_fhandler->exp_fn->suspend != NULL)
-					exp_fhandler->exp_fn->suspend(rmi4_data);
-		}
-		mutex_unlock(&exp_data.mutex);
 
 		tpd_halt = 1;
 
@@ -3458,7 +3449,6 @@ static int synaptics_rmi4_reinit_device(struct synaptics_rmi4_data *rmi4_data)
 	unsigned char ii;
 	unsigned short intr_addr;
 	struct synaptics_rmi4_fn *fhandler;
-	struct synaptics_rmi4_exp_fhandler *exp_fhandler;
 	struct synaptics_rmi4_device_info *rmi;
 
 	if (syna_fwu_upgrade_progress == FWU_PROGRESS_IN_PROGRESS)
@@ -3493,14 +3483,6 @@ static int synaptics_rmi4_reinit_device(struct synaptics_rmi4_data *rmi4_data)
 				goto exit;
 		}
 	}
-
-	mutex_lock(&exp_data.mutex);
-	if (!list_empty(&exp_data.list)) {
-		list_for_each_entry(exp_fhandler, &exp_data.list, link)
-			if (exp_fhandler->exp_fn->reinit != NULL)
-				exp_fhandler->exp_fn->reinit(rmi4_data);
-	}
-	mutex_unlock(&exp_data.mutex);
 
 	synaptics_rmi4_set_configured(rmi4_data);
 
@@ -4304,7 +4286,6 @@ static void synaptics_rmi4_sensor_wake(struct synaptics_rmi4_data *rmi4_data)
  */
 static void synaptics_rmi4_early_suspend(struct early_suspend *h)
 {
-	struct synaptics_rmi4_exp_fhandler *exp_fhandler;
 	struct synaptics_rmi4_data *rmi4_data =
 			container_of(h, struct synaptics_rmi4_data,
 			early_suspend);
@@ -4320,14 +4301,6 @@ static void synaptics_rmi4_early_suspend(struct early_suspend *h)
 	synaptics_rmi4_irq_enable(rmi4_data, false);
 	synaptics_rmi4_sensor_sleep(rmi4_data);
 	synaptics_rmi4_free_fingers(rmi4_data);
-
-	mutex_lock(&exp_data.mutex);
-	if (!list_empty(&exp_data.list)) {
-		list_for_each_entry(exp_fhandler, &exp_data.list, link)
-			if (exp_fhandler->exp_fn->early_suspend != NULL)
-				exp_fhandler->exp_fn->early_suspend(rmi4_data);
-	}
-	mutex_unlock(&exp_data.mutex);
 
 	if (rmi4_data->full_pm_cycle)
 		synaptics_rmi4_suspend(&(rmi4_data->input_dev->dev));
@@ -4347,7 +4320,6 @@ static void synaptics_rmi4_early_suspend(struct early_suspend *h)
 static void synaptics_rmi4_late_resume(struct early_suspend *h)
 {
 	int retval;
-	struct synaptics_rmi4_exp_fhandler *exp_fhandler;
 	struct synaptics_rmi4_data *rmi4_data =
 			container_of(h, struct synaptics_rmi4_data,
 			early_suspend);
@@ -4369,14 +4341,6 @@ static void synaptics_rmi4_late_resume(struct early_suspend *h)
 		}
 	}
 
-	mutex_lock(&exp_data.mutex);
-	if (!list_empty(&exp_data.list)) {
-		list_for_each_entry(exp_fhandler, &exp_data.list, link)
-			if (exp_fhandler->exp_fn->late_resume != NULL)
-				exp_fhandler->exp_fn->late_resume(rmi4_data);
-	}
-	mutex_unlock(&exp_data.mutex);
-
 	rmi4_data->touch_stopped = false;
 
 	return;
@@ -4395,9 +4359,6 @@ static void synaptics_rmi4_late_resume(struct early_suspend *h)
  */
 static int synaptics_rmi4_suspend(struct device *dev)
 {
-#ifndef LENOVO_GESTURE_WAKEUP
-	struct synaptics_rmi4_exp_fhandler *exp_fhandler;
-#endif
 	struct synaptics_rmi4_data *rmi4_data = dev_get_drvdata(g_dev);
 
 	if (rmi4_data->staying_awake)
@@ -4423,14 +4384,6 @@ static int synaptics_rmi4_suspend(struct device *dev)
 		synaptics_rmi4_free_fingers(rmi4_data);
 	}
 
-	mutex_lock(&exp_data.mutex);
-	if (!list_empty(&exp_data.list)) {
-		list_for_each_entry(exp_fhandler, &exp_data.list, link)
-			if (exp_fhandler->exp_fn->suspend != NULL)
-				exp_fhandler->exp_fn->suspend(rmi4_data);
-	}
-	mutex_unlock(&exp_data.mutex);
-
 	tpd_halt = 1;
 	mt_eint_mask(CUST_EINT_TOUCH_PANEL_NUM);
 
@@ -4451,7 +4404,6 @@ static int synaptics_rmi4_suspend(struct device *dev)
 static int synaptics_rmi4_resume(struct device *dev)
 {
 	int retval;
-	struct synaptics_rmi4_exp_fhandler *exp_fhandler;
 	struct synaptics_rmi4_data *rmi4_data = dev_get_drvdata(g_dev);
 
 	if (bypass_suspend) {
@@ -4489,14 +4441,6 @@ static int synaptics_rmi4_resume(struct device *dev)
 				__func__);
 		return retval;
 	}
-
-	mutex_lock(&exp_data.mutex);
-	if (!list_empty(&exp_data.list)) {
-		list_for_each_entry(exp_fhandler, &exp_data.list, link)
-			if (exp_fhandler->exp_fn->resume != NULL)
-				exp_fhandler->exp_fn->resume(rmi4_data);
-	}
-	mutex_unlock(&exp_data.mutex);
 
 	rmi4_data->touch_stopped = false;
 	tpd_halt = 0;
