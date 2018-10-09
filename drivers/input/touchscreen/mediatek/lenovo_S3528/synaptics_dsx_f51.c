@@ -108,8 +108,6 @@ static int rmidb_scan_pdt(void)
 	bool fdb_found = false;
 	struct synaptics_rmi4_fn_desc rmi_fd;
 	struct synaptics_rmi4_data *rmi4_data = rmidb->rmi4_data;
-	unsigned char temp;
-
 
 	for (page = 0; page < PAGES_TO_SERVICE; page++) {
 		for (addr = PDT_START; addr > PDT_END; addr -= PDT_ENTRY_SIZE) {
@@ -149,7 +147,7 @@ fdb_found:
 
 	dev_dbg(&rmi4_data->i2c_client->dev,
 				"%s: F51 found\n",__func__);
-       printk("[TSP-xw]%s:F51 found\n",__func__);
+	printk("[TSP-xw]%s:F51 found\n",__func__);
 	rmidb->query_base_addr = rmi_fd.query_base_addr | (page << 8);
 	rmidb->control_base_addr = rmi_fd.ctrl_base_addr | (page << 8);
 	rmidb->data_base_addr = rmi_fd.data_base_addr | (page << 8);
@@ -302,10 +300,10 @@ static void synaptics_rmi4_db_reset(struct synaptics_rmi4_data *rmi4_data)
 {
 	/*lenovo-sw xuwen1 changed 20140910 for read f51,begin*/
 	if (!rmidb)
-		{
-		 return;
-		synaptics_rmi4_db_init(rmi4_data);
-		}
+		return;
+
+	synaptics_rmi4_db_init(rmi4_data);
+
 	/*lenovo-sw xuwen1 changed 20140910 for read f51,end*/
 	rmidb_scan_pdt();
 

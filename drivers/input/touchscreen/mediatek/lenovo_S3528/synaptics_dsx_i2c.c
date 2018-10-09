@@ -116,7 +116,7 @@ static struct workqueue_struct *tpd_esd_check_wq = NULL;
 static unsigned char tpd_esd_doing_reset = 0;
 static void tpd_esd_check_func(struct work_struct *);
 static void tpd_esd_do_reset(struct synaptics_rmi4_data *rmi4_data);
-static int tpd_esd_check_status(unsigned char status);
+static inline int tpd_esd_check_status(unsigned char status);
 #endif
 
 #ifdef KERNEL_ABOVE_2_6_38
@@ -807,7 +807,7 @@ static ssize_t keypad_enable_proc_write(struct file *file, const char __user *bu
 		return count;
 
 	if (copy_from_user(buf, buffer, count)) {
-		printk(KERN_ERR "%s: read proc input error.\n", __func__);
+		__dbg_core("%s: read proc input error.\n", __func__);
 		return count;
 	}
 
@@ -995,10 +995,6 @@ static int synaptics_rmi4_i2c_write(struct synaptics_rmi4_data *rmi4_data,
 {
 	int retval;
 	unsigned char retry;
-	unsigned char buf[length + 1];
-
-	mutex_lock(&(rmi4_data->rmi4_io_ctrl_mutex));
-
 	struct i2c_msg msg[] = {
 		{
 			.addr = rmi4_data->i2c_client->addr,
@@ -1010,13 +1006,15 @@ static int synaptics_rmi4_i2c_write(struct synaptics_rmi4_data *rmi4_data,
 		}
 	};
 
+	mutex_lock(&(rmi4_data->rmi4_io_ctrl_mutex));
+
 	retval = synaptics_rmi4_set_page(rmi4_data, addr);
 	if (retval != PAGE_SELECT_LEN)
 		goto exit;
 
 	gpDMABuf_va[0] = addr & MASK_8BIT;
 
-	memcpy(&gpDMABuf_va[1],&data[0] , length);
+	memcpy(&gpDMABuf_va[1], &data[0], length);
 
 	for (retry = 0; retry < SYN_I2C_RETRY_TIMES; retry++) {
 		if (i2c_transfer(rmi4_data->i2c_client->adapter, msg, 1) == 1) {
@@ -1043,7 +1041,7 @@ exit:
 	return retval;
 }
 
-#ifdef	SPECIAL_REPORT_LOG
+#ifdef SPECIAL_REPORT_LOG
 #define	NS_TO_MS(_p1, _p2)	(((unsigned int)((_p1)-(_p2)))/(1000)/(1000))
 #endif
 
@@ -1383,7 +1381,7 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 	int wx;
 	int wy;
 	
-#ifdef	SPECIAL_REPORT_LOG
+#ifdef SPECIAL_REPORT_LOG
 	static unsigned int x_s=0, y_s=0, wx_s=0, wy_s=0;
 	unsigned char finger_c;
 	unsigned long long ns_tmp;
@@ -1538,7 +1536,7 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 					finger_status,
 					x, y);
 
-#ifdef	SPECIAL_REPORT_LOG
+#ifdef SPECIAL_REPORT_LOG
 			x_s = x; y_s = y; wx_s = wx; wy_s = wy;
 			ns_tmp = sched_clock(); //ns
 			ms_gap = NS_TO_MS(ns_tmp, ns_gap); //ms
@@ -1557,7 +1555,7 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 				BTN_TOUCH, 0);
 		input_report_key(rmi4_data->input_dev,
 				BTN_TOOL_FINGER, 0);
-#ifdef	SPECIAL_REPORT_LOG
+#ifdef SPECIAL_REPORT_LOG
 		input_report_abs(rmi4_data->input_dev,
 				ABS_MT_POSITION_X, x);
 		input_report_abs(rmi4_data->input_dev,
@@ -1601,7 +1599,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 	unsigned char touch_count = 0; /* number of touch points */
 	unsigned char finger;
 	unsigned char fingers_to_process;
-	unsigned char finger_status;
+	unsigned char finger_status = 0;
 	unsigned char size_of_2d_data;
 	unsigned short data_addr;
 	int x;
@@ -1624,7 +1622,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 #ifdef F12_DATA_15_WORKAROUND
 	static unsigned char fingers_already_present;
 #endif
-#ifdef	SPECIAL_REPORT_LOG
+#ifdef SPECIAL_REPORT_LOG
 	static unsigned int x_s=0, y_s=0, wx_s=0, wy_s=0;
 	unsigned char finger_c;
 	unsigned long long ns_tmp;
@@ -1700,7 +1698,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 
 	retval = synaptics_rmi4_i2c_read(rmi4_data,
 			data_addr + extra_data->data1_offset,
-			data,//(unsigned char *)fhandler->data,
+			(unsigned char *)data,//(unsigned char *)fhandler->data,
 			fingers_to_process * size_of_2d_data);
 	if (retval < 0)
 		return 0;
@@ -1832,7 +1830,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 					__func__, finger,
 					finger_status,
 					x, y, wx, wy);
-#ifdef	SPECIAL_REPORT_LOG
+#ifdef SPECIAL_REPORT_LOG
 			x_s = x; y_s = y; wx_s = wx; wy_s = wy;
 			ns_tmp = sched_clock(); //ns
 			ms_gap = NS_TO_MS(ns_tmp, ns_gap); //ms
@@ -1851,7 +1849,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 				BTN_TOUCH, 0);
 		input_report_key(rmi4_data->input_dev,
 				BTN_TOOL_FINGER, 0);
-#ifdef	SPECIAL_REPORT_LOG
+#ifdef SPECIAL_REPORT_LOG
 		input_report_abs(rmi4_data->input_dev,
 				ABS_MT_POSITION_X, x);
 		input_report_abs(rmi4_data->input_dev,
@@ -1940,7 +1938,7 @@ static void synaptics_rmi4_f1a_report(struct synaptics_rmi4_data *rmi4_data,
 	static bool before_2d_status[MAX_NUMBER_OF_BUTTONS];
 	static bool while_2d_status[MAX_NUMBER_OF_BUTTONS];
 #endif
-#ifdef	TPD_BUTTON_REPORT_XY
+#ifdef TPD_BUTTON_REPORT_XY
 	unsigned int touch_count_real = 0;
 #endif
 
@@ -1975,12 +1973,12 @@ static void synaptics_rmi4_f1a_report(struct synaptics_rmi4_data *rmi4_data,
 		shift = button % 8;
 		status = ((data[index] >> shift) & MASK_1BIT);
 
-#ifdef	TPD_BUTTON_REPORT_XY
+#ifdef TPD_BUTTON_REPORT_XY
 		touch_count_real += status;	//record the total read touch finger
 		__dbg("tpd button, button=%d, status=%d, oldstatus=%d, touch_count_real=%d\n", button, status, current_status[button], touch_count_real);
 #endif
 
-#ifndef	TPD_BUTTON_REPORT_XY
+#ifndef TPD_BUTTON_REPORT_XY
 		if (current_status[button] == status)
 			continue;
 		else
@@ -2002,7 +2000,7 @@ static void synaptics_rmi4_f1a_report(struct synaptics_rmi4_data *rmi4_data,
 				f1a->button_map[button],
 				status);
 
-#ifdef	TPD_BUTTON_REPORT_XY
+#ifdef TPD_BUTTON_REPORT_XY
 		if(1 == status) {	//only if button down, report the x and y
 			input_report_key(rmi4_data->input_dev,
 					BTN_TOUCH, status);
@@ -2064,7 +2062,7 @@ static void synaptics_rmi4_f1a_report(struct synaptics_rmi4_data *rmi4_data,
 #endif	/* TPD_BUTTON_REPORT_XY */
 	}
 
-#ifdef	TPD_BUTTON_REPORT_XY
+#ifdef TPD_BUTTON_REPORT_XY
 	//touch_count is not zero, it means there have fingers down or up
 	//touch_count_real is zero, it means all the finger up, report the up event
 	if(touch_count && (0 == touch_count_real)) {
@@ -2171,7 +2169,7 @@ static void synaptics_rmi4_sensor_report(struct synaptics_rmi4_data *rmi4_data)
 				__func__);
 		return;
 	}
-#if defined(LENOVO_CTP_ESD_CHECK)
+#ifdef LENOVO_CTP_ESD_CHECK
 	if (tpd_esd_check_status(data[0])) {
 		__dbg_core("rmi4_esd [IRQ] status: 0x%x\n",data[0]);
 		__dbg_core("rmi4_esd [IRQ] esd check trigger\n");
@@ -2234,7 +2232,6 @@ static void synaptics_rmi4_sensor_report(struct synaptics_rmi4_data *rmi4_data)
 static void tpd_eint_handler(void)
 {
 	__dbg("enter in tpd_eint_handler\n");
-	TPD_DEBUG_PRINT_INT;
 	tpd_flag = 1;
 	wake_up_interruptible(&waiter);
 }
@@ -2255,7 +2252,6 @@ static int touch_event_handler(void *data)
 
 		wait_event_interruptible(waiter, tpd_flag != 0);
 		tpd_flag = 0;
-		TPD_DEBUG_SET_TIME;
 		set_current_state(TASK_RUNNING);
 
 		if (!rmi4_data->touch_stopped)
@@ -2284,7 +2280,6 @@ static int synaptics_rmi4_irq_enable(struct synaptics_rmi4_data *rmi4_data,
 	unsigned char intr_status[MAX_INTR_REGISTERS];
 
 	if (enable) {
-
 		/* Clear interrupts first */
 		retval = synaptics_rmi4_i2c_read(rmi4_data,
 				rmi4_data->f01_data_base_addr + 1,
@@ -2298,7 +2293,7 @@ static int synaptics_rmi4_irq_enable(struct synaptics_rmi4_data *rmi4_data,
 			mt_eint_set_sens(CUST_EINT_TOUCH_PANEL_NUM, MT_EDGE_SENSITIVE);
 			mt_eint_set_hw_debounce(CUST_EINT_TOUCH_PANEL_NUM, EINTF_TRIGGER_FALLING);
 			mt_eint_registration(CUST_EINT_TOUCH_PANEL_NUM, EINTF_TRIGGER_FALLING,tpd_eint_handler, 1); //0);
-			}
+		}
 		mt_eint_unmask(CUST_EINT_TOUCH_PANEL_NUM);
 		rmi4_data->irq_enabled = true;
 	} else {
@@ -2359,7 +2354,7 @@ static int synaptics_rmi4_f01_init(struct synaptics_rmi4_data *rmi4_data,
  *
  * Called by synaptics_rmi4_query_device().
  *
- * This funtion parses information from the Function 11 registers
+ * This function parses information from the Function 11 registers
  * and determines the number of fingers supported, x and y data ranges,
  * offset to the associated interrupt status register, interrupt bit
  * mask, and gathers finger data acquisition capabilities from the query
@@ -2455,7 +2450,7 @@ static int synaptics_rmi4_f12_set_enables(struct synaptics_rmi4_data *rmi4_data,
  *
  * Called by synaptics_rmi4_query_device().
  *
- * This funtion parses information from the Function 12 registers and
+ * This function parses information from the Function 12 registers and
  * determines the number of fingers supported, offset to the data1
  * register, x and y data ranges, offset to the associated interrupt
  * status register, interrupt bit mask, and allocates memory resources
@@ -2583,16 +2578,16 @@ static int synaptics_rmi4_f12_init(struct synaptics_rmi4_data *rmi4_data,
 				query_5.ctrl26_is_present;
 	lpwg_handler.control_27.addr= fhandler->full_addr.ctrl_base + lpwg_handler.control_27.offset;
 	__dbg("lpwg_handler.control_27.addr:0x%04x\n",lpwg_handler.control_27.addr);
-			retval = synaptics_rmi4_i2c_read(rmi4_data,
-				lpwg_handler.control_27.addr,
-				lpwg_handler.control_27.data,
-				sizeof(lpwg_handler.control_27.data));
-		if (retval < 0)
-			{
-			__dbg(" read timer_control_lpwg_handler failed\n");
-			return retval;
-			}
-		// __dbg(" max_active_duration d%,timer_1 %d,max_active_duration_timeout %d.\n", lpwg_handler.control_27.max_active_duration,
+	retval = synaptics_rmi4_i2c_read(rmi4_data,
+		lpwg_handler.control_27.addr,
+		lpwg_handler.control_27.data,
+		sizeof(lpwg_handler.control_27.data));
+	if (retval < 0)
+	{
+		__dbg("read timer_control_lpwg_handler failed\n");
+		return retval;
+	}
+	//__dbg("max_active_duration %d,timer_1 %d,max_active_duration_timeout %d.\n", lpwg_handler.control_27.max_active_duration,
 	//lpwg_handler.control_27.timer_1,lpwg_handler.control_27.max_active_duration_timeout);
 	/*lenovo-sw xuwen1 add 20140915 for FW enter doze from area end*/
 	ctrl_28_offset = ctrl_23_offset +
@@ -2681,15 +2676,13 @@ static int synaptics_rmi4_f12_init(struct synaptics_rmi4_data *rmi4_data,
 	rmi4_data->sensor_max_y =
 			((unsigned short)ctrl_8.max_y_coord_lsb << 0) |
 			((unsigned short)ctrl_8.max_y_coord_msb << 8);
-/*#ifdef TPD_HAVE_BUTTON
-	rmi4_data->sensor_max_y = rmi4_data->sensor_max_y * TPD_DISPLAY_HEIGH_RATIO / TPD_TOUCH_HEIGH_RATIO;
-#endif*/
+
 	dev_dbg(&rmi4_data->i2c_client->dev,
 			"%s: Function %02x max x = %d max y = %d\n",
 			__func__, fhandler->fn_number,
 			rmi4_data->sensor_max_x,
 			rmi4_data->sensor_max_y);
-	__dbg("[DRV2] max x = %d max y = %d\n ",rmi4_data->sensor_max_x,rmi4_data->sensor_max_y);
+	__dbg("[DRV2] max x = %d max y = %d\n ", rmi4_data->sensor_max_x, rmi4_data->sensor_max_y);
 	rmi4_data->num_of_rx = ctrl_8.num_of_rx;
 	rmi4_data->num_of_tx = ctrl_8.num_of_tx;
 	rmi4_data->max_touch_width = max(rmi4_data->num_of_rx,
@@ -3008,7 +3001,7 @@ static int synaptics_rmi4_alloc_fh(struct synaptics_rmi4_fn **fhandler,
  *
  * Called by synaptics_rmi4_probe().
  *
- * This funtion scans the page description table, records the offsets
+ * This function scans the page description table, records the offsets
  * to the register types of Function $01, sets up the function handlers
  * for Function $11 and Function $12, determines the number of interrupt
  * sources from the sensor, adds valid Functions with data inputs to the
@@ -3707,13 +3700,9 @@ static void tpd_esd_do_reset(struct synaptics_rmi4_data *rmi4_data)
 	tpd_esd_doing_reset = 0;
 }
 
-static int tpd_esd_check_status(unsigned char status)
+static inline int tpd_esd_check_status(unsigned char status)
 {
-	if ((status & 0xF) == 0x3 || (status & 0xF) > 0x7) {
-		return 1;
-	}
-
-	return 0;
+	return ((status & 0xF) == 0x3 || (status & 0xF) > 0x7);
 }
 
 static int tpd_esd_check(struct synaptics_rmi4_data *rmi4_data)
@@ -3783,7 +3772,6 @@ int rmi4_tpd_get_status(struct synaptics_rmi4_data *rmi4_data)
 
 void rmi4_tpd_hw_reset(void)
 {
-
 	tpd_power_ctrl(0);
 	tpd_power_ctrl(1);
 
@@ -3793,7 +3781,6 @@ void rmi4_tpd_hw_reset(void)
 	msleep(60);
 }
 
-/*lenovo liuyw2 add , called by fw upgrade, once fwu failed, reprobe some codes*/
 void rmi4_tpd_reprobe(struct synaptics_rmi4_data *rmi4_data)
 {
 	synaptics_rmi4_set_input_dev(rmi4_data);
@@ -3810,7 +3797,7 @@ void rmi4_tpd_reinit(struct synaptics_rmi4_data *rmi4_data)
  * Called by the kernel when an association with an I2C device of the
  * same name is made (after doing i2c_add_driver).
  *
- * This funtion allocates and initializes the resources for the driver
+ * This function allocates and initializes the resources for the driver
  * as an input driver, turns on the power to the sensor, queries the
  * sensor for its supported Functions and characteristics, registers
  * the driver to the input subsystem, sets up the interrupt, handles
@@ -3818,8 +3805,6 @@ void rmi4_tpd_reinit(struct synaptics_rmi4_data *rmi4_data)
  * and creates a work queue for detection of other expansion Function
  * modules.
  */
-
- 
 static int synaptics_rmi4_probe(struct i2c_client *client,
 		const struct i2c_device_id *dev_id)
 {
@@ -3927,7 +3912,6 @@ static int synaptics_rmi4_probe(struct i2c_client *client,
 		exp_data.initialized = true;
 	}
 
-
 	exp_data.workqueue = create_singlethread_workqueue("dsx_exp_workqueue");
 	INIT_DELAYED_WORK(&exp_data.work, synaptics_rmi4_exp_fn_work);
 	exp_data.rmi4_data = rmi4_data;
@@ -3996,6 +3980,7 @@ err_enable_irq:
 #endif
 
 	synaptics_rmi4_empty_fn_list(rmi4_data);
+	dma_free_coherent(&rmi4_data->input_dev->dev, 4096, gpDMABuf_va, gpDMABuf_pa);
 	input_unregister_device(rmi4_data->input_dev);
 	rmi4_data->input_dev = NULL;
 
@@ -4005,108 +3990,13 @@ err_set_input_dev:
 	return retval;
 }
 
-/*lenovo-sw xuwen1 add 20140625 for glove mode begin*/
-#ifdef LENOVO_CTP_GLOVE_CONTROL
-static int set_glove_mode_func(bool en)
-{
-	u8 reg_val = 0;
-	int retval = 0;
-
-	struct synaptics_rmi4_data *rmi4_data = dev_get_drvdata(g_dev);
-
-	if (!tpd_load_status) {
-		__dbg("[glove_mode]Do not use correct touchpanel.\n");
-		return -1;
-	}
-
-	if (tpd_halt) {
-		__dbg("[glove_mode]touchpanel status is suspend.\n");
-		return -1;
-	}
-
-	if (en) {
-		if (tpd_rmi4_s3203_det) {
-			reg_val = 0x00;
-			retval = synaptics_rmi4_i2c_write(rmi4_data, 0x041A,
-						&reg_val,sizeof(reg_val));
-		} else {
-			reg_val = 0x84;
-			retval = synaptics_rmi4_i2c_write(rmi4_data, 0x0201,
-						&reg_val,sizeof(reg_val));
-		}
-		glove_func.status = 1; //close button&USB
-		__dbg_core("enable glove func mode.\n");
-
-	} else {
-		if (tpd_rmi4_s3203_det) {
-			reg_val = 0x02;
-			retval = synaptics_rmi4_i2c_write(rmi4_data, 0x041A,
-						&reg_val,sizeof(reg_val));
-		} else {
-			reg_val = 0x04;
-			retval = synaptics_rmi4_i2c_write(rmi4_data, 0x0201,
-						&reg_val,sizeof(reg_val));
-		}
-		glove_func.status = 0;
-		__dbg_core("disable glove func mode.\n");
-
-	}
-	if (retval < 0) {
-		__dbg("set glove func error !\n");
-	}
-	return retval;
-}
-
-static int get_glove_mode_func(void)
-{
-	struct synaptics_rmi4_data *rmi4_data = dev_get_drvdata(g_dev);
-	u8 reg_val = 0;
-	int retval = 0;
-	u8 tmp;
-
-	if (!tpd_load_status) {
-		__dbg("[glove_mode]Do not use correct touchpanel.\n");
-		return -1;
-	}
-
-	if (tpd_halt) {
-		__dbg("[glove_mode]touchpanel status is suspend.\n");
-		return -1;
-	}
-
-	if (tpd_rmi4_s3203_det) {
-		retval = synaptics_rmi4_i2c_read(rmi4_data, 0x041A,
-						&reg_val,sizeof(reg_val));
-		if (retval< 0) {
-			TPD_DMESG("set glove func error !\n");
-		}
-		/*00:enabled, 02:disabled, so !reg_val*/
-		tmp = !reg_val;
-
-	} else {
-		retval = synaptics_rmi4_i2c_read(rmi4_data, 0x0201,
-						&reg_val,sizeof(reg_val));
-		if (retval< 0) {
-			TPD_DMESG("set glove func error !\n");
-		}
-		tmp = (reg_val >> 7) & 0xff;
-
-	}
-	
-	__dbg("the value of glove status is 0x%8x\n",tmp);
-	return tmp;
-}
-
-#endif
-/*lenovo-sw xuwen1 add 20140625 for glove mode end*/
-
  /**
  * synaptics_rmi4_remove()
  *
  * Called by the kernel when the association with an I2C device of the
  * same name is broken (when the driver is unloaded).
  *
- * This funtion terminates the work queue, stops sensor data acquisition,
+ * This function terminates the work queue, stops sensor data acquisition,
  * frees the interrupt, unregisters the driver from the input subsystem,
  * turns off the power to the sensor, and frees other allocated resources.
  */
@@ -4516,7 +4406,7 @@ static int __init synaptics_rmi4_init(void)
  *
  * Called by the kernel when the driver is unloaded.
  *
- * This funtion unregisters the driver from the I2C subsystem.
+ * This function unregisters the driver from the I2C subsystem.
  *
  */
 static void __exit synaptics_rmi4_exit(void)

@@ -794,11 +794,12 @@ static int get_tpd_info(void)
 	tpd_info.name = ic_name;
 	tpd_info.fw_num = tpd_read_fw_version();
 	tpd_info.types = FAMILY_QUERY_ID;//((tpd_read_fw_version())>>6)&&0xFF;
+	return 0;
 }
 
 static unsigned int tpd_read_custom_family_query(void)
 {
-	int i, retval;
+	int retval;
 	unsigned char config_fam;
 	unsigned short addrss;
 	addrss = fwu->rmi4_data->f01_query_base_addr + 0x02;
@@ -1600,7 +1601,7 @@ static int fwu_kthread_hdlr(void *data)
 	return 0;
 }
 
-static void fwu_kthread_start(const void *data)
+static void fwu_kthread_start(void *data)
 {
 	struct task_struct *thread = NULL;
 	int retval;
@@ -1619,7 +1620,7 @@ static void fwu_startup_fw_update_work(struct work_struct *work)
 		__dbg ("entern in update flow\n");//add by xuwen 1 for test
 		//synaptics_fw_updater(SynaLaibao);//If you need to update Laibao,please open this
 		if (cfwu_data != NULL)
-			fwu_kthread_start(cfwu_data);
+			fwu_kthread_start((void*)cfwu_data);
 		else
 			__dbg_core(" %s: cfwu_data is null\n",__func__);
 	} else
