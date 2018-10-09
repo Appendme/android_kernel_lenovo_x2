@@ -181,22 +181,15 @@ fdb_found:
 	return 0;
 }
 
-extern int synaptics_rmi4_f51_report(struct synaptics_rmi4_data *rmi4_data);
 static void synaptics_rmi4_db_attn(struct synaptics_rmi4_data *rmi4_data,
 		unsigned char intr_mask)
 {
 	if (!rmidb)
 		return;
-       int retval;
+
 	dev_dbg(&rmi4_data->i2c_client->dev,
 				"%s: F51 interrupt triggered\n",__func__);
-	
-	retval = synaptics_rmi4_f51_report(rmi4_data);
-	if (retval <0)
-		printk("[TSP-xw]read f51_0x0400 fail\n");
-	/* Do whatever you want here */			
-				
-		
+
 	return;
 }
 

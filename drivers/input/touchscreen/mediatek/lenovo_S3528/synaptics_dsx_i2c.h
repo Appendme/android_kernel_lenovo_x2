@@ -219,10 +219,10 @@ struct synaptics_rmi4_data {
 #ifdef CONFIG_HAS_EARLYSUSPEND
 	struct early_suspend early_suspend;
 #endif
-  /*lenovo-sw xuwen1 add for slide gesture begin*/
-       u8 fn11_mask;
-        u8 fn1a_mask;
-  /*lenovo-sw xuwen1 add for slide gesture end*/
+	/*lenovo-sw xuwen1 add for slide gesture begin*/
+	u8 fn11_mask;
+	u8 fn1a_mask;
+	/*lenovo-sw xuwen1 add for slide gesture end*/
 	unsigned char current_page;
 	unsigned char button_0d_enabled;
 	unsigned char full_pm_cycle;
@@ -257,6 +257,12 @@ struct synaptics_rmi4_data {
 	int (*irq_enable)(struct synaptics_rmi4_data *rmi4_data, bool enable);
 	int (*reset_device)(struct synaptics_rmi4_data *rmi4_data);
 	atomic_t keypad_enable;
+	atomic_t syna_use_gesture;
+	atomic_t double_tap_enable;
+	atomic_t up_swipe_enable;
+	atomic_t down_arrow_enable;
+	atomic_t letter_o_enable;
+	unsigned char glove_enable;
 };
 
 struct synaptics_rmi4_exp_fn {
