@@ -28,7 +28,6 @@
 #include "synaptics_dsx_i2c.h"
 #include <linux/kthread.h>
 
-#include "tpd.h"
 #include "tpd_synaptics_upgrade.h"
 
 #define TPD_DEBUG_MORE	1
@@ -363,8 +362,8 @@ unsigned char tpd_rmi4_s3203_det;
 
 DECLARE_COMPLETION(fwu_remove_complete);
 
-static int get_tpd_info(void);
-static struct tpd_version_info tpd_info;
+// static int get_tpd_info(void);
+// static struct tpd_version_info tpd_info;
 
 static unsigned int extract_uint_le(const unsigned char *ptr)
 {
@@ -788,14 +787,14 @@ static unsigned int tpd_read_fw_version(void)
 	return config_id_no;
 }
 
-static int get_tpd_info(void)
-{
-	char *ic_name = "synaptics";
-	tpd_info.name = ic_name;
-	tpd_info.fw_num = tpd_read_fw_version();
-	tpd_info.types = FAMILY_QUERY_ID;//((tpd_read_fw_version())>>6)&&0xFF;
-	return 0;
-}
+// static int get_tpd_info(void)
+// {
+// 	char *ic_name = "synaptics";
+// 	tpd_info.name = ic_name;
+// 	tpd_info.fw_num = tpd_read_fw_version();
+// 	tpd_info.types = FAMILY_QUERY_ID;//((tpd_read_fw_version())>>6)&&0xFF;
+// 	return 0;
+// }
 
 static unsigned int tpd_read_custom_family_query(void)
 {
@@ -1513,7 +1512,7 @@ int synaptics_fw_updater(unsigned char *fw_data)
 	syna_fwu_upgrade_progress = FWU_PROGRESS_IN_PROGRESS;
 	retval = fwu_start_reflash();
 	/*lenovo liuyw2 2014-8-9. add update fw id after update complete*/
-	get_tpd_info();
+	// get_tpd_info();
 	syna_fwu_upgrade_progress = FWU_PROGRESS_DONE;
 	return retval;
 }
@@ -1956,10 +1955,10 @@ static int synaptics_rmi4_fwu_init(struct synaptics_rmi4_data *rmi4_data)
 			goto exit_remove_attrs;
 		}
 	}
-	le_tpd_reg_feature_fwu_userspace_cb(fwu_get_lastest_fwid, fwu_get_upgrade_progress);
-	le_tpd_reg_feature_tpd_info(&tpd_info);
+	//le_tpd_reg_feature_fwu_userspace_cb(fwu_get_lastest_fwid, fwu_get_upgrade_progress);
+	//le_tpd_reg_feature_tpd_info(&tpd_info);
 	/*lenovo-sw xuwen1 add 20140409 for read FW&ID begin*/
-	FW_ID_B_UPDAT= tpd_read_fw_version();
+	FW_ID_B_UPDAT = tpd_read_fw_version();
 	__dbg("FW_ID_before_update is 0x%08x.\n",FW_ID_B_UPDAT);
 
 	//lenovo-sw xuwen1 for test
@@ -2035,7 +2034,7 @@ static int synaptics_rmi4_fwu_init(struct synaptics_rmi4_data *rmi4_data)
 #endif
 
 	//FW_ID_A_UPDAT = tpd_read_fw_version();
-	get_tpd_info();
+	// get_tpd_info();
 	//__dbg("FW_ID_after_update is 0x%08x.\n",FW_ID_A_UPDAT);
 	/*lenovo-sw xuwen1 add 20140409 for read FW&ID end*/
 	return 0;

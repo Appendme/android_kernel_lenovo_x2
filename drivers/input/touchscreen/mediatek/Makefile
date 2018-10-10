@@ -2,15 +2,15 @@ include $(srctree)/drivers/misc/mediatek/Makefile.custom
 
 
 # In case the platform does NOT support this type of sensors
-obj-y   +=  mtk_tpd.o
-obj-y   +=  tpd_button.o
-obj-y   +=  tpd_calibrate.o
-obj-y   +=  tpd_debug.o
-obj-y   +=  tpd_default.o
-obj-y   +=  tpd_init.o
-obj-y   +=  tpd_misc.o
-obj-y   +=  tpd_setting.o
-obj-$(CONFIG_LENOVO_CTP_FEATURE)	+=  tpd_feature.o
+#obj-y   +=  mtk_tpd.o
+#obj-y   +=  tpd_button.o
+#obj-y   +=  tpd_calibrate.o
+#obj-y   +=  tpd_debug.o
+#obj-y   +=  tpd_default.o
+#obj-y   +=  tpd_init.o
+#obj-y   +=  tpd_misc.o
+#obj-y   +=  tpd_setting.o
+#obj-$(CONFIG_LENOVO_CTP_FEATURE)	+=  tpd_feature.o
 
 ifeq ($(CONFIG_TOUCHSCREEN_MTK_MAX1187X),y)
 obj-y	+=  max1187x/
@@ -120,8 +120,4 @@ endif
 
 ifeq ($(CONFIG_TOUCHSCREEN_MTK_S3528),y)
 obj-y	+=  S3528/
-endif
-
-ifeq ($(CONFIG_TOUCHSCREEN_LENOVO_S3528),y)
-obj-y	+=  lenovo_S3528/
 endif

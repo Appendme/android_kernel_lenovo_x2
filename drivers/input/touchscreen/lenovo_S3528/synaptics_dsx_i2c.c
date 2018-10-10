@@ -34,8 +34,8 @@
 #include <mach/mt_pm_ldo.h>
 #include <mach/mt_typedefs.h>
 #include <mach/mt_boot.h>
+#include <mach/eint.h>
 #include "cust_gpio_usage.h"
-#include "tpd.h"
 #include <linux/sched.h>
 
 #include "synaptics_dsx_i2c.h"
@@ -3548,10 +3548,6 @@ static int synaptics_rmi4_probe(struct i2c_client *client,
 	int retval;
 	unsigned char attr_count;
 	struct synaptics_rmi4_data *rmi4_data;
-
-	/*if other tp ic already, then return, dont do reset&pwr on*/ 
-	if (tpd_ic_ready_get())
-		return 0;
 
 	if (!i2c_check_functionality(client->adapter,
 			I2C_FUNC_SMBUS_BYTE_DATA)) {
