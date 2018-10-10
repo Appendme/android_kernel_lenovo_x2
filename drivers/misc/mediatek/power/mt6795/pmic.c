@@ -100,7 +100,7 @@ unsigned int g_eint_pmit_mt6332_num = 22;
 #ifdef CUST_EINT_MT_PMIC_DEBOUNCE_CN
 unsigned int g_cust_eint_mt_pmic_debounce_cn = CUST_EINT_MT_PMIC_DEBOUNCE_CN;
 #else
-unsigned int g_cust_eint_mt_pmic_debounce_cn = 1;      
+unsigned int g_cust_eint_mt_pmic_debounce_cn = 1;
 #endif 
 
 #ifdef CUST_EINT_MT_PMIC_TYPE
@@ -178,7 +178,7 @@ void upmu_set_reg_value(kal_uint32 reg, kal_uint32 reg_val)
 {
     U32 ret=0;
     
-    ret=pmic_config_interface(reg, reg_val, 0xFFFF, 0x0);    
+    ret=pmic_config_interface(reg, reg_val, 0xFFFF, 0x0);
 }
 
 unsigned int get_pmic_mt6331_cid(void)
@@ -225,7 +225,7 @@ static ssize_t show_MT6331_BUCK_CURRENT_METER(struct device *dev,struct device_a
 }
 static ssize_t store_MT6331_BUCK_CURRENT_METER(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(MT6331_BUCK_CURRENT_METER, 0664, show_MT6331_BUCK_CURRENT_METER, store_MT6331_BUCK_CURRENT_METER);
@@ -241,7 +241,7 @@ static ssize_t show_MT6332_BUCK_CURRENT_METER(struct device *dev,struct device_a
 }
 static ssize_t store_MT6332_BUCK_CURRENT_METER(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(MT6332_BUCK_CURRENT_METER, 0664, show_MT6332_BUCK_CURRENT_METER, store_MT6332_BUCK_CURRENT_METER);
@@ -262,7 +262,7 @@ EXPORT_SYMBOL(upmu_interrupt_chrdet_int_en);
 //==============================================================================
 kal_uint32 upmu_get_rgs_chrdet(void)
 {
-    kal_uint32 val=0;    
+    kal_uint32 val=0;
     pmic_config_interface(0x10A, 0x1, 0xF, 8);
     pmic_config_interface(0x10A, 0x17,0xFF,0);
     pmic_read_interface(0x108,   &val,0x1, 1);
@@ -297,7 +297,7 @@ struct low_battery_callback_table
 
 struct low_battery_callback_table lbcb_tb[] ={
     {NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL},
-    {NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL}    
+    {NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL}
 };
 
 void (*low_battery_callback)(LOW_BATTERY_LEVEL);
@@ -328,7 +328,7 @@ void exec_low_battery_callback(LOW_BATTERY_LEVEL low_battery_level) //0:no limit
                 low_battery_callback = lbcb_tb[i].lbcb;
                 low_battery_callback(low_battery_level);
                 xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[exec_low_battery_callback] prio_val=%d,low_battery=%d\n",i,low_battery_level);
-            }        
+            }
         }
     }
 }
@@ -352,8 +352,8 @@ void low_battery_protect_init(void)
     if( PMIC6332_E1_CID_CODE == get_mt6332_pmic_chip_version() )
     {
         // for batses, isense
-    	mt6332_upmu_set_rg_adcin_batsns_en(1);
-    	mt6332_upmu_set_rg_adcin_cs_en(1);
+        mt6332_upmu_set_rg_adcin_batsns_en(1);
+        mt6332_upmu_set_rg_adcin_cs_en(1);
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "Reg[0x%x]=0x%x\n", 
             MT6332_AUXADC_CON10, upmu_get_reg_value(MT6332_AUXADC_CON10)
             );
@@ -405,7 +405,7 @@ struct battery_oc_callback_table
 
 struct battery_oc_callback_table occb_tb[] ={
     {NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL},
-    {NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL}    
+    {NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL}
 };
 
 void (*battery_oc_callback)(BATTERY_OC_LEVEL);
@@ -436,7 +436,7 @@ void exec_battery_oc_callback(BATTERY_OC_LEVEL battery_oc_level) //0:no limit
                 battery_oc_callback = occb_tb[i].occb;
                 battery_oc_callback(battery_oc_level);
                 xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[exec_battery_oc_callback] prio_val=%d,battery_oc_level=%d\n",i,battery_oc_level);
-            }        
+            }
         }
     }
 }
@@ -512,7 +512,7 @@ struct battery_percent_callback_table
 
 struct battery_percent_callback_table bpcb_tb[] ={
     {NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL},
-    {NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL}    
+    {NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL},{NULL}
 };
 
 void (*battery_percent_callback)(BATTERY_PERCENT_LEVEL);
@@ -528,7 +528,7 @@ void register_battery_percent_notify( void (*battery_percent_callback)(BATTERY_P
     if( (g_battery_percent_stop==0) && (g_battery_percent_level==1) )
     {
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[register_battery_percent_notify] level l happen\n");
-        battery_percent_callback(BATTERY_PERCENT_LEVEL_1);        
+        battery_percent_callback(BATTERY_PERCENT_LEVEL_1);
     }
 }
 
@@ -549,7 +549,7 @@ void exec_battery_percent_callback(BATTERY_PERCENT_LEVEL battery_percent_level) 
                 battery_percent_callback = bpcb_tb[i].bpcb;
                 battery_percent_callback(battery_percent_level);
                 xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[exec_battery_percent_callback] prio_val=%d,battery_percent_level=%d\n",i,battery_percent_level);
-            }        
+            }
         }
     }
 }
@@ -590,7 +590,7 @@ int bat_percent_notify_handler(void *unused)
         mutex_unlock(&bat_percent_notify_mutex);
         wake_unlock(&bat_percent_notify_lock);
        
-        hrtimer_start(&bat_percent_notify_timer, ktime, HRTIMER_MODE_REL);    
+        hrtimer_start(&bat_percent_notify_timer, ktime, HRTIMER_MODE_REL);
         
     } while (!kthread_should_stop());
     
@@ -612,7 +612,7 @@ void bat_percent_notify_init(void)
 
     ktime = ktime_set(20, 0);
     hrtimer_init(&bat_percent_notify_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-    bat_percent_notify_timer.function = bat_percent_notify_task;    
+    bat_percent_notify_timer.function = bat_percent_notify_task;
     hrtimer_start(&bat_percent_notify_timer, ktime, HRTIMER_MODE_REL);
 
     bat_percent_notify_thread = kthread_run(bat_percent_notify_handler, 0, "bat_percent_notify_thread");
@@ -642,7 +642,7 @@ void wake_up_pmic_mt6331(void)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[wake_up_pmic_mt6331]\r\n");
     wake_up_process(pmic_6331_thread_handle);
-    wake_lock(&pmicThread_lock_mt6331);    
+    wake_lock(&pmicThread_lock_mt6331);
 }
 EXPORT_SYMBOL(wake_up_pmic_mt6331);
 
@@ -650,7 +650,7 @@ void wake_up_pmic_mt6332(void)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[wake_up_pmic_mt6332]\r\n");
     wake_up_process(pmic_6332_thread_handle);
-    wake_lock(&pmicThread_lock_mt6332);    
+    wake_lock(&pmicThread_lock_mt6332);
 }
 EXPORT_SYMBOL(wake_up_pmic_mt6332);
 
@@ -764,11 +764,11 @@ void pwrkey_int_handler(void)
 
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pwrkey_int_handler]....\n");
     
-    if(mt6331_upmu_get_pwrkey_deb()==1)                
+    if(mt6331_upmu_get_pwrkey_deb()==1)
     {
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pwrkey_int_handler] Release pwrkey\n");
         
-        #if defined (CONFIG_MTK_KERNEL_POWER_OFF_CHARGING)
+#if defined (CONFIG_MTK_KERNEL_POWER_OFF_CHARGING)
         if(g_boot_mode == KERNEL_POWER_OFF_CHARGING_BOOT && timer_pre != 0)
         {
                 timer_pos = sched_clock();
@@ -782,8 +782,8 @@ void pwrkey_int_handler(void)
                     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pmic_thread_kthread] Power Key Pressed during kernel power off charging, reboot OS\r\n");
                     arch_reset(0, NULL);
                 }
-        }        
-        #endif
+        }
+#endif
         
         kpd_pwrkey_pmic_handler(0x0);
         //mt6331_upmu_set_rg_pwrkey_int_sel(0);
@@ -792,17 +792,17 @@ void pwrkey_int_handler(void)
     {
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pwrkey_int_handler] Press pwrkey\n");
         
-        #if defined (CONFIG_MTK_KERNEL_POWER_OFF_CHARGING)
+#if defined (CONFIG_MTK_KERNEL_POWER_OFF_CHARGING)
         if(g_boot_mode == KERNEL_POWER_OFF_CHARGING_BOOT)
         {
             timer_pre = sched_clock();
         }
-        #endif
+#endif
         kpd_pwrkey_pmic_handler(0x1);
         //mt6331_upmu_set_rg_pwrkey_int_sel(1);
     }
     
-    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,0);    
+    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,0);
 }
 
 #if 0 //defined(CONFIG_MTK_FPGA)
@@ -833,33 +833,31 @@ void homekey_int_handler(void)
         //mt6331_upmu_set_rg_homekey_int_sel(1);
     }
     
-    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,1);    
+    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,1);
 }
 
 void chrdet_int_handler(void)
 {
-    kal_uint32 ret=0;
-    
+    kal_uint32 ret = 0;
+    int boot_mode = 0;
+
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[chrdet_int_handler]....\n");
 
-      int boot_mode = 0;
-      boot_mode = get_boot_mode();	
-    
-    #ifdef CONFIG_MTK_KERNEL_POWER_OFF_CHARGING 
+    boot_mode = get_boot_mode();
+
+#ifdef CONFIG_MTK_KERNEL_POWER_OFF_CHARGING 
  /*lenovo-sw zhangrc2 add function for reboot machine by tp gesture  2014-05-01 begin*/
-     #ifdef CONFIG_LENOVO_POWEROFF_CHARGING_UI
-     	 if (!upmu_get_rgs_chrdet())
-    	 {    
-        	if(boot_mode == KERNEL_POWER_OFF_CHARGING_BOOT || boot_mode == LOW_POWER_OFF_CHARGING_BOOT)
-		{
-            		xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[chrdet_int_handler] Unplug Charger/USB In Kernel Power Off Charging Mode!  Shutdown OS!\r\n");
-	    		 if(0x1 != tp_button_flag) 
-			{	
-            		mt_power_off();
-	     		}		
-        	} 		
-    	 } 	
-    #else	
+#ifdef CONFIG_LENOVO_POWEROFF_CHARGING_UI
+        if (!upmu_get_rgs_chrdet())
+        {
+            if(boot_mode == KERNEL_POWER_OFF_CHARGING_BOOT || boot_mode == LOW_POWER_OFF_CHARGING_BOOT)
+            {
+                xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[chrdet_int_handler] Unplug Charger/USB In Kernel Power Off Charging Mode!  Shutdown OS!\r\n");
+                if(0x1 != tp_button_flag) 
+                    mt_power_off();
+            }
+         }
+#else
     if (!upmu_get_rgs_chrdet())
     {
         //int boot_mode = 0;
@@ -871,94 +869,62 @@ void chrdet_int_handler(void)
             mt_power_off();
         }
     }
-    #endif	
-    #else
-    upmu_get_rgs_chrdet();
-    #endif
-	#ifdef CONFIG_LENOVO_CTP_FEATURE
-	le_tpd_glove_usb_notify(upmu_get_rgs_chrdet());
-	#endif
-/*lenovo-sw zhangrc2 add function for reboot machine by tp gesture  2014-05-01 begin*/
-#ifdef CONFIG_LENOVO_POWEROFF_CHARGING_UI
-     if((0x1 == tp_button_flag) &&
-	 (boot_mode == KERNEL_POWER_OFF_CHARGING_BOOT || boot_mode == LOW_POWER_OFF_CHARGING_BOOT)) {	
-    	  } else {
-     		do_chrdet_int_task();
-     	}
-#else
-    do_chrdet_int_task();
 #endif
+#else
+    upmu_get_rgs_chrdet();
+#endif
+#ifdef CONFIG_LENOVO_CTP_FEATURE
+    le_tpd_glove_usb_notify(upmu_get_rgs_chrdet());
+#endif
+    do_chrdet_int_task();
 
     ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,2);
 }
 
-void mt6331_thr_h_int_handler(void)
+inline void mt6331_thr_h_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[mt6331_thr_h_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,3);
+    pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,3);
 }
 
-void mt6331_thr_l_int_handler(void)
+inline void mt6331_thr_l_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[mt6331_thr_l_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,4);
+    pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,4);
 }
 
-void mt6331_bat_h_int_handler(void)
+inline void mt6331_bat_h_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[mt6331_bat_h_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,5);
+    pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,5);
 }
 
-void mt6331_bat_l_int_handler(void)
+inline void mt6331_bat_l_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[mt6331_bat_l_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,6);
+    pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,6);
 }
 
 void rtc_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[rtc_int_handler]....\n");
-
     rtc_irq_handler();
-
-    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,7); 
+    pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,7);
 }
 
-void audio_int_handler(void)
+inline void audio_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[audio_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,8);
+    pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,8);
 }
 
-void mad_int_handler(void)
+inline void mad_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[mad_int_handler]....\n");
-
 #if defined(CONFIG_MTK_VOW_SUPPORT)
     vow_irq_handler();
 #endif
-
-    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,9);
+    pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,9);
 }
 
 #if defined(CONFIG_MTK_ACCDET)
@@ -967,333 +933,223 @@ extern int accdet_irq_handler(void);
 
 void accdet_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[accdet_int_handler]....\n");
-
-    #if defined(CONFIG_MTK_ACCDET)
-    ret = accdet_irq_handler();
-    #endif
-    if(0 == ret){
+#if defined(CONFIG_MTK_ACCDET)
+    if(!accdet_irq_handler()){
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[accdet_int_handler] don't finished\n");
     }
-    
-    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,10);
+#endif
+    pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,10);
 }
 
-void accdet_eint_int_handler(void)
+inline void accdet_eint_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[accdet_eint_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,11);
+    pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,11);
 }
 
-void accdet_negv_int_handler(void)
+inline void accdet_negv_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[accdet_negv_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,12);
+    pmic_config_interface(MT6331_INT_STATUS0,0x1,0x1,12);
 }
 
-void vdvfs11_oc_int_handler(void)
+inline void vdvfs11_oc_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[vdvfs11_oc_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,0);
+    pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,0);
 }
 
-void vdvfs12_oc_int_handler(void)
+inline void vdvfs12_oc_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[vdvfs12_oc_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,1);
+    pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,1);
 }
 
-void vdvfs13_oc_int_handler(void)
+inline void vdvfs13_oc_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[vdvfs13_oc_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,2);
+    pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,2);
 }
 
-void vdvfs14_oc_int_handler(void)
+inline void vdvfs14_oc_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[vdvfs14_oc_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,3);
+    pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,3);
 }
 
-void vgpu_oc_int_handler(void)
+inline void vgpu_oc_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[vgpu_oc_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,4);
+    pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,4);
 }
 
-void vcore1_oc_int_handler(void)
+inline void vcore1_oc_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[vcore1_oc_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,5);
+    pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,5);
 }
 
-void vcore2_oc_int_handler(void)
+inline void vcore2_oc_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[vcore2_oc_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,6);
+    pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,6);
 }
 
-void vio18_oc_int_handler(void)
+inline void vio18_oc_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[vio18_oc_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,7);
+    pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,7);
 }
 
-void mt6331_ldo_oc_int_handler(void)
+inline void mt6331_ldo_oc_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[mt6331_ldo_oc_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,8);
+    pmic_config_interface(MT6331_INT_STATUS1,0x1,0x1,8);
 }
 
-void chr_complete_int_handler(void)
+inline void chr_complete_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[chr_complete_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,0);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,0);
 }
 
-void thermal_sd_int_handler(void)
+inline void thermal_sd_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[thermal_sd_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,1);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,1);
 }
 
-void thermal_reg_in_int_handler(void)
+inline void thermal_reg_in_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[thermal_reg_in_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,2);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,2);
 }
 
-void thermal_reg_out_int_handler(void)
+inline void thermal_reg_out_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[thermal_reg_out_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,3);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,3);
 }
 
-void otg_oc_int_handler(void)
+inline void otg_oc_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[otg_oc_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,4);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,4);
 }
 
-void chr_oc_int_handler(void)
+inline void chr_oc_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[chr_oc_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,5);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,5);
 }
 
-void otg_thermal_int_handler(void)
+inline void otg_thermal_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[otg_thermal_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,6);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,6);
 }
 
-void otg_chrin_short_int_handler(void)
+inline void otg_chrin_short_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[otg_chrin_short_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,7);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,7);
 }
 
-void otg_drvcdt_short_int_handler(void)
+inline void otg_drvcdt_short_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[otg_drvcdt_short_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,8);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,8);
 }
 
-void chr_plug_in_flash_int_handler(void)
+inline void chr_plug_in_flash_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[chr_plug_in_flash_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,9);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,9);
 }
 
-void chrwdt_flag_int_handler(void)
+inline void chrwdt_flag_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[chrwdt_flag_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,10);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,10);
 }
 
-void flash_en_timeout_int_handler(void)
+inline void flash_en_timeout_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[flash_en_timeout_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,11);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,11);
 }
 
-void flash_vled1_short_int_handler(void)
+inline void flash_vled1_short_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[flash_vled1_short_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,12);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,12);
 }
 
-void flash_vled1_open_int_handler(void)
+inline void flash_vled1_open_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[flash_vled1_open_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,13);
+    pmic_config_interface(MT6332_INT_STATUS0,0x1,0x1,13);
 }
 
-void ov_int_handler(void)
+inline void ov_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[ov_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,0);
+    pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,0);
 }
 
-void bvalid_det_int_handler(void)
+inline void bvalid_det_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[bvalid_det_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,1);
+    pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,1);
 }
 
-void vbaton_undet_int_handler(void)
+inline void vbaton_undet_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[vbaton_undet_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,2);
+    pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,2);
 }
 
-void chr_plug_in_int_handler(void)
+inline void chr_plug_in_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[chr_plug_in_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,3);
+    pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,3);
 }
 
-void chr_plug_out_int_handler(void)
+inline void chr_plug_out_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[chr_plug_out_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,4);
+    pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,4);
 }
 
-void bc11_timeout_int_handler(void)
+inline void bc11_timeout_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[bc11_timeout_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,5);
+    pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,5);
 }
 
-void flash_vled2_short_int_handler(void)
+inline void flash_vled2_short_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[flash_vled2_short_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,6);
+    pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,6);
 }
 
-void flash_vled2_open_int_handler(void)
+inline void flash_vled2_open_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[flash_vled2_open_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,7);
+    pmic_config_interface(MT6332_INT_STATUS1,0x1,0x1,7);
 }
 
-void mt6332_thr_h_int_handler(void)
+inline void mt6332_thr_h_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[mt6332_thr_h_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS2,0x1,0x1,0);
+    pmic_config_interface(MT6332_INT_STATUS2,0x1,0x1,0);
 }
 
-void mt6332_thr_l_int_handler(void)
+inline void mt6332_thr_l_int_handler(void)
 {
-    kal_uint32 ret=0;
-
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[mt6332_thr_l_int_handler]....\n");
-
-    ret=pmic_config_interface(MT6332_INT_STATUS2,0x1,0x1,1);
+    pmic_config_interface(MT6332_INT_STATUS2,0x1,0x1,1);
 }
 
 #ifdef MTK_PMIC_DVT_SUPPORT
@@ -1306,27 +1162,27 @@ void mt6332_bat_h_int_handler(void)
 
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[mt6332_bat_h_int_handler]....\n");
 
-    #ifdef MTK_PMIC_DVT_SUPPORT
+#ifdef MTK_PMIC_DVT_SUPPORT
     mt6332_bat_int_close();
-    #endif
+#endif
 
 #ifdef LOW_BATTERY_PROTECT
     g_low_battery_level=0;
     exec_low_battery_callback(LOW_BATTERY_LEVEL_0);
 
-    #if 0
+#if 0
     lbat_max_en_setting(0);
     mdelay(1);
     lbat_min_en_setting(1);
-    #else
+#else
     
     mt6332_upmu_set_auxadc_lbat_volt_min(BAT_LV_1_THD);
     
     lbat_min_en_setting(0);
     lbat_max_en_setting(0);
     mdelay(1);
-    lbat_min_en_setting(1);   
-    #endif
+    lbat_min_en_setting(1);
+#endif
     
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "Reg[0x%x]=0x%x, Reg[0x%x]=0x%x, Reg[0x%x]=0x%x\n", 
             MT6332_AUXADC_CON18, upmu_get_reg_value(MT6332_AUXADC_CON18),
@@ -1344,9 +1200,9 @@ void mt6332_bat_l_int_handler(void)
 
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[mt6332_bat_l_int_handler]....\n");
 
-    #ifdef MTK_PMIC_DVT_SUPPORT
+#ifdef MTK_PMIC_DVT_SUPPORT
     mt6332_bat_int_close();
-    #endif
+#endif
 
 #ifdef LOW_BATTERY_PROTECT
     g_low_battery_level++;
@@ -1360,11 +1216,11 @@ void mt6332_bat_l_int_handler(void)
     else                            
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[bat_l_int_handler]err,g_low_battery_level=%d\n", g_low_battery_level);
 
-    #if 0
+#if 0
     lbat_min_en_setting(0);
     mdelay(1);
     lbat_max_en_setting(1);
-    #else
+#else
     
     mt6332_upmu_set_auxadc_lbat_volt_min(BAT_LV_2_THD);
         
@@ -1376,7 +1232,7 @@ void mt6332_bat_l_int_handler(void)
         lbat_min_en_setting(1);
     }
     lbat_max_en_setting(1);
-    #endif
+#endif
 
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "Reg[0x%x]=0x%x, Reg[0x%x]=0x%x, Reg[0x%x]=0x%x\n", 
             MT6332_AUXADC_CON18, upmu_get_reg_value(MT6332_AUXADC_CON18),
@@ -1434,9 +1290,9 @@ void bif_int_handler(void)
 
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[bif_int_handler]....\n");
 
-    #ifdef MTK_PMIC_DVT_SUPPORT
+#ifdef MTK_PMIC_DVT_SUPPORT
     tc_bif_1008_step_1();//DVT
-    #endif
+#endif
     
     ret=pmic_config_interface(MT6332_INT_STATUS2,0x1,0x1,8);
 }
@@ -1491,7 +1347,7 @@ void fg_cur_l_int_handler(void)
 
 #ifdef BATTERY_OC_PROTECT
     g_battery_oc_level=1;
-    exec_battery_oc_callback(BATTERY_OC_LEVEL_1);       
+    exec_battery_oc_callback(BATTERY_OC_LEVEL_1);
     bat_oc_h_en_setting(0);
     bat_oc_l_en_setting(0);
     mdelay(1);
@@ -1599,7 +1455,7 @@ static void mt6331_int_handler(void)
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[PMIC_INT] mt6331_int_status_val_0=0x%x\n", mt6331_int_status_val_0);
 
     if( (((mt6331_int_status_val_0)&(0x0001))>>0) == 1 )  { pwrkey_int_handler();       }
-    if( (((mt6331_int_status_val_0)&(0x0002))>>1) == 1 )  { homekey_int_handler();      }         
+    if( (((mt6331_int_status_val_0)&(0x0002))>>1) == 1 )  { homekey_int_handler();      }
     if( (((mt6331_int_status_val_0)&(0x0004))>>2) == 1 )  { chrdet_int_handler();       }
     if( (((mt6331_int_status_val_0)&(0x0008))>>3) == 1 )  { mt6331_thr_h_int_handler(); }
     if( (((mt6331_int_status_val_0)&(0x0010))>>4) == 1 )  { mt6331_thr_l_int_handler(); }
@@ -1623,7 +1479,7 @@ static void mt6331_int_handler(void)
     if( (((mt6331_int_status_val_1)&(0x0010))>>4) == 1 )  { vgpu_oc_int_handler();       }
     if( (((mt6331_int_status_val_1)&(0x0020))>>5) == 1 )  { vcore1_oc_int_handler();     }
     if( (((mt6331_int_status_val_1)&(0x0040))>>6) == 1 )  { vcore2_oc_int_handler();     }
-    if( (((mt6331_int_status_val_1)&(0x0080))>>7) == 1 )  { vio18_oc_int_handler();      }             
+    if( (((mt6331_int_status_val_1)&(0x0080))>>7) == 1 )  { vio18_oc_int_handler();      }
     if( (((mt6331_int_status_val_1)&(0x0100))>>8) == 1 )  { mt6331_ldo_oc_int_handler(); }
 }
 
@@ -1640,7 +1496,7 @@ static void mt6332_int_handler(void)
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[PMIC_INT] mt6332_int_status_val_0=0x%x\n", mt6332_int_status_val_0);
 
     if( (((mt6332_int_status_val_0)&(0x0001))>>0) == 1 )  { chr_complete_int_handler();      }
-    if( (((mt6332_int_status_val_0)&(0x0002))>>1) == 1 )  { thermal_sd_int_handler();        }         
+    if( (((mt6332_int_status_val_0)&(0x0002))>>1) == 1 )  { thermal_sd_int_handler();        }
     if( (((mt6332_int_status_val_0)&(0x0004))>>2) == 1 )  { thermal_reg_in_int_handler();    }
     if( (((mt6332_int_status_val_0)&(0x0008))>>3) == 1 )  { thermal_reg_out_int_handler();   }
     if( (((mt6332_int_status_val_0)&(0x0010))>>4) == 1 )  { otg_oc_int_handler();            }
@@ -1659,7 +1515,7 @@ static void mt6332_int_handler(void)
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[PMIC_INT] mt6332_int_status_val_1=0x%x\n", mt6332_int_status_val_1);
 
     if( (((mt6332_int_status_val_1)&(0x0001))>>0) == 1 )  { ov_int_handler();                }
-    if( (((mt6332_int_status_val_1)&(0x0002))>>1) == 1 )  { bvalid_det_int_handler();        }         
+    if( (((mt6332_int_status_val_1)&(0x0002))>>1) == 1 )  { bvalid_det_int_handler();        }
     if( (((mt6332_int_status_val_1)&(0x0004))>>2) == 1 )  { vbaton_undet_int_handler();      }
     if( (((mt6332_int_status_val_1)&(0x0008))>>3) == 1 )  { chr_plug_in_int_handler();       }
     if( (((mt6332_int_status_val_1)&(0x0010))>>4) == 1 )  { chr_plug_out_int_handler();      }
@@ -1672,7 +1528,7 @@ static void mt6332_int_handler(void)
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[PMIC_INT] mt6332_int_status_val_2=0x%x\n", mt6332_int_status_val_2);
 
     if( (((mt6332_int_status_val_2)&(0x0001))>>0) == 1 )  { mt6332_thr_h_int_handler(); }
-    if( (((mt6332_int_status_val_2)&(0x0002))>>1) == 1 )  { mt6332_thr_l_int_handler(); }         
+    if( (((mt6332_int_status_val_2)&(0x0002))>>1) == 1 )  { mt6332_thr_l_int_handler(); }
     if( (((mt6332_int_status_val_2)&(0x0004))>>2) == 1 )  { mt6332_bat_h_int_handler(); }
     if( (((mt6332_int_status_val_2)&(0x0008))>>3) == 1 )  { mt6332_bat_l_int_handler(); }
     if( (((mt6332_int_status_val_2)&(0x0010))>>4) == 1 )  { fg_bat_h_int_handler();     }
@@ -1692,7 +1548,7 @@ static void mt6332_int_handler(void)
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[PMIC_INT] mt6332_int_status_val_3=0x%x\n", mt6332_int_status_val_3);
 
     if( (((mt6332_int_status_val_3)&(0x0001))>>0) == 1 )  { vdram_oc_int_handler();      }
-    if( (((mt6332_int_status_val_3)&(0x0002))>>1) == 1 )  { vdvfs2_oc_int_handler();     }         
+    if( (((mt6332_int_status_val_3)&(0x0002))>>1) == 1 )  { vdvfs2_oc_int_handler();     }
     if( (((mt6332_int_status_val_3)&(0x0004))>>2) == 1 )  { vrf1_oc_int_handler();       }
     if( (((mt6332_int_status_val_3)&(0x0008))>>3) == 1 )  { vrf2_oc_int_handler();       }
     if( (((mt6332_int_status_val_3)&(0x0010))>>4) == 1 )  { vpa_oc_int_handler();        }
@@ -1717,7 +1573,7 @@ static int pmic_thread_kthread_mt6331(void *x)
     while (1) {
         mutex_lock(&pmic_mutex_mt6331);
 
-        pwrap_eint_status = pmic_wrap_eint_status();    
+        pwrap_eint_status = pmic_wrap_eint_status();
         xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[PMIC31_INT] pwrap_eint_status=0x%x\n", pwrap_eint_status);
 
         mt6331_int_handler();
@@ -1741,7 +1597,7 @@ static int pmic_thread_kthread_mt6331(void *x)
         mutex_unlock(&pmic_mutex_mt6331);
         wake_unlock(&pmicThread_lock_mt6331);
 
-        set_current_state(TASK_INTERRUPTIBLE);        
+        set_current_state(TASK_INTERRUPTIBLE);
 
         //mt_eint_unmask(g_eint_pmit_mt6331_num);
         if(g_mt6331_irq!=0)
@@ -1772,7 +1628,7 @@ static int pmic_thread_kthread_mt6332(void *x)
     while (1) {
         mutex_lock(&pmic_mutex_mt6332);
 
-        pwrap_eint_status = pmic_wrap_eint_status();    
+        pwrap_eint_status = pmic_wrap_eint_status();
         xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[PMIC32_INT] pwrap_eint_status=0x%x\n", pwrap_eint_status);
 
         mt6332_int_handler(); 
@@ -1800,7 +1656,7 @@ static int pmic_thread_kthread_mt6332(void *x)
         mutex_unlock(&pmic_mutex_mt6332);
         wake_unlock(&pmicThread_lock_mt6332);
 
-        set_current_state(TASK_INTERRUPTIBLE);        
+        set_current_state(TASK_INTERRUPTIBLE);
 
         //mt_eint_unmask(g_eint_pmit_mt6332_num);
         if(g_mt6332_irq!=0)
@@ -1875,9 +1731,9 @@ void PMIC_EINT_SETTING(void)
     mt_eint_set_hw_debounce(g_eint_pmit_mt6332_num, g_cust_eint_mt_pmic_debounce_cn);
 
     mt_eint_registration(g_eint_pmit_mt6331_num,g_cust_eint_mt_pmic_type,mt_pmic_eint_irq_mt6331,0);
-    mt_eint_registration(g_eint_pmit_mt6332_num,g_cust_eint_mt_pmic_type,mt_pmic_eint_irq_mt6332,0);    
+    mt_eint_registration(g_eint_pmit_mt6332_num,g_cust_eint_mt_pmic_type,mt_pmic_eint_irq_mt6332,0);
         
-    mt_eint_unmask(g_eint_pmit_mt6331_num);    
+    mt_eint_unmask(g_eint_pmit_mt6331_num);
     mt_eint_unmask(g_eint_pmit_mt6332_num);
 
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[CUST_EINT] CUST_EINT_MT_PMIC_MT6331_NUM=%d\n", g_eint_pmit_mt6331_num);
@@ -1900,7 +1756,7 @@ void PMIC_EINT_SETTING(void)
 #if 0 //defined(CONFIG_MTK_FPGA)
     // no CONFIG_PMIC_HW_ACCESS_EN
 #else
-    #define CONFIG_PMIC_HW_ACCESS_EN
+#define CONFIG_PMIC_HW_ACCESS_EN
 #endif
 
 static DEFINE_MUTEX(pmic_access_mutex);
@@ -1972,7 +1828,7 @@ U32 pmic_config_interface (U32 RegNum, U32 val, U32 MASK, U32 SHIFT)
     }
     //xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[pmic_config_interface] write Reg[%x]=0x%x\n", RegNum, pmic_reg);
 
-    #if 0
+#if 0
     //3. Double Check
     //mt_read_byte(RegNum, &pmic_reg);
     return_value= pwrap_wacs2(0, (RegNum), 0, &rdata);
@@ -1984,7 +1840,7 @@ U32 pmic_config_interface (U32 RegNum, U32 val, U32 MASK, U32 SHIFT)
         return return_value;
     }
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[pmic_config_interface] Reg[%x]=0x%x\n", RegNum, pmic_reg);
-    #endif
+#endif
 
     mutex_unlock(&pmic_access_mutex);
 #else
@@ -2117,7 +1973,7 @@ static ssize_t show_BUCK_VDVFS11_STATUS(struct device *dev,struct device_attribu
 }
 static ssize_t store_BUCK_VDVFS11_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VDVFS11_STATUS, 0664, show_BUCK_VDVFS11_STATUS, store_BUCK_VDVFS11_STATUS);
@@ -2135,7 +1991,7 @@ static ssize_t show_BUCK_VDVFS12_STATUS(struct device *dev,struct device_attribu
 }
 static ssize_t store_BUCK_VDVFS12_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VDVFS12_STATUS, 0664, show_BUCK_VDVFS12_STATUS, store_BUCK_VDVFS12_STATUS);
@@ -2153,7 +2009,7 @@ static ssize_t show_BUCK_VDVFS13_STATUS(struct device *dev,struct device_attribu
 }
 static ssize_t store_BUCK_VDVFS13_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VDVFS13_STATUS, 0664, show_BUCK_VDVFS13_STATUS, store_BUCK_VDVFS13_STATUS);
@@ -2171,7 +2027,7 @@ static ssize_t show_BUCK_VDVFS14_STATUS(struct device *dev,struct device_attribu
 }
 static ssize_t store_BUCK_VDVFS14_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VDVFS14_STATUS, 0664, show_BUCK_VDVFS14_STATUS, store_BUCK_VDVFS14_STATUS);
@@ -2189,7 +2045,7 @@ static ssize_t show_BUCK_VGPU_STATUS(struct device *dev,struct device_attribute 
 }
 static ssize_t store_BUCK_VGPU_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VGPU_STATUS, 0664, show_BUCK_VGPU_STATUS, store_BUCK_VGPU_STATUS);
@@ -2207,7 +2063,7 @@ static ssize_t show_BUCK_VCORE1_STATUS(struct device *dev,struct device_attribut
 }
 static ssize_t store_BUCK_VCORE1_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VCORE1_STATUS, 0664, show_BUCK_VCORE1_STATUS, store_BUCK_VCORE1_STATUS);
@@ -2225,7 +2081,7 @@ static ssize_t show_BUCK_VCORE2_STATUS(struct device *dev,struct device_attribut
 }
 static ssize_t store_BUCK_VCORE2_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VCORE2_STATUS, 0664, show_BUCK_VCORE2_STATUS, store_BUCK_VCORE2_STATUS);
@@ -2243,7 +2099,7 @@ static ssize_t show_BUCK_VIO18_STATUS(struct device *dev,struct device_attribute
 }
 static ssize_t store_BUCK_VIO18_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VIO18_STATUS, 0664, show_BUCK_VIO18_STATUS, store_BUCK_VIO18_STATUS);
@@ -2261,7 +2117,7 @@ static ssize_t show_BUCK_VDRAM_STATUS(struct device *dev,struct device_attribute
 }
 static ssize_t store_BUCK_VDRAM_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VDRAM_STATUS, 0664, show_BUCK_VDRAM_STATUS, store_BUCK_VDRAM_STATUS);
@@ -2279,7 +2135,7 @@ static ssize_t show_BUCK_VDVFS2_STATUS(struct device *dev,struct device_attribut
 }
 static ssize_t store_BUCK_VDVFS2_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VDVFS2_STATUS, 0664, show_BUCK_VDVFS2_STATUS, store_BUCK_VDVFS2_STATUS);
@@ -2297,7 +2153,7 @@ static ssize_t show_BUCK_VRF1_STATUS(struct device *dev,struct device_attribute 
 }
 static ssize_t store_BUCK_VRF1_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VRF1_STATUS, 0664, show_BUCK_VRF1_STATUS, store_BUCK_VRF1_STATUS);
@@ -2315,7 +2171,7 @@ static ssize_t show_BUCK_VRF2_STATUS(struct device *dev,struct device_attribute 
 }
 static ssize_t store_BUCK_VRF2_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VRF2_STATUS, 0664, show_BUCK_VRF2_STATUS, store_BUCK_VRF2_STATUS);
@@ -2333,7 +2189,7 @@ static ssize_t show_BUCK_VPA_STATUS(struct device *dev,struct device_attribute *
 }
 static ssize_t store_BUCK_VPA_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VPA_STATUS, 0664, show_BUCK_VPA_STATUS, store_BUCK_VPA_STATUS);
@@ -2351,7 +2207,7 @@ static ssize_t show_BUCK_VSBST_STATUS(struct device *dev,struct device_attribute
 }
 static ssize_t store_BUCK_VSBST_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VSBST_STATUS, 0664, show_BUCK_VSBST_STATUS, store_BUCK_VSBST_STATUS);
@@ -2369,7 +2225,7 @@ static ssize_t show_LDO_VTCXO1_STATUS(struct device *dev,struct device_attribute
 }
 static ssize_t store_LDO_VTCXO1_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VTCXO1_STATUS, 0664, show_LDO_VTCXO1_STATUS, store_LDO_VTCXO1_STATUS);
@@ -2387,7 +2243,7 @@ static ssize_t show_LDO_VTCXO2_STATUS(struct device *dev,struct device_attribute
 }
 static ssize_t store_LDO_VTCXO2_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VTCXO2_STATUS, 0664, show_LDO_VTCXO2_STATUS, store_LDO_VTCXO2_STATUS);
@@ -2405,7 +2261,7 @@ static ssize_t show_LDO_VAUD32_STATUS(struct device *dev,struct device_attribute
 }
 static ssize_t store_LDO_VAUD32_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VAUD32_STATUS, 0664, show_LDO_VAUD32_STATUS, store_LDO_VAUD32_STATUS);
@@ -2423,7 +2279,7 @@ static ssize_t show_LDO_VAUXA32_STATUS(struct device *dev,struct device_attribut
 }
 static ssize_t store_LDO_VAUXA32_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VAUXA32_STATUS, 0664, show_LDO_VAUXA32_STATUS, store_LDO_VAUXA32_STATUS);
@@ -2441,7 +2297,7 @@ static ssize_t show_LDO_VCAMA_STATUS(struct device *dev,struct device_attribute 
 }
 static ssize_t store_LDO_VCAMA_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VCAMA_STATUS, 0664, show_LDO_VCAMA_STATUS, store_LDO_VCAMA_STATUS);
@@ -2459,7 +2315,7 @@ static ssize_t show_LDO_VMCH_STATUS(struct device *dev,struct device_attribute *
 }
 static ssize_t store_LDO_VMCH_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VMCH_STATUS, 0664, show_LDO_VMCH_STATUS, store_LDO_VMCH_STATUS);
@@ -2477,7 +2333,7 @@ static ssize_t show_LDO_VEMC33_STATUS(struct device *dev,struct device_attribute
 }
 static ssize_t store_LDO_VEMC33_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VEMC33_STATUS, 0664, show_LDO_VEMC33_STATUS, store_LDO_VEMC33_STATUS);
@@ -2495,7 +2351,7 @@ static ssize_t show_LDO_VIO28_STATUS(struct device *dev,struct device_attribute 
 }
 static ssize_t store_LDO_VIO28_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VIO28_STATUS, 0664, show_LDO_VIO28_STATUS, store_LDO_VIO28_STATUS);
@@ -2513,7 +2369,7 @@ static ssize_t show_LDO_VMC_STATUS(struct device *dev,struct device_attribute *a
 }
 static ssize_t store_LDO_VMC_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VMC_STATUS, 0664, show_LDO_VMC_STATUS, store_LDO_VMC_STATUS);
@@ -2531,7 +2387,7 @@ static ssize_t show_LDO_VCAM_AF_STATUS(struct device *dev,struct device_attribut
 }
 static ssize_t store_LDO_VCAM_AF_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VCAM_AF_STATUS, 0664, show_LDO_VCAM_AF_STATUS, store_LDO_VCAM_AF_STATUS);
@@ -2549,7 +2405,7 @@ static ssize_t show_LDO_VGP1_STATUS(struct device *dev,struct device_attribute *
 }
 static ssize_t store_LDO_VGP1_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VGP1_STATUS, 0664, show_LDO_VGP1_STATUS, store_LDO_VGP1_STATUS);
@@ -2567,7 +2423,7 @@ static ssize_t show_LDO_VGP4_STATUS(struct device *dev,struct device_attribute *
 }
 static ssize_t store_LDO_VGP4_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VGP4_STATUS, 0664, show_LDO_VGP4_STATUS, store_LDO_VGP4_STATUS);
@@ -2585,7 +2441,7 @@ static ssize_t show_LDO_VSIM1_STATUS(struct device *dev,struct device_attribute 
 }
 static ssize_t store_LDO_VSIM1_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VSIM1_STATUS, 0664, show_LDO_VSIM1_STATUS, store_LDO_VSIM1_STATUS);
@@ -2603,7 +2459,7 @@ static ssize_t show_LDO_VSIM2_STATUS(struct device *dev,struct device_attribute 
 }
 static ssize_t store_LDO_VSIM2_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VSIM2_STATUS, 0664, show_LDO_VSIM2_STATUS, store_LDO_VSIM2_STATUS);
@@ -2621,7 +2477,7 @@ static ssize_t show_LDO_VFBB_STATUS(struct device *dev,struct device_attribute *
 }
 static ssize_t store_LDO_VFBB_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VFBB_STATUS, 0664, show_LDO_VFBB_STATUS, store_LDO_VFBB_STATUS);
@@ -2639,7 +2495,7 @@ static ssize_t show_LDO_VRTC_STATUS(struct device *dev,struct device_attribute *
 }
 static ssize_t store_LDO_VRTC_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VRTC_STATUS, 0664, show_LDO_VRTC_STATUS, store_LDO_VRTC_STATUS);
@@ -2657,7 +2513,7 @@ static ssize_t show_LDO_VMIPI_STATUS(struct device *dev,struct device_attribute 
 }
 static ssize_t store_LDO_VMIPI_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VMIPI_STATUS, 0664, show_LDO_VMIPI_STATUS, store_LDO_VMIPI_STATUS);
@@ -2675,7 +2531,7 @@ static ssize_t show_LDO_VIBR_STATUS(struct device *dev,struct device_attribute *
 }
 static ssize_t store_LDO_VIBR_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VIBR_STATUS, 0664, show_LDO_VIBR_STATUS, store_LDO_VIBR_STATUS);
@@ -2691,7 +2547,7 @@ static ssize_t show_LDO_31_VDIG18_STATUS(struct device *dev,struct device_attrib
 }
 static ssize_t store_LDO_31_VDIG18_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_31_VDIG18_STATUS, 0664, show_LDO_31_VDIG18_STATUS, store_LDO_31_VDIG18_STATUS);
@@ -2709,7 +2565,7 @@ static ssize_t show_LDO_VCAMD_STATUS(struct device *dev,struct device_attribute 
 }
 static ssize_t store_LDO_VCAMD_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VCAMD_STATUS, 0664, show_LDO_VCAMD_STATUS, store_LDO_VCAMD_STATUS);
@@ -2727,7 +2583,7 @@ static ssize_t show_LDO_VUSB10_STATUS(struct device *dev,struct device_attribute
 }
 static ssize_t store_LDO_VUSB10_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VUSB10_STATUS, 0664, show_LDO_VUSB10_STATUS, store_LDO_VUSB10_STATUS);
@@ -2745,7 +2601,7 @@ static ssize_t show_LDO_VCAM_IO_STATUS(struct device *dev,struct device_attribut
 }
 static ssize_t store_LDO_VCAM_IO_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VCAM_IO_STATUS, 0664, show_LDO_VCAM_IO_STATUS, store_LDO_VCAM_IO_STATUS);
@@ -2763,7 +2619,7 @@ static ssize_t show_LDO_VSRAM_DVFS1_STATUS(struct device *dev,struct device_attr
 }
 static ssize_t store_LDO_VSRAM_DVFS1_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VSRAM_DVFS1_STATUS, 0664, show_LDO_VSRAM_DVFS1_STATUS, store_LDO_VSRAM_DVFS1_STATUS);
@@ -2781,7 +2637,7 @@ static ssize_t show_LDO_VGP2_STATUS(struct device *dev,struct device_attribute *
 }
 static ssize_t store_LDO_VGP2_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VGP2_STATUS, 0664, show_LDO_VGP2_STATUS, store_LDO_VGP2_STATUS);
@@ -2799,7 +2655,7 @@ static ssize_t show_LDO_VGP3_STATUS(struct device *dev,struct device_attribute *
 }
 static ssize_t store_LDO_VGP3_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VGP3_STATUS, 0664, show_LDO_VGP3_STATUS, store_LDO_VGP3_STATUS);
@@ -2817,7 +2673,7 @@ static ssize_t show_LDO_VBIASN_STATUS(struct device *dev,struct device_attribute
 }
 static ssize_t store_LDO_VBIASN_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VBIASN_STATUS, 0664, show_LDO_VBIASN_STATUS, store_LDO_VBIASN_STATUS);
@@ -2835,7 +2691,7 @@ static ssize_t show_LDO_VBIF28_STATUS(struct device *dev,struct device_attribute
 }
 static ssize_t store_LDO_VBIF28_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VBIF28_STATUS, 0664, show_LDO_VBIF28_STATUS, store_LDO_VBIF28_STATUS);
@@ -2853,7 +2709,7 @@ static ssize_t show_LDO_VAUXB32_STATUS(struct device *dev,struct device_attribut
 }
 static ssize_t store_LDO_VAUXB32_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VAUXB32_STATUS, 0664, show_LDO_VAUXB32_STATUS, store_LDO_VAUXB32_STATUS);
@@ -2871,7 +2727,7 @@ static ssize_t show_LDO_VUSB33_STATUS(struct device *dev,struct device_attribute
 }
 static ssize_t store_LDO_VUSB33_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VUSB33_STATUS, 0664, show_LDO_VUSB33_STATUS, store_LDO_VUSB33_STATUS);
@@ -2887,7 +2743,7 @@ static ssize_t show_LDO_32_VDIG18_STATUS(struct device *dev,struct device_attrib
 }
 static ssize_t store_LDO_32_VDIG18_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_32_VDIG18_STATUS, 0664, show_LDO_32_VDIG18_STATUS, store_LDO_32_VDIG18_STATUS);
@@ -2905,7 +2761,7 @@ static ssize_t show_LDO_VSRAM_DVFS2_STATUS(struct device *dev,struct device_attr
 }
 static ssize_t store_LDO_VSRAM_DVFS2_STATUS(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VSRAM_DVFS2_STATUS, 0664, show_LDO_VSRAM_DVFS2_STATUS, store_LDO_VSRAM_DVFS2_STATUS);
@@ -2917,35 +2773,35 @@ static DEVICE_ATTR(LDO_VSRAM_DVFS2_STATUS, 0664, show_LDO_VSRAM_DVFS2_STATUS, st
 //==============================================================================
 kal_uint32 get_volt_val_hw_buck_ip_v1(kal_uint32 val)
 {
-    kal_uint32 volt_val=0;        
+    kal_uint32 volt_val=0;
     volt_val = (val*6250)+700000; 
     return volt_val;
 }
 
 kal_uint32 get_volt_val_hw_buck_ip_v2(kal_uint32 val)
 {
-    kal_uint32 volt_val=0;        
+    kal_uint32 volt_val=0;
     volt_val = (val*12500)+1400000;
     return volt_val;
 }
 
 kal_uint32 get_volt_val_hw_buck_ip_v3(kal_uint32 val)
 {
-    kal_uint32 volt_val=0;        
+    kal_uint32 volt_val=0;
     volt_val = (((val*93750)+10500000)+9)/10;
     return volt_val;
 }
 
 kal_uint32 get_volt_val_hw_buck_ip_v4(kal_uint32 val)
 {
-    kal_uint32 volt_val=0;        
+    kal_uint32 volt_val=0;
     volt_val = (val*50000)+500000;
     return volt_val;
 }
 
 kal_uint32 get_volt_val_hw_buck_ip_v5(kal_uint32 val)
 {
-    kal_uint32 volt_val=0;        
+    kal_uint32 volt_val=0;
     volt_val = (val*6250)+700000;
     volt_val = volt_val*5;
     return volt_val;
@@ -2966,7 +2822,7 @@ static ssize_t show_BUCK_VDVFS11_VOLTAGE(struct device *dev,struct device_attrib
 }
 static ssize_t store_BUCK_VDVFS11_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VDVFS11_VOLTAGE, 0664, show_BUCK_VDVFS11_VOLTAGE, store_BUCK_VDVFS11_VOLTAGE);
@@ -2984,7 +2840,7 @@ static ssize_t show_BUCK_VDVFS12_VOLTAGE(struct device *dev,struct device_attrib
 }
 static ssize_t store_BUCK_VDVFS12_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VDVFS12_VOLTAGE, 0664, show_BUCK_VDVFS12_VOLTAGE, store_BUCK_VDVFS12_VOLTAGE);
@@ -3002,7 +2858,7 @@ static ssize_t show_BUCK_VDVFS13_VOLTAGE(struct device *dev,struct device_attrib
 }
 static ssize_t store_BUCK_VDVFS13_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VDVFS13_VOLTAGE, 0664, show_BUCK_VDVFS13_VOLTAGE, store_BUCK_VDVFS13_VOLTAGE);
@@ -3020,7 +2876,7 @@ static ssize_t show_BUCK_VDVFS14_VOLTAGE(struct device *dev,struct device_attrib
 }
 static ssize_t store_BUCK_VDVFS14_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VDVFS14_VOLTAGE, 0664, show_BUCK_VDVFS14_VOLTAGE, store_BUCK_VDVFS14_VOLTAGE);
@@ -3038,7 +2894,7 @@ static ssize_t show_BUCK_VGPU_VOLTAGE(struct device *dev,struct device_attribute
 }
 static ssize_t store_BUCK_VGPU_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VGPU_VOLTAGE, 0664, show_BUCK_VGPU_VOLTAGE, store_BUCK_VGPU_VOLTAGE);
@@ -3056,7 +2912,7 @@ static ssize_t show_BUCK_VCORE1_VOLTAGE(struct device *dev,struct device_attribu
 }
 static ssize_t store_BUCK_VCORE1_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VCORE1_VOLTAGE, 0664, show_BUCK_VCORE1_VOLTAGE, store_BUCK_VCORE1_VOLTAGE);
@@ -3074,7 +2930,7 @@ static ssize_t show_BUCK_VCORE2_VOLTAGE(struct device *dev,struct device_attribu
 }
 static ssize_t store_BUCK_VCORE2_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VCORE2_VOLTAGE, 0664, show_BUCK_VCORE2_VOLTAGE, store_BUCK_VCORE2_VOLTAGE);
@@ -3092,7 +2948,7 @@ static ssize_t show_BUCK_VIO18_VOLTAGE(struct device *dev,struct device_attribut
 }
 static ssize_t store_BUCK_VIO18_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VIO18_VOLTAGE, 0664, show_BUCK_VIO18_VOLTAGE, store_BUCK_VIO18_VOLTAGE);
@@ -3110,7 +2966,7 @@ static ssize_t show_BUCK_VDRAM_VOLTAGE(struct device *dev,struct device_attribut
 }
 static ssize_t store_BUCK_VDRAM_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VDRAM_VOLTAGE, 0664, show_BUCK_VDRAM_VOLTAGE, store_BUCK_VDRAM_VOLTAGE);
@@ -3128,7 +2984,7 @@ static ssize_t show_BUCK_VDVFS2_VOLTAGE(struct device *dev,struct device_attribu
 }
 static ssize_t store_BUCK_VDVFS2_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VDVFS2_VOLTAGE, 0664, show_BUCK_VDVFS2_VOLTAGE, store_BUCK_VDVFS2_VOLTAGE);
@@ -3146,7 +3002,7 @@ static ssize_t show_BUCK_VRF1_VOLTAGE(struct device *dev,struct device_attribute
 }
 static ssize_t store_BUCK_VRF1_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VRF1_VOLTAGE, 0664, show_BUCK_VRF1_VOLTAGE, store_BUCK_VRF1_VOLTAGE);
@@ -3164,7 +3020,7 @@ static ssize_t show_BUCK_VRF2_VOLTAGE(struct device *dev,struct device_attribute
 }
 static ssize_t store_BUCK_VRF2_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VRF2_VOLTAGE, 0664, show_BUCK_VRF2_VOLTAGE, store_BUCK_VRF2_VOLTAGE);
@@ -3182,7 +3038,7 @@ static ssize_t show_BUCK_VPA_VOLTAGE(struct device *dev,struct device_attribute 
 }
 static ssize_t store_BUCK_VPA_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VPA_VOLTAGE, 0664, show_BUCK_VPA_VOLTAGE, store_BUCK_VPA_VOLTAGE);
@@ -3200,7 +3056,7 @@ static ssize_t show_BUCK_VSBST_VOLTAGE(struct device *dev,struct device_attribut
 }
 static ssize_t store_BUCK_VSBST_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(BUCK_VSBST_VOLTAGE, 0664, show_BUCK_VSBST_VOLTAGE, store_BUCK_VSBST_VOLTAGE);
@@ -3214,17 +3070,17 @@ static ssize_t show_LDO_VTCXO1_VOLTAGE(struct device *dev,struct device_attribut
     
     ret = pmic_read_interface(reg_address, &reg_val, 0x3, 5);
     if(reg_val == 0)         ret_value = 2800;
-    else if(reg_val == 1)    ret_value = 2800;   
+    else if(reg_val == 1)    ret_value = 2800;
     else if(reg_val == 2)    ret_value = 2800;
     else if(reg_val == 3)    ret_value = 2800;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VTCXO1_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VTCXO1_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VTCXO1_VOLTAGE, 0664, show_LDO_VTCXO1_VOLTAGE, store_LDO_VTCXO1_VOLTAGE);
@@ -3238,17 +3094,17 @@ static ssize_t show_LDO_VTCXO2_VOLTAGE(struct device *dev,struct device_attribut
     
     ret = pmic_read_interface(reg_address, &reg_val, 0x3, 5);
     if(reg_val == 0)         ret_value = 2800;
-    else if(reg_val == 1)    ret_value = 2800;   
+    else if(reg_val == 1)    ret_value = 2800;
     else if(reg_val == 2)    ret_value = 2800;
     else if(reg_val == 3)    ret_value = 2800;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VTCXO2_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VTCXO2_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VTCXO2_VOLTAGE, 0664, show_LDO_VTCXO2_VOLTAGE, store_LDO_VTCXO2_VOLTAGE);
@@ -3262,17 +3118,17 @@ static ssize_t show_LDO_VAUD32_VOLTAGE(struct device *dev,struct device_attribut
     
     ret = pmic_read_interface(reg_address, &reg_val, 0x3, 5);
     if(reg_val == 0)         ret_value = 2800;
-    else if(reg_val == 1)    ret_value = 3000;   
+    else if(reg_val == 1)    ret_value = 3000;
     else if(reg_val == 2)    ret_value = 3000;
     else if(reg_val == 3)    ret_value = 3200;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VAUD32_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VAUD32_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VAUD32_VOLTAGE, 0664, show_LDO_VAUD32_VOLTAGE, store_LDO_VAUD32_VOLTAGE);
@@ -3286,17 +3142,17 @@ static ssize_t show_LDO_VAUXA32_VOLTAGE(struct device *dev,struct device_attribu
     
     ret = pmic_read_interface(reg_address, &reg_val, 0x3, 5);
     if(reg_val == 0)         ret_value = 2800;
-    else if(reg_val == 1)    ret_value = 3000;   
+    else if(reg_val == 1)    ret_value = 3000;
     else if(reg_val == 2)    ret_value = 3000;
     else if(reg_val == 3)    ret_value = 3200;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VAUXA32_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VAUXA32_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VAUXA32_VOLTAGE, 0664, show_LDO_VAUXA32_VOLTAGE, store_LDO_VAUXA32_VOLTAGE);
@@ -3310,21 +3166,21 @@ static ssize_t show_LDO_VCAMA_VOLTAGE(struct device *dev,struct device_attribute
     
     ret = pmic_read_interface(reg_address, &reg_val, 0x7, 4);
     if(reg_val == 0)         ret_value = 1500;
-    else if(reg_val == 1)    ret_value = 1800;   
+    else if(reg_val == 1)    ret_value = 1800;
     else if(reg_val == 2)    ret_value = 2500;
     else if(reg_val == 3)    ret_value = 2800;
     else if(reg_val == 4)    ret_value = 1500;
     else if(reg_val == 5)    ret_value = 1800;
     else if(reg_val == 6)    ret_value = 2500;
     else if(reg_val == 7)    ret_value = 2800;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VCAMA_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VCAMA_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VCAMA_VOLTAGE, 0664, show_LDO_VCAMA_VOLTAGE, store_LDO_VCAMA_VOLTAGE);
@@ -3338,15 +3194,15 @@ static ssize_t show_LDO_VMCH_VOLTAGE(struct device *dev,struct device_attribute 
     
     ret = pmic_read_interface(reg_address, &reg_val, 0x1, 6);
     if(reg_val == 0)         ret_value = 3000;
-    else if(reg_val == 1)    ret_value = 3300;   
-    else                     ret_value = 0;            
+    else if(reg_val == 1)    ret_value = 3300;
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VMCH_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VMCH_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VMCH_VOLTAGE, 0664, show_LDO_VMCH_VOLTAGE, store_LDO_VMCH_VOLTAGE);
@@ -3360,15 +3216,15 @@ static ssize_t show_LDO_VEMC33_VOLTAGE(struct device *dev,struct device_attribut
     
     ret = pmic_read_interface(reg_address, &reg_val, 0x1, 6);
     if(reg_val == 0)         ret_value = 3000;
-    else if(reg_val == 1)    ret_value = 3300;   
-    else                     ret_value = 0;            
+    else if(reg_val == 1)    ret_value = 3300;
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VEMC33_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VEMC33_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VEMC33_VOLTAGE, 0664, show_LDO_VEMC33_VOLTAGE, store_LDO_VEMC33_VOLTAGE);
@@ -3389,14 +3245,14 @@ static ssize_t show_LDO_VIO28_VOLTAGE(struct device *dev,struct device_attribute
     else if(reg_val == 5)    ret_value = 2800;
     else if(reg_val == 6)    ret_value = 2800;
     else if(reg_val == 7)    ret_value = 2800;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VIO28_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VIO28_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VIO28_VOLTAGE, 0664, show_LDO_VIO28_VOLTAGE, store_LDO_VIO28_VOLTAGE);
@@ -3417,14 +3273,14 @@ static ssize_t show_LDO_VMC_VOLTAGE(struct device *dev,struct device_attribute *
     else if(reg_val == 5)    ret_value = 3300;
     else if(reg_val == 6)    ret_value = 1800;
     else if(reg_val == 7)    ret_value = 3300;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VMC_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VMC_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VMC_VOLTAGE, 0664, show_LDO_VMC_VOLTAGE, store_LDO_VMC_VOLTAGE);
@@ -3445,14 +3301,14 @@ static ssize_t show_LDO_VCAM_AF_VOLTAGE(struct device *dev,struct device_attribu
     else if(reg_val == 5)    ret_value = 2800;
     else if(reg_val == 6)    ret_value = 3000;
     else if(reg_val == 7)    ret_value = 3300;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VCAM_AF_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VCAM_AF_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VCAM_AF_VOLTAGE, 0664, show_LDO_VCAM_AF_VOLTAGE, store_LDO_VCAM_AF_VOLTAGE);
@@ -3473,14 +3329,14 @@ static ssize_t show_LDO_VGP1_VOLTAGE(struct device *dev,struct device_attribute 
     else if(reg_val == 5)    ret_value = 2800;
     else if(reg_val == 6)    ret_value = 3000;
     else if(reg_val == 7)    ret_value = 3300;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VGP1_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VGP1_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VGP1_VOLTAGE, 0664, show_LDO_VGP1_VOLTAGE, store_LDO_VGP1_VOLTAGE);
@@ -3501,14 +3357,14 @@ static ssize_t show_LDO_VGP4_VOLTAGE(struct device *dev,struct device_attribute 
     else if(reg_val == 5)    ret_value = 2800;
     else if(reg_val == 6)    ret_value = 3000;
     else if(reg_val == 7)    ret_value = 3300;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VGP4_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VGP4_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VGP4_VOLTAGE, 0664, show_LDO_VGP4_VOLTAGE, store_LDO_VGP4_VOLTAGE);
@@ -3529,14 +3385,14 @@ static ssize_t show_LDO_VSIM1_VOLTAGE(struct device *dev,struct device_attribute
     else if(reg_val == 5)    ret_value = 3000;
     else if(reg_val == 6)    ret_value = 1800;
     else if(reg_val == 7)    ret_value = 3000;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VSIM1_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VSIM1_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VSIM1_VOLTAGE, 0664, show_LDO_VSIM1_VOLTAGE, store_LDO_VSIM1_VOLTAGE);
@@ -3557,14 +3413,14 @@ static ssize_t show_LDO_VSIM2_VOLTAGE(struct device *dev,struct device_attribute
     else if(reg_val == 5)    ret_value = 3000;
     else if(reg_val == 6)    ret_value = 1800;
     else if(reg_val == 7)    ret_value = 3000;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VSIM2_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VSIM2_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VSIM2_VOLTAGE, 0664, show_LDO_VSIM2_VOLTAGE, store_LDO_VSIM2_VOLTAGE);
@@ -3585,14 +3441,14 @@ static ssize_t show_LDO_VFBB_VOLTAGE(struct device *dev,struct device_attribute 
     else if(reg_val == 5)    ret_value = 450;
     else if(reg_val == 6)    ret_value = 500;
     else if(reg_val == 7)    ret_value = 500;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VFBB_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VFBB_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VFBB_VOLTAGE, 0664, show_LDO_VFBB_VOLTAGE, store_LDO_VFBB_VOLTAGE);
@@ -3606,7 +3462,7 @@ static ssize_t show_LDO_VRTC_VOLTAGE(struct device *dev,struct device_attribute 
 }
 static ssize_t store_LDO_VRTC_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VRTC_VOLTAGE, 0664, show_LDO_VRTC_VOLTAGE, store_LDO_VRTC_VOLTAGE);
@@ -3635,14 +3491,14 @@ static ssize_t show_LDO_VMIPI_VOLTAGE(struct device *dev,struct device_attribute
     else if(reg_val ==13)    ret_value = 2800;
     else if(reg_val ==14)    ret_value = 3000;
     else if(reg_val ==15)    ret_value = 3300;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VMIPI_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VMIPI_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VMIPI_VOLTAGE, 0664, show_LDO_VMIPI_VOLTAGE, store_LDO_VMIPI_VOLTAGE);
@@ -3663,14 +3519,14 @@ static ssize_t show_LDO_VIBR_VOLTAGE(struct device *dev,struct device_attribute 
     else if(reg_val == 5)    ret_value = 2800;
     else if(reg_val == 6)    ret_value = 3000;
     else if(reg_val == 7)    ret_value = 3300;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VIBR_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VIBR_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VIBR_VOLTAGE, 0664, show_LDO_VIBR_VOLTAGE, store_LDO_VIBR_VOLTAGE);
@@ -3691,14 +3547,14 @@ static ssize_t show_LDO_31_VDIG18_VOLTAGE(struct device *dev,struct device_attri
     else if(reg_val == 5)    ret_value = 1700;
     else if(reg_val == 6)    ret_value = 1800;
     else if(reg_val == 7)    ret_value = 1800;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_31_VDIG18_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_31_VDIG18_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_31_VDIG18_VOLTAGE, 0664, show_LDO_31_VDIG18_VOLTAGE, store_LDO_31_VDIG18_VOLTAGE);
@@ -3719,14 +3575,14 @@ static ssize_t show_LDO_VCAMD_VOLTAGE(struct device *dev,struct device_attribute
     else if(reg_val == 5)    ret_value = 1500;
     else if(reg_val == 6)    ret_value = 1500;
     else if(reg_val == 7)    ret_value = 1500;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VCAMD_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VCAMD_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VCAMD_VOLTAGE, 0664, show_LDO_VCAMD_VOLTAGE, store_LDO_VCAMD_VOLTAGE);
@@ -3755,14 +3611,14 @@ static ssize_t show_LDO_VUSB10_VOLTAGE(struct device *dev,struct device_attribut
     else if(reg_val ==13)    ret_value = 1250;
     else if(reg_val ==14)    ret_value = 1300;
     else if(reg_val ==15)    ret_value = 1300;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VUSB10_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VUSB10_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VUSB10_VOLTAGE, 0664, show_LDO_VUSB10_VOLTAGE, store_LDO_VUSB10_VOLTAGE);
@@ -3791,14 +3647,14 @@ static ssize_t show_LDO_VCAM_IO_VOLTAGE(struct device *dev,struct device_attribu
     else if(reg_val ==13)    ret_value = 1300;
     else if(reg_val ==14)    ret_value = 1500;
     else if(reg_val ==15)    ret_value = 1800;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VCAM_IO_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VCAM_IO_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VCAM_IO_VOLTAGE, 0664, show_LDO_VCAM_IO_VOLTAGE, store_LDO_VCAM_IO_VOLTAGE);
@@ -3811,14 +3667,14 @@ static ssize_t show_LDO_VSRAM_DVFS1_VOLTAGE(struct device *dev,struct device_att
     kal_uint32 reg_val=0;
     
     ret = pmic_read_interface(reg_address, &reg_val, 0x7F, 9);
-    ret_value = 700000+(6250*reg_val);       
+    ret_value = 700000+(6250*reg_val);
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VSRAM_DVFS1_VOLTAGE (uV) : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VSRAM_DVFS1_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VSRAM_DVFS1_VOLTAGE, 0664, show_LDO_VSRAM_DVFS1_VOLTAGE, store_LDO_VSRAM_DVFS1_VOLTAGE);
@@ -3847,14 +3703,14 @@ static ssize_t show_LDO_VGP2_VOLTAGE(struct device *dev,struct device_attribute 
     else if(reg_val ==13)    ret_value = 1300;
     else if(reg_val ==14)    ret_value = 1500;
     else if(reg_val ==15)    ret_value = 1800;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VGP2_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VGP2_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VGP2_VOLTAGE, 0664, show_LDO_VGP2_VOLTAGE, store_LDO_VGP2_VOLTAGE);
@@ -3883,14 +3739,14 @@ static ssize_t show_LDO_VGP3_VOLTAGE(struct device *dev,struct device_attribute 
     else if(reg_val ==13)    ret_value = 1300;
     else if(reg_val ==14)    ret_value = 1500;
     else if(reg_val ==15)    ret_value = 1800;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VGP3_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VGP3_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VGP3_VOLTAGE, 0664, show_LDO_VGP3_VOLTAGE, store_LDO_VGP3_VOLTAGE);
@@ -3914,7 +3770,7 @@ static ssize_t show_LDO_VBIASN_VOLTAGE(struct device *dev,struct device_attribut
 }
 static ssize_t store_LDO_VBIASN_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VBIASN_VOLTAGE, 0664, show_LDO_VBIASN_VOLTAGE, store_LDO_VBIASN_VOLTAGE);
@@ -3930,7 +3786,7 @@ static ssize_t show_LDO_VBIF28_VOLTAGE(struct device *dev,struct device_attribut
 }
 static ssize_t store_LDO_VBIF28_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VBIF28_VOLTAGE, 0664, show_LDO_VBIF28_VOLTAGE, store_LDO_VBIF28_VOLTAGE);
@@ -3947,14 +3803,14 @@ static ssize_t show_LDO_VAUXB32_VOLTAGE(struct device *dev,struct device_attribu
     else if(reg_val == 1)    ret_value = 3000;
     else if(reg_val == 2)    ret_value = 3000;
     else if(reg_val == 3)    ret_value = 3200;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VAUXB32_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VAUXB32_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VAUXB32_VOLTAGE, 0664, show_LDO_VAUXB32_VOLTAGE, store_LDO_VAUXB32_VOLTAGE);
@@ -3970,7 +3826,7 @@ static ssize_t show_LDO_VUSB33_VOLTAGE(struct device *dev,struct device_attribut
 }
 static ssize_t store_LDO_VUSB33_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VUSB33_VOLTAGE, 0664, show_LDO_VUSB33_VOLTAGE, store_LDO_VUSB33_VOLTAGE);
@@ -3991,14 +3847,14 @@ static ssize_t show_LDO_32_VDIG18_VOLTAGE(struct device *dev,struct device_attri
     else if(reg_val == 5)    ret_value = 1700;
     else if(reg_val == 6)    ret_value = 1800;
     else if(reg_val == 7)    ret_value = 1800;
-    else                     ret_value = 0;            
+    else                     ret_value = 0;
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_32_VDIG18_VOLTAGE : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_32_VDIG18_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_32_VDIG18_VOLTAGE, 0664, show_LDO_32_VDIG18_VOLTAGE, store_LDO_32_VDIG18_VOLTAGE);
@@ -4011,14 +3867,14 @@ static ssize_t show_LDO_VSRAM_DVFS2_VOLTAGE(struct device *dev,struct device_att
     kal_uint32 reg_val=0;
     
     ret = pmic_read_interface(reg_address, &reg_val, 0x7F, 9);
-    ret_value = 700000+(6250*reg_val);       
+    ret_value = 700000+(6250*reg_val);
 
     xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] LDO_VSRAM_DVFS2_VOLTAGE (uV) : %d\n", ret_value);
     return sprintf(buf, "%u\n", ret_value);
 }
 static ssize_t store_LDO_VSRAM_DVFS2_VOLTAGE(struct device *dev,struct device_attribute *attr, const char *buf, size_t size)
 {
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[EM] Not Support Write Function\n");
     return size;
 }
 static DEVICE_ATTR(LDO_VSRAM_DVFS2_VOLTAGE, 0664, show_LDO_VSRAM_DVFS2_VOLTAGE, store_LDO_VSRAM_DVFS2_VOLTAGE);
@@ -4035,84 +3891,49 @@ static DEVICE_ATTR(LDO_VSRAM_DVFS2_VOLTAGE, 0664, show_LDO_VSRAM_DVFS2_VOLTAGE, 
 // LDO EN APIs
 //==============================================================================
 #ifdef PMIC_LDO_EN_API
-void dct_pmic_VTCXO1_enable(kal_bool dctEnable)
+inline void dct_pmic_VTCXO1_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VTCXO1_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vtcxo1_en(1);
-    } else {
-        mt6331_upmu_set_rg_vtcxo1_en(0);
-    }
+    mt6331_upmu_set_rg_vtcxo1_en(dctEnable);
 }
 
-void dct_pmic_VTCXO2_enable(kal_bool dctEnable)
+inline void dct_pmic_VTCXO2_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VTCXO2_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vtcxo2_en(1);
-    } else {
-        mt6331_upmu_set_rg_vtcxo2_en(0);
-    }
+    mt6331_upmu_set_rg_vtcxo2_en(dctEnable);
 }
 
-void dct_pmic_VAUD32_enable(kal_bool dctEnable)
+inline void dct_pmic_VAUD32_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VAUD32_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vaud32_en(1);
-    } else {
-        mt6331_upmu_set_rg_vaud32_en(0);
-    }
+    mt6331_upmu_set_rg_vaud32_en(dctEnable);
 }
 
-void dct_pmic_VAUXA32_enable(kal_bool dctEnable)
+inline void dct_pmic_VAUXA32_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VAUXA32_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vauxa32_en(1);
-    } else {
-        mt6331_upmu_set_rg_vauxa32_en(0);
-    }
+    mt6331_upmu_set_rg_vauxa32_en(dctEnable);
 }
 
-void dct_pmic_VCAMA_enable(kal_bool dctEnable)
+inline void dct_pmic_VCAMA_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VCAMA_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vcama_en(1);
-    } else {
-        mt6331_upmu_set_rg_vcama_en(0);
-    }
+    mt6331_upmu_set_rg_vcama_en(dctEnable);
 }
 
-void dct_pmic_VMCH_enable(kal_bool dctEnable)
+inline void dct_pmic_VMCH_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VMCH_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vmch_en(1);
-    } else {
-        mt6331_upmu_set_rg_vmch_en(0);
-    }
+    mt6331_upmu_set_rg_vmch_en(dctEnable);
 }
 
-void dct_pmic_VEMC33_enable(kal_bool dctEnable)
+inline void dct_pmic_VEMC33_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VEMC33_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vemc33_en(1);
-    } else {
-        mt6331_upmu_set_rg_vemc33_en(0);
-    }
+    mt6331_upmu_set_rg_vemc33_en(dctEnable);
 }
 
-void dct_pmic_VIO28_enable(kal_bool dctEnable)
+inline void dct_pmic_VIO28_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VIO28_enable] %d\n", dctEnable);
     
@@ -4123,251 +3944,146 @@ void dct_pmic_VIO28_enable(kal_bool dctEnable)
     }
 }
 
-void dct_pmic_VMC_enable(kal_bool dctEnable)
+inline void dct_pmic_VMC_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VMC_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vmc_en(1);
-    } else {
-        mt6331_upmu_set_rg_vmc_en(0);
-    }
+    mt6331_upmu_set_rg_vmc_en(dctEnable);
 }
 
-void dct_pmic_VCAM_AF_enable(kal_bool dctEnable)
+inline void dct_pmic_VCAM_AF_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VCAM_AF_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vcam_af_en(1);
-    } else {
-        mt6331_upmu_set_rg_vcam_af_en(0);
-    }
+    mt6331_upmu_set_rg_vcam_af_en(dctEnable);
 }
 
-void dct_pmic_VGP1_enable(kal_bool dctEnable)
+inline void dct_pmic_VGP1_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VGP1_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vgp1_en(1);
-    } else {
-        mt6331_upmu_set_rg_vgp1_en(0);
-    }
+    mt6331_upmu_set_rg_vgp1_en(dctEnable);
 }
 
-void dct_pmic_VGP4_enable(kal_bool dctEnable)
+inline void dct_pmic_VGP4_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VGP4_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vgp4_en(1);
-    } else {
-        mt6331_upmu_set_rg_vgp4_en(0);
-    }
+    mt6331_upmu_set_rg_vgp4_en(dctEnable);
 }
 
-void dct_pmic_VSIM1_enable(kal_bool dctEnable)
+inline void dct_pmic_VSIM1_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VSIM1_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vsim1_en(1);
-    } else {
-        mt6331_upmu_set_rg_vsim1_en(0);
-    }
+    mt6331_upmu_set_rg_vsim1_en(dctEnable);
 }
 
-void dct_pmic_VSIM2_enable(kal_bool dctEnable)
+inline void dct_pmic_VSIM2_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VSIM2_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vsim2_en(1);
-    } else {
-        mt6331_upmu_set_rg_vsim2_en(0);
-    }
+    mt6331_upmu_set_rg_vsim2_en(dctEnable);
 }
 
-void dct_pmic_VFBB_enable(kal_bool dctEnable)
+inline void dct_pmic_VFBB_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VFBB_enable] %d\n", dctEnable);
     
-    #ifdef MTK_PMIC_DVT_SUPPORT
+#ifdef MTK_PMIC_DVT_SUPPORT
     upmu_set_reg_value(MT6331_TOP_CKPDN_CON1_CLR, 0x200);
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VFBB_enable] REG[0x%x] = 0x%x\n", 
         MT6331_TOP_CKPDN_CON1, upmu_get_reg_value(MT6331_TOP_CKPDN_CON1));
-    #endif
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vfbb_en(1);
-    } else {
-        mt6331_upmu_set_rg_vfbb_en(0);
-    }
+#endif
+    mt6331_upmu_set_rg_vfbb_en(dctEnable);
 }
 
-void dct_pmic_VRTC_enable(kal_bool dctEnable)
+inline void dct_pmic_VRTC_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VRTC_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vrtc_en(1);
-    } else {
-        mt6331_upmu_set_rg_vrtc_en(0);
-    }
+    mt6331_upmu_set_rg_vrtc_en(dctEnable);
 }
 
-void dct_pmic_VMIPI_enable(kal_bool dctEnable)
+inline void dct_pmic_VMIPI_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VMIPI_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vmipi_en(1);
-    } else {
-        mt6331_upmu_set_rg_vmipi_en(0);
-    }
+    mt6331_upmu_set_rg_vmipi_en(dctEnable);
 }
 
-void dct_pmic_VIBR_enable(kal_bool dctEnable)
+inline void dct_pmic_VIBR_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VIBR_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vibr_en(1);
-    } else {
-        mt6331_upmu_set_rg_vibr_en(0);
-    }
+    mt6331_upmu_set_rg_vibr_en(dctEnable);
 }
 
-void dct_pmic_MT6331_VDIG18_enable(kal_bool dctEnable)
+inline void dct_pmic_MT6331_VDIG18_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_MT6331_VDIG18_enable] no en bit\n");
 }
 
-void dct_pmic_VCAMD_enable(kal_bool dctEnable)
+inline void dct_pmic_VCAMD_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VCAMD_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vcamd_en(1);
-    } else {
-        mt6331_upmu_set_rg_vcamd_en(0);
-    }
+    mt6331_upmu_set_rg_vcamd_en(dctEnable);
 }
 
-void dct_pmic_VUSB10_enable(kal_bool dctEnable)
+inline void dct_pmic_VUSB10_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VUSB10_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vusb10_en(1);
-    } else {
-        mt6331_upmu_set_rg_vusb10_en(0);
-    }
+    mt6331_upmu_set_rg_vusb10_en(dctEnable);
 }
 
-void dct_pmic_VCAM_IO_enable(kal_bool dctEnable)
+inline void dct_pmic_VCAM_IO_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VCAM_IO_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vcam_io_en(1);
-    } else {
-        mt6331_upmu_set_rg_vcam_io_en(0);
-    }
+    mt6331_upmu_set_rg_vcam_io_en(dctEnable);
 }
 
-void dct_pmic_VSRAM_DVFS1_enable(kal_bool dctEnable)
+inline void dct_pmic_VSRAM_DVFS1_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VSRAM_DVFS1_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vsram_dvfs1_en(1);
-    } else {
-        mt6331_upmu_set_rg_vsram_dvfs1_en(0);
-    }
+    mt6331_upmu_set_rg_vsram_dvfs1_en(dctEnable);
 }
 
-void dct_pmic_VGP2_enable(kal_bool dctEnable)
+inline void dct_pmic_VGP2_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VGP2_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vgp2_en(1);
-    } else {
-        mt6331_upmu_set_rg_vgp2_en(0);
-    }
+    mt6331_upmu_set_rg_vgp2_en(dctEnable);
 }
 
-void dct_pmic_VGP3_enable(kal_bool dctEnable)
+inline void dct_pmic_VGP3_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VGP3_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vgp3_en(1);
-    } else {
-        mt6331_upmu_set_rg_vgp3_en(0);
-    }
+    mt6331_upmu_set_rg_vgp3_en(dctEnable);
 }
 
-void dct_pmic_VBIASN_enable(kal_bool dctEnable)
+inline void dct_pmic_VBIASN_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VBIASN_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6331_upmu_set_rg_vbiasn_en(1);
-    } else {
-        mt6331_upmu_set_rg_vbiasn_en(0);
-    }
+    mt6331_upmu_set_rg_vbiasn_en(dctEnable);
 }
 
-void dct_pmic_VBIF28_enable(kal_bool dctEnable)
+inline void dct_pmic_VBIF28_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VBIF28_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6332_upmu_set_rg_vbif28_en(1);
-    } else {
-        mt6332_upmu_set_rg_vbif28_en(0);
-    }
+    mt6332_upmu_set_rg_vbif28_en(dctEnable);
 }
 
-void dct_pmic_VAUXB32_enable(kal_bool dctEnable)
+inline void dct_pmic_VAUXB32_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VAUXB32_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6332_upmu_set_rg_vauxb32_en(1);
-    } else {
-        mt6332_upmu_set_rg_vauxb32_en(0);
-    }
+    mt6332_upmu_set_rg_vauxb32_en(dctEnable);
 }
 
-void dct_pmic_VUSB33_enable(kal_bool dctEnable)
+inline void dct_pmic_VUSB33_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VUSB33_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6332_upmu_set_rg_vusb33_en(1);
-    } else {
-        mt6332_upmu_set_rg_vusb33_en(0);
-    }
+    mt6332_upmu_set_rg_vusb33_en(dctEnable);
 }
 
-void dct_pmic_MT6332_VDIG18_enable(kal_bool dctEnable)
+inline void dct_pmic_MT6332_VDIG18_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_MT6332_VDIG18_enable] no en bit\n");
 }
 
-void dct_pmic_VSRAM_DVFS2_enable(kal_bool dctEnable)
+inline void dct_pmic_VSRAM_DVFS2_enable(kal_bool dctEnable)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[dct_pmic_VSRAM_DVFS2_enable] %d\n", dctEnable);
-    
-    if(dctEnable == KAL_TRUE) {
-        mt6332_upmu_set_rg_vsram_dvfs2_en(1);
-    } else {
-        mt6332_upmu_set_rg_vsram_dvfs2_en(0);
-    }
+    mt6332_upmu_set_rg_vsram_dvfs2_en(dctEnable);
 }
 #endif
 
@@ -4556,7 +4272,7 @@ void dct_pmic_VGP4_sel(kal_uint32 volt)
         else if(volt == 2200)    {mt6331_upmu_set_rg_vgp4_vosel(7);}
         else{
             xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "Error Setting %d. DO nothing.\r\n", volt);
-        }    
+        }
     }
 }
 
@@ -4588,7 +4304,7 @@ void dct_pmic_VSIM1_sel(kal_uint32 volt)
         else if(volt == 3100)    {mt6331_upmu_set_rg_vsim1_vosel(7);}
         else{
             xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "Error Setting %d. DO nothing.\r\n", volt);
-        }        
+        }
     }
 }
 
@@ -4620,7 +4336,7 @@ void dct_pmic_VSIM2_sel(kal_uint32 volt)
         else if(volt == 3100)    {mt6331_upmu_set_rg_vsim2_vosel(7);}
         else{
             xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "Error Setting %d. DO nothing.\r\n", volt);
-        }  
+        }
     }
 }
 
@@ -4914,7 +4630,7 @@ void pmic_ldo_enable(MT65XX_POWER powerId, kal_bool powerEnable)
     else if(powerId == MT6331_POWER_LDO_VUSB10)        { dct_pmic_VUSB10_enable(powerEnable); }
     else if(powerId == MT6331_POWER_LDO_VCAM_IO)       { dct_pmic_VCAM_IO_enable(powerEnable); }
     else if(powerId == MT6331_POWER_LDO_VSRAM_DVFS1)   { dct_pmic_VSRAM_DVFS1_enable(powerEnable); }
-    else if(powerId == MT6331_POWER_LDO_VGP2)          { dct_pmic_VGP2_enable(powerEnable); }    
+    else if(powerId == MT6331_POWER_LDO_VGP2)          { dct_pmic_VGP2_enable(powerEnable); }
     else if(powerId == MT6331_POWER_LDO_VGP3)          { dct_pmic_VGP3_enable(powerEnable); }
     else if(powerId == MT6331_POWER_LDO_VBIASN)        { dct_pmic_VBIASN_enable(powerEnable); }
     
@@ -4960,7 +4676,7 @@ void pmic_ldo_vol_sel(MT65XX_POWER powerId, MT65XX_POWER_VOLTAGE powerVolt)
     else if(powerId == MT6331_POWER_LDO_VUSB10)        { dct_pmic_VUSB10_sel(powerVolt); }
     else if(powerId == MT6331_POWER_LDO_VCAM_IO)       { dct_pmic_VCAM_IO_sel(powerVolt); }
     else if(powerId == MT6331_POWER_LDO_VSRAM_DVFS1)   { dct_pmic_VSRAM_DVFS1_sel(powerVolt); }
-    else if(powerId == MT6331_POWER_LDO_VGP2)          { dct_pmic_VGP2_sel(powerVolt); }    
+    else if(powerId == MT6331_POWER_LDO_VGP2)          { dct_pmic_VGP2_sel(powerVolt); }
     else if(powerId == MT6331_POWER_LDO_VGP3)          { dct_pmic_VGP3_sel(powerVolt); }
     else if(powerId == MT6331_POWER_LDO_VBIASN)        { dct_pmic_VBIASN_sel(powerVolt); }
     
@@ -4975,7 +4691,7 @@ void pmic_ldo_vol_sel(MT65XX_POWER powerId, MT65XX_POWER_VOLTAGE powerVolt)
         xlog_printk(ANDROID_LOG_WARN, "Power/PMIC", "[pmic_ldo_ldo_vol_sel] UnKnown powerId (%d)\n", powerId);
     }
 
-    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[pmic_ldo_vol_sel] Receive powerId %d, action is %d\n", powerId, powerVolt);    
+    xlog_printk(ANDROID_LOG_DEBUG, "Power/PMIC", "[pmic_ldo_vol_sel] Receive powerId %d, action is %d\n", powerId, powerVolt);
 }
 
 //==============================================================================
@@ -4997,64 +4713,64 @@ void dump_ldo_status_read_debug(void)
     val_1 = upmu_get_reg_value(MT6331_EN_STATUS1);
     val_2 = upmu_get_reg_value(MT6331_EN_STATUS2);
     //MT6332
-    val_3 = upmu_get_reg_value(MT6332_EN_STATUS0);    
+    val_3 = upmu_get_reg_value(MT6332_EN_STATUS0);
 
     printk("********** BUCK/LDO status dump [1:ON,0:OFF]**********\n");
 
-    printk("DVFS11      =%d, ",  (((val_0)&(0x0001))>>0) ); 
+    printk("DVFS11      =%d, ",  (((val_0)&(0x0001))>>0) );
     printk("DVFS12      =%d, ",  (((val_0)&(0x0002))>>1) );
-    printk("DVFS13      =%d, ",  (((val_0)&(0x0004))>>2) ); 
+    printk("DVFS13      =%d, ",  (((val_0)&(0x0004))>>2) );
     printk("DVFS14      =%d\n",  (((val_0)&(0x0008))>>3) );
     
-    printk("VGPU        =%d, ",  (((val_0)&(0x0010))>>4) );    
-    printk("VCORE1      =%d, ",  (((val_0)&(0x0020))>>5) ); 
-    printk("VCORE2      =%d, ",  (((val_0)&(0x0040))>>6) );         
-    printk("VIO18       =%d\n",  (((val_0)&(0x0080))>>7) );        
+    printk("VGPU        =%d, ",  (((val_0)&(0x0010))>>4) );
+    printk("VCORE1      =%d, ",  (((val_0)&(0x0020))>>5) );
+    printk("VCORE2      =%d, ",  (((val_0)&(0x0040))>>6) );
+    printk("VIO18       =%d\n",  (((val_0)&(0x0080))>>7) );
     
-    printk("NA          =%d, ",  (((val_0)&(0x0100))>>8) );     
-    printk("VRTC        =%d, ",  (((val_0)&(0x0200))>>9) ); 
-    printk("VTCXO1      =%d, ",  (((val_0)&(0x0400))>>10) );         
-    printk("VTCXO2      =%d\n",  (((val_0)&(0x0800))>>11) );    
+    printk("NA          =%d, ",  (((val_0)&(0x0100))>>8) );
+    printk("VRTC        =%d, ",  (((val_0)&(0x0200))>>9) );
+    printk("VTCXO1      =%d, ",  (((val_0)&(0x0400))>>10) );
+    printk("VTCXO2      =%d\n",  (((val_0)&(0x0800))>>11) );
     
-    printk("VAUD32      =%d, ",  (((val_0)&(0x1000))>>12) );    
+    printk("VAUD32      =%d, ",  (((val_0)&(0x1000))>>12) );
     printk("VAUXA32     =%d, ",  (((val_0)&(0x2000))>>13) );
-    printk("VCAMA       =%d, ",  (((val_0)&(0x4000))>>14) );         
-    printk("VIO28       =%d\n",  (((val_0)&(0x8000))>>15) );                                                        
-    //------------------------------------------------------------------     
-    printk("VCAM_AF     =%d, ",  (((val_1)&(0x0001))>>0) ); 
+    printk("VCAMA       =%d, ",  (((val_0)&(0x4000))>>14) );
+    printk("VIO28       =%d\n",  (((val_0)&(0x8000))>>15) );
+    //------------------------------------------------------------------
+    printk("VCAM_AF     =%d, ",  (((val_1)&(0x0001))>>0) );
     printk("VMC         =%d, ",  (((val_1)&(0x0002))>>1) );
-    printk("VMCH        =%d, ",  (((val_1)&(0x0004))>>2) ); 
+    printk("VMCH        =%d, ",  (((val_1)&(0x0004))>>2) );
     printk("VEMC33      =%d\n",  (((val_1)&(0x0008))>>3) );
     
-    printk("VGP1        =%d, ",  (((val_1)&(0x0010))>>4) );    
-    printk("VGP4        =%d, ",  (((val_1)&(0x0020))>>5) ); 
-    printk("VSIM1       =%d, ",  (((val_1)&(0x0040))>>6) );         
-    printk("VSIM2       =%d\n",  (((val_1)&(0x0080))>>7) );        
+    printk("VGP1        =%d, ",  (((val_1)&(0x0010))>>4) );
+    printk("VGP4        =%d, ",  (((val_1)&(0x0020))>>5) );
+    printk("VSIM1       =%d, ",  (((val_1)&(0x0040))>>6) );
+    printk("VSIM2       =%d\n",  (((val_1)&(0x0080))>>7) );
     
-    printk("VFBB        =%d, ",  (((val_1)&(0x0100))>>8) );     
-    printk("VMIPI       =%d, ",  (((val_1)&(0x0200))>>9) ); 
-    printk("VIBR        =%d, ",  (((val_1)&(0x0400))>>10) );         
-    printk("VCAMD       =%d\n",  (((val_1)&(0x0800))>>11) );    
+    printk("VFBB        =%d, ",  (((val_1)&(0x0100))>>8) );
+    printk("VMIPI       =%d, ",  (((val_1)&(0x0200))>>9) );
+    printk("VIBR        =%d, ",  (((val_1)&(0x0400))>>10) );
+    printk("VCAMD       =%d\n",  (((val_1)&(0x0800))>>11) );
     
-    printk("VUSB10      =%d, ",  (((val_1)&(0x1000))>>12) );    
+    printk("VUSB10      =%d, ",  (((val_1)&(0x1000))>>12) );
     printk("VCAM_IO     =%d, ",  (((val_1)&(0x2000))>>13) );
-    printk("VSRAM_DVFS1 =%d, ",  (((val_1)&(0x4000))>>14) );         
-    printk("VGP2        =%d\n",  (((val_1)&(0x8000))>>15) );                                                        
-    //------------------------------------------------------------------    
-    printk("VGP3        =%d, ",  (((val_2)&(0x0001))>>0) ); 
+    printk("VSRAM_DVFS1 =%d, ",  (((val_1)&(0x4000))>>14) );
+    printk("VGP2        =%d\n",  (((val_1)&(0x8000))>>15) );
+    //------------------------------------------------------------------
+    printk("VGP3        =%d, ",  (((val_2)&(0x0001))>>0) );
     printk("VBIASN      =%d\n",  (((val_2)&(0x0002))>>1) );
     //------------------------------------------------------------------
-    printk("VAUXB32     =%d, ",  (((val_3)&(0x0001))>>0) ); 
+    printk("VAUXB32     =%d, ",  (((val_3)&(0x0001))>>0) );
     printk("VBIF28      =%d, ",  (((val_3)&(0x0002))>>1) );
-    printk("VUSB33      =%d, ",  (((val_3)&(0x0004))>>2) ); 
+    printk("VUSB33      =%d, ",  (((val_3)&(0x0004))>>2) );
     printk("VSRAM_DVFS2 =%d\n",  (((val_3)&(0x0008))>>3) );
     
-    printk("VDRAM       =%d, ",  (((val_3)&(0x0040))>>6) );         
-    printk("VDVFS2      =%d\n",  (((val_3)&(0x0080))>>7) );        
+    printk("VDRAM       =%d, ",  (((val_3)&(0x0040))>>6) );
+    printk("VDVFS2      =%d\n",  (((val_3)&(0x0080))>>7) );
     
-    printk("VRF1        =%d, ",  (((val_3)&(0x0100))>>8) );     
-    printk("VRF2        =%d, ",  (((val_3)&(0x0200))>>9) ); 
-    printk("VPA         =%d, ",  (((val_3)&(0x0400))>>10) );         
+    printk("VRF1        =%d, ",  (((val_3)&(0x0100))>>8) );
+    printk("VRF2        =%d, ",  (((val_3)&(0x0200))>>9) );
+    printk("VPA         =%d, ",  (((val_3)&(0x0400))>>10) );
     printk("VSBST       =%d\n",  (((val_3)&(0x0800))>>11) );
 }
 
@@ -5071,60 +4787,60 @@ static int proc_utilization_show(struct seq_file *m, void *v)
     
     seq_printf(m, "********** BUCK/LDO status dump seq_printf [1:ON,0:OFF]**********\n");
 
-    seq_printf(m, "DVFS11      =%d, ",  (((val_0)&(0x0001))>>0) ); 
+    seq_printf(m, "DVFS11      =%d, ",  (((val_0)&(0x0001))>>0) );
     seq_printf(m, "DVFS12      =%d, ",  (((val_0)&(0x0002))>>1) );
-    seq_printf(m, "DVFS13      =%d, ",  (((val_0)&(0x0004))>>2) ); 
+    seq_printf(m, "DVFS13      =%d, ",  (((val_0)&(0x0004))>>2) );
     seq_printf(m, "DVFS14      =%d\n",  (((val_0)&(0x0008))>>3) );
     
-    seq_printf(m, "VGPU        =%d, ",  (((val_0)&(0x0010))>>4) );    
-    seq_printf(m, "VCORE1      =%d, ",  (((val_0)&(0x0020))>>5) ); 
-    seq_printf(m, "VCORE2      =%d, ",  (((val_0)&(0x0040))>>6) );         
-    seq_printf(m, "VIO18       =%d\n",  (((val_0)&(0x0080))>>7) );        
+    seq_printf(m, "VGPU        =%d, ",  (((val_0)&(0x0010))>>4) );
+    seq_printf(m, "VCORE1      =%d, ",  (((val_0)&(0x0020))>>5) );
+    seq_printf(m, "VCORE2      =%d, ",  (((val_0)&(0x0040))>>6) );
+    seq_printf(m, "VIO18       =%d\n",  (((val_0)&(0x0080))>>7) );
     
-    seq_printf(m, "NA          =%d, ",  (((val_0)&(0x0100))>>8) );     
-    seq_printf(m, "VRTC        =%d, ",  (((val_0)&(0x0200))>>9) ); 
-    seq_printf(m, "VTCXO1      =%d, ",  (((val_0)&(0x0400))>>10) );         
-    seq_printf(m, "VTCXO2      =%d\n",  (((val_0)&(0x0800))>>11) );    
+    seq_printf(m, "NA          =%d, ",  (((val_0)&(0x0100))>>8) );
+    seq_printf(m, "VRTC        =%d, ",  (((val_0)&(0x0200))>>9) );
+    seq_printf(m, "VTCXO1      =%d, ",  (((val_0)&(0x0400))>>10) );
+    seq_printf(m, "VTCXO2      =%d\n",  (((val_0)&(0x0800))>>11) );
     
-    seq_printf(m, "VAUD32      =%d, ",  (((val_0)&(0x1000))>>12) );    
+    seq_printf(m, "VAUD32      =%d, ",  (((val_0)&(0x1000))>>12) );
     seq_printf(m, "VAUXA32     =%d, ",  (((val_0)&(0x2000))>>13) );
-    seq_printf(m, "VCAMA       =%d, ",  (((val_0)&(0x4000))>>14) );         
-    seq_printf(m, "VIO28       =%d\n",  (((val_0)&(0x8000))>>15) );                                                        
-    //------------------------------------------------------------------     
-    seq_printf(m, "VCAM_AF     =%d, ",  (((val_1)&(0x0001))>>0) ); 
+    seq_printf(m, "VCAMA       =%d, ",  (((val_0)&(0x4000))>>14) );
+    seq_printf(m, "VIO28       =%d\n",  (((val_0)&(0x8000))>>15) );
+    //------------------------------------------------------------------
+    seq_printf(m, "VCAM_AF     =%d, ",  (((val_1)&(0x0001))>>0) );
     seq_printf(m, "VMC         =%d, ",  (((val_1)&(0x0002))>>1) );
-    seq_printf(m, "VMCH        =%d, ",  (((val_1)&(0x0004))>>2) ); 
+    seq_printf(m, "VMCH        =%d, ",  (((val_1)&(0x0004))>>2) );
     seq_printf(m, "VEMC33      =%d\n",  (((val_1)&(0x0008))>>3) );
     
-    seq_printf(m, "VGP1        =%d, ",  (((val_1)&(0x0010))>>4) );    
-    seq_printf(m, "VGP4        =%d, ",  (((val_1)&(0x0020))>>5) ); 
-    seq_printf(m, "VSIM1       =%d, ",  (((val_1)&(0x0040))>>6) );         
-    seq_printf(m, "VSIM2       =%d\n",  (((val_1)&(0x0080))>>7) );        
+    seq_printf(m, "VGP1        =%d, ",  (((val_1)&(0x0010))>>4) );
+    seq_printf(m, "VGP4        =%d, ",  (((val_1)&(0x0020))>>5) );
+    seq_printf(m, "VSIM1       =%d, ",  (((val_1)&(0x0040))>>6) );
+    seq_printf(m, "VSIM2       =%d\n",  (((val_1)&(0x0080))>>7) );
     
-    seq_printf(m, "VFBB        =%d, ",  (((val_1)&(0x0100))>>8) );     
-    seq_printf(m, "VMIPI       =%d, ",  (((val_1)&(0x0200))>>9) ); 
-    seq_printf(m, "VIBR        =%d, ",  (((val_1)&(0x0400))>>10) );         
-    seq_printf(m, "VCAMD       =%d\n",  (((val_1)&(0x0800))>>11) );    
+    seq_printf(m, "VFBB        =%d, ",  (((val_1)&(0x0100))>>8) );
+    seq_printf(m, "VMIPI       =%d, ",  (((val_1)&(0x0200))>>9) );
+    seq_printf(m, "VIBR        =%d, ",  (((val_1)&(0x0400))>>10) );
+    seq_printf(m, "VCAMD       =%d\n",  (((val_1)&(0x0800))>>11) );
     
-    seq_printf(m, "VUSB10      =%d, ",  (((val_1)&(0x1000))>>12) );    
+    seq_printf(m, "VUSB10      =%d, ",  (((val_1)&(0x1000))>>12) );
     seq_printf(m, "VCAM_IO     =%d, ",  (((val_1)&(0x2000))>>13) );
-    seq_printf(m, "VSRAM_DVFS1 =%d, ",  (((val_1)&(0x4000))>>14) );         
-    seq_printf(m, "VGP2        =%d\n",  (((val_1)&(0x8000))>>15) );                                                        
-    //------------------------------------------------------------------    
-    seq_printf(m, "VGP3        =%d, ",  (((val_2)&(0x0001))>>0) ); 
+    seq_printf(m, "VSRAM_DVFS1 =%d, ",  (((val_1)&(0x4000))>>14) );
+    seq_printf(m, "VGP2        =%d\n",  (((val_1)&(0x8000))>>15) );
+    //------------------------------------------------------------------
+    seq_printf(m, "VGP3        =%d, ",  (((val_2)&(0x0001))>>0) );
     seq_printf(m, "VBIASN      =%d\n",  (((val_2)&(0x0002))>>1) );
     //------------------------------------------------------------------
-    seq_printf(m, "VAUXB32     =%d, ",  (((val_3)&(0x0001))>>0) ); 
+    seq_printf(m, "VAUXB32     =%d, ",  (((val_3)&(0x0001))>>0) );
     seq_printf(m, "VBIF28      =%d, ",  (((val_3)&(0x0002))>>1) );
-    seq_printf(m, "VUSB33      =%d, ",  (((val_3)&(0x0004))>>2) ); 
+    seq_printf(m, "VUSB33      =%d, ",  (((val_3)&(0x0004))>>2) );
     seq_printf(m, "VSRAM_DVFS2 =%d\n",  (((val_3)&(0x0008))>>3) );
     
-    seq_printf(m, "VDRAM       =%d, ",  (((val_3)&(0x0040))>>6) );         
-    seq_printf(m, "VDVFS2      =%d\n",  (((val_3)&(0x0080))>>7) );        
+    seq_printf(m, "VDRAM       =%d, ",  (((val_3)&(0x0040))>>6) );
+    seq_printf(m, "VDVFS2      =%d\n",  (((val_3)&(0x0080))>>7) );
     
-    seq_printf(m, "VRF1        =%d, ",  (((val_3)&(0x0100))>>8) );     
-    seq_printf(m, "VRF2        =%d, ",  (((val_3)&(0x0200))>>9) ); 
-    seq_printf(m, "VPA         =%d, ",  (((val_3)&(0x0400))>>10) );         
+    seq_printf(m, "VRF1        =%d, ",  (((val_3)&(0x0100))>>8) );
+    seq_printf(m, "VRF2        =%d, ",  (((val_3)&(0x0200))>>9) );
+    seq_printf(m, "VPA         =%d, ",  (((val_3)&(0x0400))>>10) );
     seq_printf(m, "VSBST       =%d\n",  (((val_3)&(0x0800))>>11) );
     
     return 0;
@@ -5135,7 +4851,7 @@ static int proc_utilization_open(struct inode *inode, struct file *file)
     return single_open(file, proc_utilization_show, NULL);
 }
 
-static const struct file_operations pmic_debug_proc_fops = { 
+static const struct file_operations pmic_debug_proc_fops = {
     .open  = proc_utilization_open, 
     .read  = seq_read,
 };
@@ -5151,15 +4867,15 @@ void pmic_debug_init(void)
         return;
     }
 
-    #if 1
+#if 1
     proc_create("dump_ldo_status", S_IRUGO | S_IWUSR, mt_pmic_dir, &pmic_debug_proc_fops);
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "proc_create pmic_debug_proc_fops\n" );
-    #else
+#else
     entry = create_proc_entry("dump_ldo_status", 00640, mt_pmic_dir);
     if (entry) {
         entry->read_proc = dump_ldo_status_read;
     }
-    #endif
+#endif
 }
 
 //==============================================================================
@@ -5417,12 +5133,12 @@ static ssize_t store_pmic_dvt(struct device *dev,struct device_attribute *attr, 
         test_item = simple_strtoul(buf,&pvalue,10);
         printk("[store_pmic_dvt] test_item=%d\n", test_item);
 
-        #ifdef MTK_PMIC_DVT_SUPPORT 
+#ifdef MTK_PMIC_DVT_SUPPORT 
         pmic_dvt_entry(test_item);
-        #else
+#else
         printk("[store_pmic_dvt] no define MTK_PMIC_DVT_SUPPORT\n");
-        #endif
-    }    
+#endif
+    }
     return size;
 }
 static DEVICE_ATTR(pmic_dvt, 0664, show_pmic_dvt, store_pmic_dvt);
@@ -5436,23 +5152,20 @@ extern int is_bq24160_exist(void);
 
 int is_ext_swchr_exist(void)
 {
-    #ifdef CONFIG_MTK_BQ24160_SUPPORT
-        if( (is_bq24160_exist()==1) )
-            return 1;    
-        else
-            return 0;    
-    #else
-        if(get_pmic_mt6332_cid()>=PMIC6332_E1_CID_CODE)
-        {
-            xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[is_ext_swchr_exist] can access MT6332\n");
-            return 1;
-        }
-        else
-        {
-            xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[is_ext_swchr_exist] no define any HW\n");
-            return 0;
-        }
-    #endif    
+#ifdef CONFIG_MTK_BQ24160_SUPPORT
+    return is_bq24160_exist() == 1;
+#else
+    if(get_pmic_mt6332_cid() >= PMIC6332_E1_CID_CODE)
+    {
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[is_ext_swchr_exist] can access MT6332\n");
+        return 1;
+    }
+    else
+    {
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[is_ext_swchr_exist] no define any HW\n");
+        return 0;
+    }
+#endif
 }
 
 //==============================================================================
@@ -5462,19 +5175,13 @@ extern int is_tps6128x_sw_ready(void);
 extern int is_tps6128x_exist(void);
 
 int is_ext_vbat_boost_sw_ready(void)
-{    
-    if( (is_tps6128x_sw_ready()==1) )
-        return 1;    
-    else
-        return 0;    
+{
+    return is_tps6128x_sw_ready() == 1;
 }
 
 int is_ext_vbat_boost_exist(void)
 {
-    if( (is_tps6128x_exist()==1) )
-        return 1;
-    else
-        return 0;    
+    return is_tps6128x_exist() == 1;
 }
 
 //==============================================================================
@@ -5520,19 +5227,13 @@ int get_ext_buck_i2c_ch_num(void)
 }
 
 int is_ext_buck_sw_ready(void)
-{    
-    if( (is_da9210_sw_ready()==1) )
-        return 1;    
-    else
-        return 0;    
+{
+    return is_da9210_sw_ready() == 1;
 }
 
 int is_ext_buck_exist(void)
 {
-    if( (is_da9210_exist()==1) )
-        return 1;
-    else
-        return 0;    
+    return is_da9210_exist() == 1;
 }
 
 int ext_buck_vosel(unsigned long val)
@@ -5559,14 +5260,14 @@ int ext_buck_vosel(unsigned long val)
 }
 
 void ext_buck_vproc_vsel(int val)
-{    
+{
     mt_set_gpio_mode(g_vproc_vsel_gpio_number,0); // 0:GPIO mode
     mt_set_gpio_dir(g_vproc_vsel_gpio_number,1);  // dir = output
     mt_set_gpio_out(g_vproc_vsel_gpio_number,val);
 }
 
 void ext_buck_vproc_en(int val)
-{    
+{
     mt_set_gpio_mode(g_vproc_en_gpio_number,0); // 0:GPIO mode
     mt_set_gpio_dir(g_vproc_en_gpio_number,1);  // dir = output 
     mt_set_gpio_out(g_vproc_en_gpio_number,val);
@@ -5600,7 +5301,7 @@ void ext_buck_init(void)
 }
 
 void ext_buck_pre_init(void)
-{   
+{
 }
 
 //==============================================================================
@@ -5613,7 +5314,7 @@ void pmic_dig_reset(void)
     //PMIC Digital reset
     ret_val=pmic_config_interface(MT6331_TOP_RST_MISC_CLR, 0x0002, 0xFFFF, 0); //[1]=0, RG_WDTRSTB_MODE
     ret_val=pmic_config_interface(MT6331_TOP_RST_MISC_SET, 0x0001, 0xFFFF, 0); //[0]=1, RG_WDTRSTB_EN
-    printk("[pmic_dig_reset] Reg[0x%x]=0x%x\n", MT6331_TOP_RST_MISC, upmu_get_reg_value(MT6331_TOP_RST_MISC));    
+    printk("[pmic_dig_reset] Reg[0x%x]=0x%x\n", MT6331_TOP_RST_MISC, upmu_get_reg_value(MT6331_TOP_RST_MISC));
     ret_val=pmic_config_interface(MT6332_TOP_RST_MISC_CLR, 0x0002, 0xFFFF, 0); //[1]=0, RG_WDTRSTB_MODE
     ret_val=pmic_config_interface(MT6332_TOP_RST_MISC_SET, 0x0001, 0xFFFF, 0); //[0]=1, RG_WDTRSTB_EN
     printk("[pmic_dig_reset] Reg[0x%x]=0x%x\n", MT6332_TOP_RST_MISC, upmu_get_reg_value(MT6332_TOP_RST_MISC));
@@ -5626,7 +5327,7 @@ void pmic_full_reset(void)
     //PMIC HW Full reset
     ret_val=pmic_config_interface(MT6331_TOP_RST_MISC_SET, 0x0002, 0xFFFF, 0); //[1]=1, RG_WDTRSTB_MODE
     ret_val=pmic_config_interface(MT6331_TOP_RST_MISC_SET, 0x0001, 0xFFFF, 0); //[0]=1, RG_WDTRSTB_EN
-    printk("[pmic_full_reset] Reg[0x%x]=0x%x\n", MT6331_TOP_RST_MISC, upmu_get_reg_value(MT6331_TOP_RST_MISC));    
+    printk("[pmic_full_reset] Reg[0x%x]=0x%x\n", MT6331_TOP_RST_MISC, upmu_get_reg_value(MT6331_TOP_RST_MISC));
     ret_val=pmic_config_interface(MT6332_TOP_RST_MISC_SET, 0x0002, 0xFFFF, 0); //[1]=1, RG_WDTRSTB_MODE
     ret_val=pmic_config_interface(MT6332_TOP_RST_MISC_SET, 0x0001, 0xFFFF, 0); //[0]=1, RG_WDTRSTB_EN
     printk("[pmic_full_reset] Reg[0x%x]=0x%x\n", MT6332_TOP_RST_MISC, upmu_get_reg_value(MT6332_TOP_RST_MISC));
@@ -5755,7 +5456,7 @@ void PMIC_INIT_SETTING_V1(void)
         ret = pmic_config_interface(0x740,0x1,0x3,6); // [7:6]: AUXADC_TRIM_CH11_SEL; Ricky
         ret = pmic_config_interface(0x6024,0x0006,0xFFFF,0); // [2:1]: GPIO1_PULLEN; GPIO2_PULLEN; Black, 6331 GPIO pulling disable
         
-        #if 1
+#if 1
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x4, upmu_get_reg_value(0x4));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0xA, upmu_get_reg_value(0xA));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0xC, upmu_get_reg_value(0xC));
@@ -5766,35 +5467,35 @@ void PMIC_INIT_SETTING_V1(void)
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x124, upmu_get_reg_value(0x124));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x13E, upmu_get_reg_value(0x13E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x144, upmu_get_reg_value(0x144));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x14A, upmu_get_reg_value(0x14A));        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x14A, upmu_get_reg_value(0x14A));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x150, upmu_get_reg_value(0x150));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x184, upmu_get_reg_value(0x184));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x244, upmu_get_reg_value(0x244));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24A, upmu_get_reg_value(0x24A)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24C, upmu_get_reg_value(0x24C)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24E, upmu_get_reg_value(0x24E)); 
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24A, upmu_get_reg_value(0x24A));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24C, upmu_get_reg_value(0x24C));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24E, upmu_get_reg_value(0x24E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x250, upmu_get_reg_value(0x250));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x25A, upmu_get_reg_value(0x25A));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x262, upmu_get_reg_value(0x262)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x264, upmu_get_reg_value(0x264)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x266, upmu_get_reg_value(0x266)); 
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x262, upmu_get_reg_value(0x262));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x264, upmu_get_reg_value(0x264));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x266, upmu_get_reg_value(0x266));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x26A, upmu_get_reg_value(0x26A));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x282, upmu_get_reg_value(0x282));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2A6, upmu_get_reg_value(0x2A6));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2AC, upmu_get_reg_value(0x2AC));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2B2, upmu_get_reg_value(0x2B2)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2BC, upmu_get_reg_value(0x2BC)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2D6, upmu_get_reg_value(0x2D6)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x314, upmu_get_reg_value(0x314)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x33E, upmu_get_reg_value(0x33E)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x362, upmu_get_reg_value(0x362)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x368, upmu_get_reg_value(0x368)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36A, upmu_get_reg_value(0x36A)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36C, upmu_get_reg_value(0x36C)); 
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2B2, upmu_get_reg_value(0x2B2));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2BC, upmu_get_reg_value(0x2BC));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2D6, upmu_get_reg_value(0x2D6));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x314, upmu_get_reg_value(0x314));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x33E, upmu_get_reg_value(0x33E));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x362, upmu_get_reg_value(0x362));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x368, upmu_get_reg_value(0x368));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36A, upmu_get_reg_value(0x36A));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36C, upmu_get_reg_value(0x36C));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36E, upmu_get_reg_value(0x36E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x378, upmu_get_reg_value(0x378));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x394, upmu_get_reg_value(0x394));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x3A4, upmu_get_reg_value(0x3A4));        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x3A4, upmu_get_reg_value(0x3A4));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x502, upmu_get_reg_value(0x502));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x504, upmu_get_reg_value(0x504));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x506, upmu_get_reg_value(0x506));
@@ -5807,12 +5508,12 @@ void PMIC_INIT_SETTING_V1(void)
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x534, upmu_get_reg_value(0x534));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x538, upmu_get_reg_value(0x538));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x54A, upmu_get_reg_value(0x54A));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x552, upmu_get_reg_value(0x552));                
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x552, upmu_get_reg_value(0x552));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x73E, upmu_get_reg_value(0x73E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x740, upmu_get_reg_value(0x740));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n",0x6020, upmu_get_reg_value(0x6020));
-        #endif
-    } 
+#endif
+    }
     else if(mt6331_chip_version >= PMIC6331_E1_CID_CODE)
     {
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[Kernel_PMIC_INIT_SETTING_V1] 6331 PMIC Chip = 0x%x\n",mt6331_chip_version);
@@ -5930,7 +5631,7 @@ void PMIC_INIT_SETTING_V1(void)
         ret = pmic_config_interface(0x740,0x1,0x3,6); // [7:6]: AUXADC_TRIM_CH11_SEL; Ricky
         ret = pmic_config_interface(0x6024,0x0006,0xFFFF,0); // [2:1]: GPIO1_PULLEN; GPIO2_PULLEN; Black
         
-        #if 1
+#if 1
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x4, upmu_get_reg_value(0x4));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0xA, upmu_get_reg_value(0xA));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0xC, upmu_get_reg_value(0xC));
@@ -5941,35 +5642,35 @@ void PMIC_INIT_SETTING_V1(void)
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x124, upmu_get_reg_value(0x124));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x13E, upmu_get_reg_value(0x13E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x144, upmu_get_reg_value(0x144));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x14A, upmu_get_reg_value(0x14A));        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x14A, upmu_get_reg_value(0x14A));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x150, upmu_get_reg_value(0x150));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x184, upmu_get_reg_value(0x184));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x244, upmu_get_reg_value(0x244));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24A, upmu_get_reg_value(0x24A)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24C, upmu_get_reg_value(0x24C)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24E, upmu_get_reg_value(0x24E)); 
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24A, upmu_get_reg_value(0x24A));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24C, upmu_get_reg_value(0x24C));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24E, upmu_get_reg_value(0x24E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x250, upmu_get_reg_value(0x250));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x25A, upmu_get_reg_value(0x25A));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x262, upmu_get_reg_value(0x262)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x264, upmu_get_reg_value(0x264)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x266, upmu_get_reg_value(0x266)); 
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x262, upmu_get_reg_value(0x262));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x264, upmu_get_reg_value(0x264));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x266, upmu_get_reg_value(0x266));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x26A, upmu_get_reg_value(0x26A));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x282, upmu_get_reg_value(0x282));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2A6, upmu_get_reg_value(0x2A6));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2AC, upmu_get_reg_value(0x2AC));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2B2, upmu_get_reg_value(0x2B2)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2BC, upmu_get_reg_value(0x2BC)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2D6, upmu_get_reg_value(0x2D6)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x314, upmu_get_reg_value(0x314)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x33E, upmu_get_reg_value(0x33E)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x362, upmu_get_reg_value(0x362)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x368, upmu_get_reg_value(0x368)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36A, upmu_get_reg_value(0x36A)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36C, upmu_get_reg_value(0x36C)); 
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2B2, upmu_get_reg_value(0x2B2));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2BC, upmu_get_reg_value(0x2BC));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2D6, upmu_get_reg_value(0x2D6));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x314, upmu_get_reg_value(0x314));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x33E, upmu_get_reg_value(0x33E));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x362, upmu_get_reg_value(0x362));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x368, upmu_get_reg_value(0x368));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36A, upmu_get_reg_value(0x36A));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36C, upmu_get_reg_value(0x36C));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36E, upmu_get_reg_value(0x36E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x378, upmu_get_reg_value(0x378));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x394, upmu_get_reg_value(0x394));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x3A4, upmu_get_reg_value(0x3A4));        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x3A4, upmu_get_reg_value(0x3A4));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x502, upmu_get_reg_value(0x502));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x504, upmu_get_reg_value(0x504));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x506, upmu_get_reg_value(0x506));
@@ -5980,11 +5681,11 @@ void PMIC_INIT_SETTING_V1(void)
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x528, upmu_get_reg_value(0x528));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x534, upmu_get_reg_value(0x534));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x54A, upmu_get_reg_value(0x54A));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x552, upmu_get_reg_value(0x552));                
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x552, upmu_get_reg_value(0x552));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x73E, upmu_get_reg_value(0x73E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x740, upmu_get_reg_value(0x740));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n",0x6020, upmu_get_reg_value(0x6020));
-        #endif
+#endif
     }
     else
     {
@@ -6087,7 +5788,7 @@ void PMIC_INIT_SETTING_V1(void)
         ret = pmic_config_interface(0x8CD4,0xAE8,0x3FFF,0); // [13:0]: RG_IWLED_FRQ_COUNT; Waverly
         ret = pmic_config_interface(0xE024,0x0003,0xFFFF,0); // [1:0]: GPIO1_PULLEN; GPIO0_PULLEN; Black, 6332 GPIO pulling enable
         
-        #if 1
+#if 1
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8004, upmu_get_reg_value(0x8004));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x801A, upmu_get_reg_value(0x801A));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8094, upmu_get_reg_value(0x8094));
@@ -6095,14 +5796,14 @@ void PMIC_INIT_SETTING_V1(void)
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x80B2, upmu_get_reg_value(0x80B2));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8424, upmu_get_reg_value(0x8424));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8426, upmu_get_reg_value(0x8426));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8428, upmu_get_reg_value(0x8428));        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8428, upmu_get_reg_value(0x8428));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x843E, upmu_get_reg_value(0x843E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8442, upmu_get_reg_value(0x8442));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x844C, upmu_get_reg_value(0x844C));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x845C, upmu_get_reg_value(0x845C));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x846E, upmu_get_reg_value(0x846E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8472, upmu_get_reg_value(0x8472));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8478, upmu_get_reg_value(0x8478));        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8478, upmu_get_reg_value(0x8478));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x847E, upmu_get_reg_value(0x847E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8488, upmu_get_reg_value(0x8488));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8490, upmu_get_reg_value(0x8490));
@@ -6145,7 +5846,7 @@ void PMIC_INIT_SETTING_V1(void)
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8CD4, upmu_get_reg_value(0x8CD4));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8CBC, upmu_get_reg_value(0x8CBC));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0xE020, upmu_get_reg_value(0xE020));
-        #endif
+#endif
     }
     else if(mt6332_chip_version >= PMIC6332_E1_CID_CODE)
     {
@@ -6253,7 +5954,7 @@ void PMIC_INIT_SETTING_V1(void)
         ret = pmic_config_interface(0x8CD4,0xAE8,0x3FFF,0); // [13:0]: RG_IWLED_FRQ_COUNT; Waverly         
         ret = pmic_config_interface(0xE024,0x0003,0xFFFF,0); // [1:0]: GPIO1_PULLEN; GPIO0_PULLEN; Black
         
-        #if 1
+#if 1
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8004, upmu_get_reg_value(0x8004));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x801A, upmu_get_reg_value(0x801A));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8094, upmu_get_reg_value(0x8094));
@@ -6261,13 +5962,13 @@ void PMIC_INIT_SETTING_V1(void)
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x80B2, upmu_get_reg_value(0x80B2));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8424, upmu_get_reg_value(0x8424));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8426, upmu_get_reg_value(0x8426));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8428, upmu_get_reg_value(0x8428));        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8428, upmu_get_reg_value(0x8428));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x843E, upmu_get_reg_value(0x843E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8442, upmu_get_reg_value(0x8442));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x844C, upmu_get_reg_value(0x844C));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x845C, upmu_get_reg_value(0x845C));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8472, upmu_get_reg_value(0x8472));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8478, upmu_get_reg_value(0x8478));        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8478, upmu_get_reg_value(0x8478));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x847E, upmu_get_reg_value(0x847E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8488, upmu_get_reg_value(0x8488));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8490, upmu_get_reg_value(0x8490));
@@ -6308,7 +6009,7 @@ void PMIC_INIT_SETTING_V1(void)
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8CD4, upmu_get_reg_value(0x8CD4));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8CBC, upmu_get_reg_value(0x8CBC));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0xE020, upmu_get_reg_value(0xE020));
-        #endif
+#endif
     }
     else
     {
@@ -6444,7 +6145,7 @@ void PMIC_INIT_SETTING_V2(void)
         ret = pmic_config_interface(0x740,0x1,0x3,6); // [7:6]: AUXADC_TRIM_CH11_SEL; Ricky
         ret = pmic_config_interface(0x6024,0x0006,0xFFFF,0); // [2:1]: GPIO1_PULLEN; GPIO2_PULLEN; Black, 6331 GPIO pulling disable
 
-        #if 1
+#if 1
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x4, upmu_get_reg_value(0x4));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0xA, upmu_get_reg_value(0xA));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0xC, upmu_get_reg_value(0xC));
@@ -6455,37 +6156,37 @@ void PMIC_INIT_SETTING_V2(void)
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x124, upmu_get_reg_value(0x124));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x13E, upmu_get_reg_value(0x13E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x144, upmu_get_reg_value(0x144));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x14A, upmu_get_reg_value(0x14A));        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x14A, upmu_get_reg_value(0x14A));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x150, upmu_get_reg_value(0x150));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x184, upmu_get_reg_value(0x184));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x244, upmu_get_reg_value(0x244));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24A, upmu_get_reg_value(0x24A)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24C, upmu_get_reg_value(0x24C)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24E, upmu_get_reg_value(0x24E)); 
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24A, upmu_get_reg_value(0x24A));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24C, upmu_get_reg_value(0x24C));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x24E, upmu_get_reg_value(0x24E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x250, upmu_get_reg_value(0x250));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x25A, upmu_get_reg_value(0x25A));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x262, upmu_get_reg_value(0x262)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x264, upmu_get_reg_value(0x264)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x266, upmu_get_reg_value(0x266)); 
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x262, upmu_get_reg_value(0x262));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x264, upmu_get_reg_value(0x264));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x266, upmu_get_reg_value(0x266));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x26A, upmu_get_reg_value(0x26A));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x282, upmu_get_reg_value(0x282));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2A6, upmu_get_reg_value(0x2A6));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2AC, upmu_get_reg_value(0x2AC));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2B2, upmu_get_reg_value(0x2B2)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2BC, upmu_get_reg_value(0x2BC)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2D6, upmu_get_reg_value(0x2D6)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x314, upmu_get_reg_value(0x314)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x33E, upmu_get_reg_value(0x33E)); 
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2B2, upmu_get_reg_value(0x2B2));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2BC, upmu_get_reg_value(0x2BC));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x2D6, upmu_get_reg_value(0x2D6));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x314, upmu_get_reg_value(0x314));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x33E, upmu_get_reg_value(0x33E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x35C, upmu_get_reg_value(0x35C));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x362, upmu_get_reg_value(0x362));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x366, upmu_get_reg_value(0x366));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x368, upmu_get_reg_value(0x368)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36A, upmu_get_reg_value(0x36A)); 
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36C, upmu_get_reg_value(0x36C)); 
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x368, upmu_get_reg_value(0x368));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36A, upmu_get_reg_value(0x36A));
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36C, upmu_get_reg_value(0x36C));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x36E, upmu_get_reg_value(0x36E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x378, upmu_get_reg_value(0x378));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x394, upmu_get_reg_value(0x394));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x3A4, upmu_get_reg_value(0x3A4));        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x3A4, upmu_get_reg_value(0x3A4));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x502, upmu_get_reg_value(0x502));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x504, upmu_get_reg_value(0x504));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x506, upmu_get_reg_value(0x506));
@@ -6498,11 +6199,11 @@ void PMIC_INIT_SETTING_V2(void)
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x534, upmu_get_reg_value(0x534));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x538, upmu_get_reg_value(0x538));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x54A, upmu_get_reg_value(0x54A));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x552, upmu_get_reg_value(0x552));                
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x552, upmu_get_reg_value(0x552));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x73E, upmu_get_reg_value(0x73E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x740, upmu_get_reg_value(0x740));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n",0x6020, upmu_get_reg_value(0x6020));
-        #endif
+#endif
     }
     else
     {
@@ -6599,7 +6300,7 @@ void PMIC_INIT_SETTING_V2(void)
         ret = pmic_config_interface(0x8CD4,0xAE8,0x3FFF,0); // [13:0]: RG_IWLED_FRQ_COUNT; Waverly
         ret = pmic_config_interface(0xE024,0x0003,0xFFFF,0); // [1:0]: GPIO1_PULLEN; GPIO0_PULLEN; Black, 6332 GPIO pulling enable
         
-        #if 1
+#if 1
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8004, upmu_get_reg_value(0x8004));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x801A, upmu_get_reg_value(0x801A));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8094, upmu_get_reg_value(0x8094));
@@ -6607,14 +6308,14 @@ void PMIC_INIT_SETTING_V2(void)
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x80B2, upmu_get_reg_value(0x80B2));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8424, upmu_get_reg_value(0x8424));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8426, upmu_get_reg_value(0x8426));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8428, upmu_get_reg_value(0x8428));        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8428, upmu_get_reg_value(0x8428));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x843E, upmu_get_reg_value(0x843E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8442, upmu_get_reg_value(0x8442));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x844C, upmu_get_reg_value(0x844C));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x845C, upmu_get_reg_value(0x845C));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x846E, upmu_get_reg_value(0x846E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8472, upmu_get_reg_value(0x8472));
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8478, upmu_get_reg_value(0x8478));        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8478, upmu_get_reg_value(0x8478));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x847E, upmu_get_reg_value(0x847E));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8488, upmu_get_reg_value(0x8488));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8490, upmu_get_reg_value(0x8490));
@@ -6657,7 +6358,7 @@ void PMIC_INIT_SETTING_V2(void)
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8CD4, upmu_get_reg_value(0x8CD4));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0x8CBC, upmu_get_reg_value(0x8CBC));
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC INIT] Reg[0x%x]=0x%x\n", 0xE020, upmu_get_reg_value(0xE020));
-        #endif
+#endif
     }
     else
     {
@@ -6677,16 +6378,16 @@ void set_uvlo_2500mv(void)
 #endif
 void PMIC_CUSTOM_SETTING_V1(void)
 {
-    #if defined(CONFIG_MTK_FPGA)
-    #else    
+#if defined(CONFIG_MTK_FPGA)
+#else
     pmu_drv_tool_customization_init(); //DCT
-    #endif
+#endif
 
    /*lenovo-sw louhs1 set VGP2 1.2V, 20140714*/
    dct_pmic_VGP2_sel(1200);
 
 #ifdef LENOVO_UVLO_2500_SUPPORT
-   set_uvlo_2500mv();      
+   set_uvlo_2500mv();
 #endif  
 
 }
@@ -6712,8 +6413,8 @@ static long pmic_ftm_ioctl(struct file *file, unsigned int cmd, unsigned long ar
 {
     int *user_data_addr;
     int ret = 0;
-	int adc_in_data[2] = {1,1};
-	int adc_out_data[2] = {1,1};
+    int adc_in_data[2] = {1,1};
+    int adc_out_data[2] = {1,1};
 
     switch(cmd)
     {
@@ -6722,7 +6423,7 @@ static long pmic_ftm_ioctl(struct file *file, unsigned int cmd, unsigned long ar
                 user_data_addr = (int *)arg;
                 ret = copy_from_user(adc_in_data, user_data_addr, 8);
                 adc_out_data[0] = is_ext_buck_exist();
-                ret = copy_to_user(user_data_addr, adc_out_data, 8); 
+                ret = copy_to_user(user_data_addr, adc_out_data, 8);
                 xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pmic_ftm_ioctl] Get_IS_EXT_BUCK_EXIST:%d\n", adc_out_data[0]);
             break;
         //#endif
@@ -6732,7 +6433,7 @@ static long pmic_ftm_ioctl(struct file *file, unsigned int cmd, unsigned long ar
                 user_data_addr = (int *)arg;
                 ret = copy_from_user(adc_in_data, user_data_addr, 8);
                 adc_out_data[0] = is_ext_vbat_boost_exist();
-                ret = copy_to_user(user_data_addr, adc_out_data, 8); 
+                ret = copy_to_user(user_data_addr, adc_out_data, 8);
                 xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pmic_ftm_ioctl] Get_IS_EXT_VBAT_BOOST_EXIST:%d\n", adc_out_data[0]);
             break;
         //#endif
@@ -6742,7 +6443,7 @@ static long pmic_ftm_ioctl(struct file *file, unsigned int cmd, unsigned long ar
                 user_data_addr = (int *)arg;
                 ret = copy_from_user(adc_in_data, user_data_addr, 8);
                 adc_out_data[0] = is_ext_swchr_exist();
-                ret = copy_to_user(user_data_addr, adc_out_data, 8); 
+                ret = copy_to_user(user_data_addr, adc_out_data, 8);
                 xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pmic_ftm_ioctl] Get_IS_EXT_SWCHR_EXIST:%d\n", adc_out_data[0]);
             break;
         //#endif
@@ -6756,7 +6457,7 @@ static long pmic_ftm_ioctl(struct file *file, unsigned int cmd, unsigned long ar
 }
 
 static int pmic_ftm_open(struct inode *inode, struct file *file)
-{ 
+{
    return 0;
 }
 
@@ -6770,7 +6471,7 @@ static struct file_operations pmic_ftm_fops = {
     .owner          = THIS_MODULE,
     .unlocked_ioctl = pmic_ftm_ioctl,
     .open           = pmic_ftm_open,
-    .release        = pmic_ftm_release,    
+    .release        = pmic_ftm_release,
 };
 
 void pmic_ftm_init(void)
@@ -6793,10 +6494,10 @@ void pmic_ftm_init(void)
     pmic_major = MAJOR(pmic_devno);
     pmic_class = class_create(THIS_MODULE, PMIC_DEVNAME);
     
-    class_dev = (struct class_device *)device_create(pmic_class, 
-                                                   NULL, 
-                                                   pmic_devno, 
-                                                   NULL, 
+    class_dev = (struct class_device *)device_create(pmic_class,
+                                                   NULL,
+                                                   pmic_devno,
+                                                   NULL,
                                                    PMIC_DEVNAME);
     
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pmic_ftm_init] Done\n");
@@ -6813,7 +6514,7 @@ static int pmic_mt_probe(struct platform_device *dev)
 {
     int ret_device_file = 0;
     int reg_val=0;
-    unsigned int code = mt_get_chip_hw_code();    
+    unsigned int code = mt_get_chip_hw_code();
     
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "******** MT pmic driver probe!! ********\n" );
     
@@ -6833,9 +6534,9 @@ static int pmic_mt_probe(struct platform_device *dev)
     //pmic initial setting
     if (0x6795 == code) {
         PMIC_INIT_SETTING_V2();
-        #if 1
+#if 1
         //default turn off vsram at 31 for // [10:10]: RG_VSRAM_DVFS1_EN;
-        if(get_mt6331_pmic_chip_version()>=0x3120)        	 
+        if(get_mt6331_pmic_chip_version()>=0x3120)
         {
             pmic_read_interface(0x63C,&reg_val,0x3,13);
             if(reg_val==0x0) {
@@ -6854,29 +6555,29 @@ static int pmic_mt_probe(struct platform_device *dev)
                 0x18, upmu_get_reg_value(0x18),
                 0x524, upmu_get_reg_value(0x524),
                 reg_val
-            );             
+            );
         }
-        #endif
+#endif
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC_INIT_SETTING_V2] Done..\n");
     } else {
         PMIC_INIT_SETTING_V1();
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC_INIT_SETTING_V1] Done..\n");
-    }    
+    }
     PMIC_CUSTOM_SETTING_V1();
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC_CUSTOM_SETTING_V1] Done\n");
     
-    #ifdef CONFIG_MTK_SWCHR_SUPPORT
+#ifdef CONFIG_MTK_SWCHR_SUPPORT
     swchr_hw_init();
-    #endif
+#endif
 
-    #if defined(CONFIG_POWER_EXT)
+#if defined(CONFIG_POWER_EXT)
     if(get_pmic_mt6332_cid() >= PMIC6332_E3_CID_CODE)
     {
         mt6332_upmu_set_rg_chrwdt_wr(1);
         mt6332_upmu_set_rg_chrwdt_en(0);
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[CONFIG_POWER_EXT] disable MT6332 CHRWDT (0x%x)\n", upmu_get_reg_value(0x80E0));
     }
-    #endif
+#endif
 
 #if defined(CONFIG_MTK_FPGA)
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC_EINT_SETTING] disable when CONFIG_MTK_FPGA\n");
@@ -6886,25 +6587,25 @@ static int pmic_mt_probe(struct platform_device *dev)
     if (IS_ERR(pmic_6331_thread_handle)) 
     {
         pmic_6331_thread_handle = NULL;
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pmic_thread_kthread_mt6331] creation fails\n");        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pmic_thread_kthread_mt6331] creation fails\n");
     }
     else
     {
         wake_up_process(pmic_6331_thread_handle);
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pmic_thread_kthread_mt6331] kthread_create Done\n");
-    } 
+    }
 
     pmic_6332_thread_handle = kthread_create(pmic_thread_kthread_mt6332, (void *) NULL, "pmic_6332_thread");
     if (IS_ERR(pmic_6332_thread_handle)) 
     {
         pmic_6332_thread_handle = NULL;
-        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pmic_thread_kthread_mt6332] creation fails\n");        
+        xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pmic_thread_kthread_mt6332] creation fails\n");
     }
     else
     {
         wake_up_process(pmic_6332_thread_handle);
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[pmic_thread_kthread_mt6332] kthread_create Done\n");
-    } 
+    }
 
     PMIC_EINT_SETTING();
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "[PMIC_EINT_SETTING] Done\n");
@@ -6940,7 +6641,7 @@ static int pmic_mt_probe(struct platform_device *dev)
 #if 1
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_pmic_access);
 
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_BUCK_VDVFS11_STATUS);  
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_BUCK_VDVFS11_STATUS);
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_BUCK_VDVFS12_STATUS);
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_BUCK_VDVFS13_STATUS);
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_BUCK_VDVFS14_STATUS);
@@ -6955,36 +6656,36 @@ static int pmic_mt_probe(struct platform_device *dev)
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_BUCK_VPA_STATUS);
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_BUCK_VSBST_STATUS);
     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VTCXO1_STATUS);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VTCXO2_STATUS);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VAUD32_STATUS);     
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VTCXO1_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VTCXO2_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VAUD32_STATUS);
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VAUXA32_STATUS);
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAMA_STATUS);
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VMCH_STATUS);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VEMC33_STATUS);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VIO28_STATUS);      
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VMC_STATUS);        
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAM_AF_STATUS);    
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP1_STATUS);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP4_STATUS);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VSIM1_STATUS);      
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VSIM2_STATUS);      
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VFBB_STATUS);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VRTC_STATUS);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VMIPI_STATUS);      
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VIBR_STATUS);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_31_VDIG18_STATUS);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAMD_STATUS);      
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VUSB10_STATUS);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAM_IO_STATUS);    
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VMCH_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VEMC33_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VIO28_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VMC_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAM_AF_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP1_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP4_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VSIM1_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VSIM2_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VFBB_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VRTC_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VMIPI_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VIBR_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_31_VDIG18_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAMD_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VUSB10_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAM_IO_STATUS);
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VSRAM_DVFS1_STATUS);
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP2_STATUS);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP3_STATUS);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VBIASN_STATUS);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VBIF28_STATUS);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VAUXB32_STATUS);    
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VUSB33_STATUS);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_32_VDIG18_STATUS);     
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP2_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP3_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VBIASN_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VBIF28_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VAUXB32_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VUSB33_STATUS);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_32_VDIG18_STATUS);
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VSRAM_DVFS2_STATUS);
   
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_BUCK_VDVFS11_VOLTAGE);
@@ -7002,37 +6703,37 @@ static int pmic_mt_probe(struct platform_device *dev)
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_BUCK_VPA_VOLTAGE);
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_BUCK_VSBST_VOLTAGE);
     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VTCXO1_VOLTAGE);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VTCXO2_VOLTAGE);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VAUD32_VOLTAGE);     
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VTCXO1_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VTCXO2_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VAUD32_VOLTAGE);
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VAUXA32_VOLTAGE);
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAMA_VOLTAGE);
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VMCH_VOLTAGE);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VEMC33_VOLTAGE);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VIO28_VOLTAGE);      
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VMC_VOLTAGE);        
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAM_AF_VOLTAGE);    
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP1_VOLTAGE);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP4_VOLTAGE);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VSIM1_VOLTAGE);      
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VSIM2_VOLTAGE);      
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VFBB_VOLTAGE);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VRTC_VOLTAGE);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VMIPI_VOLTAGE);      
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VIBR_VOLTAGE);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_31_VDIG18_VOLTAGE);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAMD_VOLTAGE);      
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VUSB10_VOLTAGE);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAM_IO_VOLTAGE);    
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VMCH_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VEMC33_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VIO28_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VMC_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAM_AF_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP1_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP4_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VSIM1_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VSIM2_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VFBB_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VRTC_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VMIPI_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VIBR_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_31_VDIG18_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAMD_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VUSB10_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VCAM_IO_VOLTAGE);
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VSRAM_DVFS1_VOLTAGE);
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP2_VOLTAGE);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP3_VOLTAGE);       
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VBIASN_VOLTAGE);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VBIF28_VOLTAGE);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VAUXB32_VOLTAGE);    
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VUSB33_VOLTAGE);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_32_VDIG18_VOLTAGE);     
-    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VSRAM_DVFS2_VOLTAGE);  
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP2_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VGP3_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VBIASN_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VBIF28_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VAUXB32_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VUSB33_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_32_VDIG18_VOLTAGE);
+    ret_device_file = device_create_file(&(dev->dev), &dev_attr_LDO_VSRAM_DVFS2_VOLTAGE);
 
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_MT6331_BUCK_CURRENT_METER);
     ret_device_file = device_create_file(&(dev->dev), &dev_attr_MT6332_BUCK_CURRENT_METER);
@@ -7095,7 +6796,7 @@ static int pmic_mt_suspend(struct platform_device *dev, pm_message_t state)
                 );
 #endif
 
-    mt6331_upmu_set_rg_auxadc_32k_ck_pdn(0x1);  
+    mt6331_upmu_set_rg_auxadc_32k_ck_pdn(0x1);
     mt6332_upmu_set_rg_auxadc_32k_ck_pdn(0x1);
     if (Enable_BATDRV_LOG==2) {
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "Reg[0x%x]=0x%x, Reg[0x%x]=0x%x\n", 
@@ -7155,7 +6856,7 @@ static int pmic_mt_resume(struct platform_device *dev)
                 );
 #endif
 
-    mt6331_upmu_set_rg_auxadc_32k_ck_pdn(0x0);  
+    mt6331_upmu_set_rg_auxadc_32k_ck_pdn(0x0);
     mt6332_upmu_set_rg_auxadc_32k_ck_pdn(0x0);
     if (Enable_BATDRV_LOG==2) {
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "Reg[0x%x]=0x%x, Reg[0x%x]=0x%x\n", 
@@ -7189,7 +6890,7 @@ static struct platform_driver pmic_mt_driver = {
 static void pmic_early_suspend(struct early_suspend *h)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "******** MT pmic driver early suspend!! ********\n" );
-    mt6331_upmu_set_rg_auxadc_32k_ck_pdn(0x1);  
+    mt6331_upmu_set_rg_auxadc_32k_ck_pdn(0x1);
     mt6332_upmu_set_rg_auxadc_32k_ck_pdn(0x1);
     if (Enable_BATDRV_LOG==2) {
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "Reg[0x%x]=0x%x, Reg[0x%x]=0x%x\n", 
@@ -7202,7 +6903,7 @@ static void pmic_early_suspend(struct early_suspend *h)
 static void pmic_early_resume(struct early_suspend *h)
 {
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "******** MT pmic driver early resume!! ********\n" );
-    mt6331_upmu_set_rg_auxadc_32k_ck_pdn(0x0);  
+    mt6331_upmu_set_rg_auxadc_32k_ck_pdn(0x0);
     mt6332_upmu_set_rg_auxadc_32k_ck_pdn(0x0);
     if (Enable_BATDRV_LOG==2) {
         xlog_printk(ANDROID_LOG_INFO, "Power/PMIC", "Reg[0x%x]=0x%x, Reg[0x%x]=0x%x\n", 
