@@ -3093,7 +3093,7 @@ static int synaptics_rmi4_set_input_dev(struct synaptics_rmi4_data *rmi4_data)
 				__func__);
 		goto err_query_device;
 	}
-	rmi4_data->input_dev->name = DRIVER_NAME;
+	rmi4_data->input_dev->name = "mtk-tpd";
 	rmi4_data->input_dev->phys = INPUT_PHYS_NAME;
 	rmi4_data->input_dev->id.product = SYNAPTICS_DSX_DRIVER_PRODUCT;
 	rmi4_data->input_dev->id.version = SYNAPTICS_DSX_DRIVER_VERSION;
