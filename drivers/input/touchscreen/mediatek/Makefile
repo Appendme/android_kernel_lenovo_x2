@@ -10,7 +10,6 @@ include $(srctree)/drivers/misc/mediatek/Makefile.custom
 #obj-y   +=  tpd_init.o
 #obj-y   +=  tpd_misc.o
 #obj-y   +=  tpd_setting.o
-#obj-$(CONFIG_LENOVO_CTP_FEATURE)	+=  tpd_feature.o
 
 ifeq ($(CONFIG_TOUCHSCREEN_MTK_MAX1187X),y)
 obj-y	+=  max1187x/

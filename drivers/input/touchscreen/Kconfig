@@ -433,10 +433,6 @@ config TOUCHSCREEN_MTK_HD
 	bool "GT9XX for lenovo hd aio driver config"
 	depends on TOUCHSCREEN_MTK
 
-config LENOVO_CTP_FEATURE
-	bool "lenovo ctp feature(gesture,glove,versioninfo,etc.)"
-	depends on TOUCHSCREEN_MTK && !LENOVO_GESTURE_WAKEUP
-
 config LENOVO_CTP_APPSELECT
 	bool "lenovo feature. replace key_menu with appselect"
 	depends on TOUCHSCREEN_MTK

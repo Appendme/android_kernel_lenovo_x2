@@ -721,6 +721,8 @@ static ssize_t synaptics_rmi4_suspend_store(struct device *dev,
 	return count;
 }
 
+#define SYNA_GESTURE_WAKEUP
+
 enum gestures
 {
 	SYNA_NO_GESTURE = 0x00,
@@ -1241,7 +1243,7 @@ static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
 	data_reg_blk_size = fhandler->size_of_data_register_block;
 
 	__dbg_core("fn11_mask(%d)\n",rmi4_data->fn11_mask);
-#ifdef LENOVO_GESTURE_WAKEUP
+#ifdef SYNA_GESTURE_WAKEUP
 	if (atomic_read(&rmi4_data->syna_use_gesture)) {
 		retval = synaptics_rmi4_i2c_read(rmi4_data,
 				SYNA_ADDR_GESTURE_OFFSET,
@@ -1467,7 +1469,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 	
 	__dbg_core("fn11_mask(%d)\n",rmi4_data->fn11_mask);
 	/*lenovo-sw xuwen1 add for gesture begin*/
-#ifdef LENOVO_GESTURE_WAKEUP
+#ifdef SYNA_GESTURE_WAKEUP
 	if (rmi4_data->fn11_mask) {
 		if (atomic_read(&rmi4_data->syna_use_gesture)) {
 			retval = synaptics_rmi4_i2c_read(rmi4_data,
@@ -3772,7 +3774,7 @@ static void synaptics_rmi4_sensor_sleep(struct synaptics_rmi4_data *rmi4_data)
 		return;
 	}
 
-#ifdef LENOVO_GESTURE_WAKEUP
+#ifdef SYNA_GESTURE_WAKEUP
 	if (atomic_read(&rmi4_data->syna_use_gesture)) {
 		device_ctrl = (device_ctrl & ~MASK_3BIT);
 		device_ctrl = (device_ctrl |  NO_SLEEP_OFF );

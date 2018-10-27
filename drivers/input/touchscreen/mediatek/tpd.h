@@ -126,32 +126,6 @@ u16 tpd_read(int position);
 u16 tpd_read_adc(u16 pos);
 u16 tpd_read_status(void);
 #endif
-#ifdef CONFIG_LENOVO_CTP_FEATURE
-struct tpd_version_info
-{
-    char *name;
-    unsigned int types;
-    unsigned int fw_num;
-};
-
-struct  fwu_userspace_t {
-	int (*lastest_fwid)(void);
-	int (*upgrade_progress)(void);
-};
-
-struct  tpd_glove_t {
-	int (*set_mode)(bool);
-	int (*get_mode)(void);
-	int pre_status;
-	int status;
-	int usb_st;
-};
-
-struct  tpd_gesture_t {
-	int letter ;
-	int wakeup_enable ;
-};
-#endif
 extern int tpd_driver_add(struct tpd_driver_t *tpd_drv);
 extern int tpd_driver_remove(struct tpd_driver_t *tpd_drv);
 void tpd_button_setting(int keycnt, void *keys, void *keys_dim);

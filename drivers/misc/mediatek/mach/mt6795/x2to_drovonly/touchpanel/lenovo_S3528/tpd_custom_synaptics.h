@@ -10,13 +10,6 @@
 #include <pmic_drv.h>
 #include <cust_i2c.h>
 
-#ifdef CONFIG_LENOVO_CTP_FEATURE
-
-#define LENOVO_CTP_GLOVE_CONTROL
-#define LENOVO_GESTURE_WAKEUP
-#define LENOVO_AREA_TOUCH
-
-#endif
 #define LENOVO_CTP_ESD_CHECK
 #define TPD_CLOSE_POWER_IN_SLEEP
 

@@ -129,10 +129,6 @@ extern void charger_hv_detect_sw_workaround_init(void);
 extern void pmu_drv_tool_customization_init(void);
 extern void pmic_auxadc_init(void);
 extern int PMIC_IMM_GetOneChannelValue(upmu_adc_chl_list_enum dwChannel, int deCount, int trimd);
-/*lenovo-sw liuyw2 add tpd glove notify*/
-#ifdef CONFIG_LENOVO_CTP_FEATURE
-extern void le_tpd_glove_usb_notify(unsigned int st);
-#endif
 
 #if defined (CONFIG_MTK_KERNEL_POWER_OFF_CHARGING)
 extern void mt_power_off(void);
@@ -872,9 +868,6 @@ void chrdet_int_handler(void)
 #endif
 #else
     upmu_get_rgs_chrdet();
-#endif
-#ifdef CONFIG_LENOVO_CTP_FEATURE
-    le_tpd_glove_usb_notify(upmu_get_rgs_chrdet());
 #endif
     do_chrdet_int_task();
 
