@@ -133,8 +133,6 @@ static const struct file_operations ext_buck_fops = {
     .write = ext_buck_write,
 };
 
-
-
 #define TOPCK_LDVT
 
 #ifdef TOPCK_LDVT
@@ -143,7 +141,7 @@ static const struct file_operations ext_buck_fops = {
 ****************************/
 unsigned int ckgen_meter(int val)
 {
-	int output = 0, i = 0;
+    int output = 0, i = 0;
     unsigned int temp, clk26cali_0, clk_cfg_9, clk_misc_cfg_1;
 
     clk26cali_0 = DRV_Reg32(CLK26CALI_0);
@@ -164,8 +162,8 @@ unsigned int ckgen_meter(int val)
         printk("%d, wait for frequency meter finish, CLK26CALI = 0x%x\n", val, DRV_Reg32(CLK26CALI_0));
         mdelay(10);
         i++;
-        if(i > 10)
-        	break;
+        if (i > 10)
+            break;
     }
 
     temp = DRV_Reg32(CLK26CALI_2) & 0xFFFF;
@@ -176,7 +174,7 @@ unsigned int ckgen_meter(int val)
     pminit_write(CLK_MISC_CFG_1, clk_misc_cfg_1);
     pminit_write(CLK26CALI_0, clk26cali_0);
 
-    if(i>10)
+    if (i > 10)
         return 0;
     else
         return output;
@@ -208,8 +206,8 @@ unsigned int abist_meter(int val)
         printk("%d, wait for frequency meter finish, CLK26CALI = 0x%x\n", val, DRV_Reg32(CLK26CALI_0));
         mdelay(10);
         i++;
-        if(i > 10)
-        	break;
+        if (i > 10)
+            break;
     }
 
     temp = DRV_Reg32(CLK26CALI_1) & 0xFFFF;
@@ -221,7 +219,7 @@ unsigned int abist_meter(int val)
     pminit_write(CLK26CALI_0, clk26cali_0);
     pminit_write(AP_PLL_CON0, ap_pll_con0);
 
-    if(i>10)
+    if (i > 10)
         return 0;
     else
         return output;
@@ -229,10 +227,10 @@ unsigned int abist_meter(int val)
 
 static int ckgen_meter_read(struct seq_file *m, void *v)
 {
-	int i;
+    int i;
 
-	for(i=1; i<38; i++)
-    	seq_printf(m, "%d\n", ckgen_meter(i));
+    for (i = 1; i < 38; i++)
+        seq_printf(m, "%d\n", ckgen_meter(i));
 
     return 0;
 }
@@ -256,13 +254,12 @@ static int ckgen_meter_write(struct file *file, const char __user *buffer,
     return count;
 }
 
-
 static int abist_meter_read(struct seq_file *m, void *v)
 {
-	int i;
+    int i;
 
-	for(i=1; i<48; i++)
-    	seq_printf(m, "%d\n", abist_meter(i));
+    for (i = 1; i < 48; i++)
+        seq_printf(m, "%d\n", abist_meter(i));
 
     return 0;
 }
@@ -551,7 +548,6 @@ unsigned int mt_get_bigcpu_freq(void)
 }
 EXPORT_SYMBOL(mt_get_bigcpu_freq);
 
-
 unsigned int mt_get_mmclk_freq(void)
 {
     int output = 0;
@@ -720,21 +716,18 @@ static const struct file_operations mfgclk_fops = {
     .read  = seq_read,
 };
 
-
-
 static int __init mt_power_management_init(void)
 {
-    struct proc_dir_entry *entry = NULL;
     struct proc_dir_entry *pm_init_dir = NULL;
     CHIP_SW_VER ver = mt_get_chip_sw_ver();
 
     pm_power_off = mt_power_off;
 
-    #if !defined (CONFIG_FPGA_CA7)
+#if !defined (CONFIG_FPGA_CA7)
      //FIXME: for FPGA early porting
-    #if 0
+#if 0
     xlog_printk(ANDROID_LOG_INFO, "Power/PM_INIT", "Bus Frequency = %d KHz\n", mt_get_bus_freq());
-    #endif
+#endif
 
     //cpu dormant driver init
     mt_cpu_dormant_init();
@@ -755,8 +748,7 @@ static int __init mt_power_management_init(void)
 
     //FIXME: for FPGA early porting
 
-
-   	mt_dcm_init(); // dynamic clock management init
+    mt_dcm_init(); // dynamic clock management init
 
     pm_init_dir = proc_mkdir("pm_init", NULL);
     if (!pm_init_dir)
@@ -765,32 +757,24 @@ static int __init mt_power_management_init(void)
     }
     else
     {
-        entry = proc_create("smallcpu_speed_dump", S_IRUGO, pm_init_dir, &smallcpu_fops);
-
-        entry = proc_create("bigcpu_speed_dump", S_IRUGO, pm_init_dir, &bigcpu_fops);
-
-        entry = proc_create("emi_speed_dump", S_IRUGO, pm_init_dir, &emi_fops);
-
-        entry = proc_create("bus_speed_dump", S_IRUGO, pm_init_dir, &bus_fops);
-
-        entry = proc_create("mmclk_speed_dump", S_IRUGO, pm_init_dir, &mmclk_fops);
-
-        entry = proc_create("mfgclk_speed_dump", S_IRUGO, pm_init_dir, &mfgclk_fops);
+        proc_create("smallcpu_speed_dump", S_IRUGO, pm_init_dir, &smallcpu_fops);
+        proc_create("bigcpu_speed_dump", S_IRUGO, pm_init_dir, &bigcpu_fops);
+        proc_create("emi_speed_dump", S_IRUGO, pm_init_dir, &emi_fops);
+        proc_create("bus_speed_dump", S_IRUGO, pm_init_dir, &bus_fops);
+        proc_create("mmclk_speed_dump", S_IRUGO, pm_init_dir, &mmclk_fops);
+        proc_create("mfgclk_speed_dump", S_IRUGO, pm_init_dir, &mfgclk_fops);
 #ifdef TOPCK_LDVT
-        entry = proc_create("abist_meter_test", S_IRUGO|S_IWUSR, pm_init_dir, &abist_meter_fops);
-        entry = proc_create("ckgen_meter_test", S_IRUGO|S_IWUSR, pm_init_dir, &ckgen_meter_fops);
+        proc_create("abist_meter_test", S_IRUGO|S_IWUSR, pm_init_dir, &abist_meter_fops);
+        proc_create("ckgen_meter_test", S_IRUGO|S_IWUSR, pm_init_dir, &ckgen_meter_fops);
 #endif
-
-        entry = proc_create("ext_buck", S_IRUGO, pm_init_dir, &ext_buck_fops);
+        proc_create("ext_buck", S_IRUGO, pm_init_dir, &ext_buck_fops);
     }
 
-    #endif
+#endif
 
     return 0;
 }
-
 arch_initcall(mt_power_management_init);
-
 
 static void _pmic_late_init(void)
 {
@@ -817,7 +801,6 @@ static int __init mt_pm_late_init(void)
     clk_buf_init();
     return 0;
 }
-
 late_initcall(mt_pm_late_init);
 
 
