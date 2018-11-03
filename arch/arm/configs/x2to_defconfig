@@ -3036,7 +3036,7 @@ CONFIG_UNCOMPRESS_INCLUDE="mach/uncompress.h"
 #
 # Security options
 #
-# CONFIG_KEYS is not set
+CONFIG_KEYS=y
 # CONFIG_SECURITY_DMESG_RESTRICT is not set
 CONFIG_SECURITY=y
 # CONFIG_SECURITYFS is not set
