@@ -1126,11 +1126,10 @@ static int bq27531_driver_probe(struct i2c_client *client, const struct i2c_devi
 	
     INIT_WORK(&work_dl_fw, work_dlfw);
 
-    if (!(new_client = kmalloc(sizeof(struct i2c_client), GFP_KERNEL))) {
+    if (!(new_client = kzalloc(sizeof(struct i2c_client), GFP_KERNEL))) {
         err = -ENOMEM;
         goto exit;
     }    
-    memset(new_client, 0, sizeof(struct i2c_client));
 
     new_client = client;    
 
@@ -1219,6 +1218,8 @@ static int __init bq27531_init(void)
 
 static void __exit bq27531_exit(void)
 {
+    if (new_client != NULL)
+        kfree(new_client);
     i2c_del_driver(&bq27531_driver);
 }
 

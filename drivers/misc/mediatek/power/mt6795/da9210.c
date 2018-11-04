@@ -539,11 +539,10 @@ static int da9210_driver_probe(struct i2c_client *client, const struct i2c_devic
 
     xlog_printk(ANDROID_LOG_INFO, "Power/PMIC","[da9210_driver_probe] \n");
 
-    if (!(new_client = kmalloc(sizeof(struct i2c_client), GFP_KERNEL))) {
+    if (!(new_client = kzalloc(sizeof(struct i2c_client), GFP_KERNEL))) {
         err = -ENOMEM;
         goto exit;
     }    
-    memset(new_client, 0, sizeof(struct i2c_client));
 
     new_client = client;    
     
@@ -789,6 +788,8 @@ static int __init da9210_init(void)
 
 static void __exit da9210_exit(void)
 {
+    if (new_client != NULL)
+        kfree(new_client);
     i2c_del_driver(&da9210_driver);
 }
 

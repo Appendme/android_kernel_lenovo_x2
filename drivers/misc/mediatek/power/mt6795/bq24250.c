@@ -566,11 +566,10 @@ static int bq24250_driver_probe(struct i2c_client *client, const struct i2c_devi
 
     battery_xlog_printk(BAT_LOG_CRTI,"[bq24250_driver_probe] \n");
 
-    if (!(new_client = kmalloc(sizeof(struct i2c_client), GFP_KERNEL))) {
+    if (!(new_client = kzalloc(sizeof(struct i2c_client), GFP_KERNEL))) {
         err = -ENOMEM;
         goto exit;
     }    
-    memset(new_client, 0, sizeof(struct i2c_client));
 
     new_client = client;    
 
@@ -706,6 +705,8 @@ static int __init bq24250_init(void)
 
 static void __exit bq24250_exit(void)
 {
+    if (new_client != NULL)
+        kfree(new_client);
     i2c_del_driver(&bq24250_driver);
 }
 

@@ -268,11 +268,10 @@ static int tps6128x_driver_probe(struct i2c_client *client, const struct i2c_dev
 
     battery_xlog_printk(BAT_LOG_CRTI,"[tps6128x_driver_probe] \n");
 
-    if (!(new_client = kmalloc(sizeof(struct i2c_client), GFP_KERNEL))) {
+    if (!(new_client = kzalloc(sizeof(struct i2c_client), GFP_KERNEL))) {
         err = -ENOMEM;
         goto exit;
     }    
-    memset(new_client, 0, sizeof(struct i2c_client));
 
     new_client = client;    
 
@@ -427,6 +426,8 @@ static int __init tps6128x_init(void)
 
 static void __exit tps6128x_exit(void)
 {
+    if (new_client != NULL)
+        kfree(new_client);
     i2c_del_driver(&tps6128x_driver);
 }
 
