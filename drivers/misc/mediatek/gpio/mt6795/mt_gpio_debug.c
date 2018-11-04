@@ -494,8 +494,8 @@ typedef union {
 void mt_reg_test(void) 
 {
 	TEST_NUION *test_data = NULL;
-	GPIO_REGS_test *cur_mem_data = NULL ;    
-    int idx, i;
+	GPIO_REGS_test *cur_mem_data = NULL ;
+    int i;
 
 	test_data = kzalloc(sizeof(*test_data), GFP_KERNEL);  
 	if (test_data == NULL) {
