@@ -853,7 +853,7 @@ static void __exit mtk_wdt_exit (void)
 {
 }
 /*this function is for those user who need WDT APIs before WDT driver's probe*/
-static void __init mtk_wdt_get_base_addr(void)
+static int __init mtk_wdt_get_base_addr(void)
 {
 #ifdef CONFIG_OF
 	struct device_node *np_rgu;
@@ -869,8 +869,8 @@ static void __init mtk_wdt_get_base_addr(void)
 		}
 		printk("RGU base: 0x%p \n", toprgu_base_t);		
 	}
-	
 #endif
+	return 0;
 }
 core_initcall(mtk_wdt_get_base_addr);
 postcore_initcall(mtk_wdt_init);
