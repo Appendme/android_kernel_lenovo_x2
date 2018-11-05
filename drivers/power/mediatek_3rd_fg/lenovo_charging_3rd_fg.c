@@ -742,7 +742,7 @@ static DEVICE_ATTR(ipo_is_enable, S_IRUGO|S_IWUSR, chg_show_ipo_is_enable, chg_s
 	 arch_reset(0,NULL);
 	// return size; 
 }
-static DEVICE_ATTR(tp_poweron_action, S_IRUGO|S_IWUSR, NULL, chg_store_tp_poweron_action);
+static DEVICE_ATTR(tp_poweron_action, S_IWUSR, NULL, chg_store_tp_poweron_action);
 #endif
 /*lenovo-sw zhangrc2 add function for reboot machine by tp gesture  2014-05-01 end*/
 int lenovo_battery_create_sys_file(struct device *dev)
